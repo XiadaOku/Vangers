@@ -3571,8 +3571,7 @@ void uvsShop::updateResource(void){
 #endif
 		std::cout << "items_add: " << i << std::endl;
 		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-		if (i == 16 && strcmp(game_name,"threall run")==0) 
-			continue;
+		if (i == 16 && strcmp(game_name,"threall run")==0) continue;
 		if (  GetItem( Pitem, i, 0) == NULL )
 			for( j = 0; j < 4 + RND(10); j++ ) {
 				addItem(pi = new uvsItem(i));
