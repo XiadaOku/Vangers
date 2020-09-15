@@ -3685,10 +3685,7 @@ void GloryPlace::Init(int ind)
 		} else {
 			World = WORLD_THREALL;
 			R_curr.x = GloryRnd.aiRnd(WorldTable[World]->x_size);
-			if(World < MAIN_WORLD_MAX - 1)
-				R_curr.y = 300 + GloryRnd.aiRnd(WorldTable[World]->y_size - 600);
-			else	
-				R_curr.y = GloryRnd.aiRnd(WorldTable[World]->y_size);
+			R_curr.y = GloryRnd.aiRnd(WorldTable[World]->y_size);
 		}
 		return;
 	}
