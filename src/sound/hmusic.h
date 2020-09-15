@@ -6,7 +6,6 @@ void xsDeInitMusic(void);
 void xsPlayMusic(int track,int min = 0,int sec = 0);
 void xsPlayOneTrackMusic(int track,int min = 0,int sec = 0);
 void xsStopMusic(void);
-void xsStopMusic(int &track);
 void xsPauseMusic(void);
 void xsResumeMusic(void);
 int xsGetStatusMusic(void);

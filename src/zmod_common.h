@@ -11,21 +11,22 @@
 #define WORLD_KHOX		4
 #define WORLD_BOOZEENA	5
 #define WORLD_WEEXOW	6
-#define WORLD_HMOK		7
+#define WORLD_ARKONOY	7
 #define WORLD_THREALL	8
-#define WORLD_ARKONOY	9
+#define WORLD_HMOK		9
 
-#define Z_MODS_SPEEDOMETER_RU		"‘ˆ„ŽŒ…’"
-#define Z_MODS_NEPTUN_RU			"…’“"
-#define Z_MODS_FORMULAV_RU			"”ŽŒ“‹€"
-#define Z_MODS_TRAKTRIAL_RU			"’€Š-’ˆ€‹"
-#define Z_MODS_RAFARUN_RU			"’€€Š€œˆ …ƒ€"
-#define Z_MODS_KHOXRUN_RU			"ž•…Œ ŠŽŠ‘“!"
-#define Z_MODS_RAZMINKA_RU			"€‡ŒˆŠ€"
-#define Z_MODS_TEST_RU				"’…‘’"
-#define Z_MODS_LEMAN_RU				"‹…Œ€"
-#define Z_MODS_THKING_RU			"–€œ ƒŽ›"
-#define Z_MODS_SKYSOMA_RU			"…Ž‘ŽŒ€"
+
+#define Z_MODS_SPEEDOMETER_RU		"Ð¡ÐŸÐ˜Ð”ÐžÐœÐ•Ð¢Ð "
+#define Z_MODS_NEPTUN_RU			"ÐÐ•ÐŸÐ¢Ð£Ð"
+#define Z_MODS_FORMULAV_RU			"Ð¤ÐžÐ ÐœÐ£Ð›Ð"
+#define Z_MODS_TRAKTRIAL_RU			"Ð¢Ð ÐÐš-Ð¢Ð Ð˜ÐÐ›"
+#define Z_MODS_RAFARUN_RU			"Ð¢ÐÐ ÐÐšÐÐÐ¬Ð˜ Ð‘Ð•Ð“Ð"
+#define Z_MODS_KHOXRUN_RU			"ÐÐ®Ð¥ÐÐ•Ðœ ÐšÐžÐšÐ¡Ð£!"
+#define Z_MODS_RAZMINKA_RU			"Ð ÐÐ—ÐœÐ˜ÐÐšÐ"
+#define Z_MODS_TEST_RU				"Ð¢Ð•Ð¡Ð¢"
+#define Z_MODS_LEMAN_RU				"Ð›Ð•ÐœÐÐ"
+#define Z_MODS_THKING_RU			"Ð¦ÐÐ Ð¬ Ð“ÐžÐ Ð«"
+#define Z_MODS_SKYSOMA_RU			"ÐÐ•Ð‘ÐžÐ¡ÐžÐœÐ"
 
 #define Z_MODS_SPEEDOMETER_EN		"SPEEDOMETER"
 #define Z_MODS_NEPTUN_EN			"NEPTUNE"

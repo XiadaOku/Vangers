@@ -1,5 +1,3 @@
-#ifndef __3DOBJECT_H__
-#define __3DOBJECT_H__
 
 const char TG_NO_TOUCH = 1;
 const char TG_POINT_TOUCH = 2;
@@ -465,5 +463,3 @@ extern int stuff_delta_phase;
 extern int STANDART_FRAME_RATE;
 extern double speed_correction_factor;
 extern double speed_correction_tau;
-
-#endif

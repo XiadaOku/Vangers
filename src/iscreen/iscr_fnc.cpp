@@ -95,8 +95,6 @@ extern int iScreenLastInput;
 extern int iScreenChat;
 extern int iChatON;
 
-extern int IsMainMenu;
-
 /* --------------------------- PROTOTYPE SECTION ---------------------------- */
 
 int iGetEscaveTime(void);
@@ -2224,10 +2222,8 @@ void iHandleExtEvent(int code,int data)
 			mode = xsGetStatusMusic();
 			if(!iGetOptionValue(iMUSIC_ON)){
 				MusicON = 1;
-				if (CurrentWorld != -1) {
-					if (mode != XCD_PLAYING) {
-						IsMainMenu ? StartCDTRACK() : StartWTRACK();
-					}
+				if(mode != XCD_PLAYING){
+					StartCDTRACK();
 				}
 			}
 			else {

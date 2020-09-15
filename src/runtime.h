@@ -31,14 +31,12 @@ const int  RTO_QUANT_FLAG		= 0x02;
 const int  RTO_FINIT_FLAG		= 0x04;
 const int  RTO_ALL_FLAGS		= RTO_INIT_FLAG | RTO_QUANT_FLAG | RTO_FINIT_FLAG;
 
-extern int IsMainMenu;
-
 struct BaseRTO : XRuntimeObject
 {
 	int flags;
 	int NextID;
 
-	void SetNext(int id){ NextID = id; IsMainMenu = id == RTO_MAIN_MENU_ID; }
+	void SetNext(int id){ NextID = id; }
 	void SetFlag(int fl){ flags |= fl; }
 	void ClearFlag(int fl){ flags &= ~fl; }
 

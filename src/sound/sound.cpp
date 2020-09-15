@@ -550,7 +550,7 @@ void StopCDTRACK(void)
 	if(!MusicON) return;
 //	LastTrack = xsGetCurTrackCD();
 //	xsStopCD();
-	xsStopMusic(LastTrack);
+	xsStopMusic();
 	activeWTRACK = 0;
 	SlowOn = 1;
 #endif

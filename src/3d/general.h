@@ -1,5 +1,3 @@
-#ifndef __3D__GENERAL_H__
-#define __3D__GENERAL_H__
 
 #include "parser.h"
 
@@ -27,4 +25,6 @@ extern XStream fout;
 #endif
 extern XBuffer msg_buf;
 
-#endif
+
+
+

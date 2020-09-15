@@ -1,5 +1,3 @@
-#ifndef __3D__HEAP_H__
-#define __3D__HEAP_H__
 
 struct MemoryHeap {
 	int offset,size;
@@ -37,5 +35,3 @@ struct MemoryHeap {
 	}
 	void end_alloc();
 };
-
-#endif
