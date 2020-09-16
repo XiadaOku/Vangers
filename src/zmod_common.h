@@ -11,22 +11,21 @@
 #define WORLD_KHOX		4
 #define WORLD_BOOZEENA	5
 #define WORLD_WEEXOW	6
-#define WORLD_ARKONOY	7
+#define WORLD_HMOK		7
 #define WORLD_THREALL	8
-#define WORLD_HMOK		9
+#define WORLD_ARKONOY	9
 
-
-#define Z_MODS_SPEEDOMETER_RU		"СПИДОМЕТР"
-#define Z_MODS_NEPTUN_RU			"НЕПТУН"
-#define Z_MODS_FORMULAV_RU			"ФОРМУЛА"
-#define Z_MODS_TRAKTRIAL_RU			"ТРАК-ТРИАЛ"
-#define Z_MODS_RAFARUN_RU			"ТАРАКАНЬИ БЕГА"
-#define Z_MODS_KHOXRUN_RU			"НЮХНЕМ КОКСУ!"
-#define Z_MODS_RAZMINKA_RU			"РАЗМИНКА"
-#define Z_MODS_TEST_RU				"ТЕСТ"
-#define Z_MODS_LEMAN_RU				"ЛЕМАН"
-#define Z_MODS_THKING_RU			"ЦАРЬ ГОРЫ"
-#define Z_MODS_SKYSOMA_RU			"НЕБОСОМА"
+#define Z_MODS_SPEEDOMETER_RU		"���������"
+#define Z_MODS_NEPTUN_RU			"������"
+#define Z_MODS_FORMULAV_RU			"�������"
+#define Z_MODS_TRAKTRIAL_RU			"����-�����"
+#define Z_MODS_RAFARUN_RU			"��������� ����"
+#define Z_MODS_KHOXRUN_RU			"������ �����!"
+#define Z_MODS_RAZMINKA_RU			"��������"
+#define Z_MODS_TEST_RU				"����"
+#define Z_MODS_LEMAN_RU				"�����"
+#define Z_MODS_THKING_RU			"���� ����"
+#define Z_MODS_SKYSOMA_RU			"��������"
 
 #define Z_MODS_SPEEDOMETER_EN		"SPEEDOMETER"
 #define Z_MODS_NEPTUN_EN			"NEPTUNE"

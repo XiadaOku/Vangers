@@ -3714,10 +3714,14 @@ void GloryPlace::Init(int ind)
 	if(ind == 0) {
 		World = GloryRnd.aiRnd(3); // НЕ МЕНЯТЬ !!! Связано с багом вылета клиента при смерти в пассе. если чек не на трех мирах.
 	} else {
-		World = GloryRnd.aiRnd(WORLD_MAX - 1);
+		World = GloryRnd.aiRnd(WORLD_MAX);
+		while (World == WORLD_HMOK)
+			World = GloryRnd.aiRnd(WORLD_MAX);
 
 		if(z_my_server_data.mod_id == Z_MODS_RAFARUN_ID ) { //tarakan'i bega/ excludes hmok && threall
-			World = GloryRnd.aiRnd(WORLD_MAX - 2);
+			World = GloryRnd.aiRnd(WORLD_MAX);
+			while (World == WORLD_HMOK || World == WORLD_THREALL)
+				World = GloryRnd.aiRnd(WORLD_MAX);
 		}
 	};
 	R_curr.x = GloryRnd.aiRnd(WorldTable[World]->x_size);
