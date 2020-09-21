@@ -417,7 +417,7 @@ const char* iSTR_MP_Mechos_assembled_in = iSTR_MP_Mechos_assembled_in1;
 const char* iSTR_NONE = iSTR_NONE1;
 const char* iSTR_EMPTY_SLOT = iSTR_EMPTY_SLOT1;
 const char* iSTR_Checkpoints_Number = iSTR_Checkpoints_Number1;
-const char* iSTR_DefaultPassword = iSTR_DefaultPassword1;
+const char* iSTR_DefaultPassword;
 
 #ifdef iMOVE_MOUSE_OBJECTS
 iScreenObject* iMovedObj = NULL;
