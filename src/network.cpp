@@ -183,7 +183,7 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	XBuffer str_buf;
 	if(!game_ID) {
 	    if (lang() == RUSSIAN) {
-            str_buf < "®¢ ï ¨£à  ­  ";
+		//CP866 ÐÐ¾Ð²Ð°Ñ Ð¸Ð³Ñ€Ð° Ð½Ð°
         } else {
             str_buf < "New Game on ";
         }
@@ -619,7 +619,7 @@ int InputEventBuffer::receive_waiting_for_event(int event, XSocket& sock,int ski
 	}
 	if(!skip_if_aint)
 	    if (lang() == RUSSIAN) {
-            ErrH.Abort("‘¥à¢¥à ­¥ ®â¢¥ç ¥â", XERR_USER, event);
+            ErrH.Abort("â€˜Â¥Ã Â¢Â¥Ã  Â­Â¥ Â®Ã¢Â¢Â¥Ã§Â Â¥Ã¢", XERR_USER, event);
         } else {
             ErrH.Abort("Time out of Server's response receiving", XERR_USER, event);
         }
@@ -663,7 +663,7 @@ int InputEventBuffer::next_event() {
 	zCreateObjectQueue* temp;
 	if (event_ID == zCREATE_OBJECT_BY_SERVER) {
 		std::cout<<"zCREATE_OBJECT_BY_SERVER"<<std::endl;
-		//zmod - ¯ ª¥â "á®§¤ © ¯à¥¤¬¥¤"
+		//zmod - Â¯Â ÂªÂ¥Ã¢ "Ã¡Â®Â§Â¤Â Â© Â¯Ã Â¥Â¤Â¬Â¥Â¤"
 		*this > factory_number > ammo_count;
 		body_size = 0;
 		if(my_player_body.BirthTime) {
@@ -834,7 +834,7 @@ int restore_connection()
 	if(!main_socket){
 		if(number_of_reconnection_attempt-- <= 0)
 		    if (lang() == RUSSIAN) {
-                ErrH.Abort("¥ ¬®£ã ¢®ááâ ­®¢¨âì á®¥¤¨­¥­¨¥ á ‘¥à¢¥à®¬");
+                ErrH.Abort("ÂÂ¥ Â¬Â®Â£Ã£ Â¢Â®Ã¡Ã¡Ã¢Â Â­Â®Â¢Â¨Ã¢Ã¬ Ã¡Â®Â¥Â¤Â¨Â­Â¥Â­Â¨Â¥ Ã¡ â€˜Â¥Ã Â¢Â¥Ã Â®Â¬");
             } else {
                 ErrH.Abort("Unable to restore connection to Server");
             }
