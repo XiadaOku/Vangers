@@ -2759,9 +2759,3 @@ void ShowImageKeyPress(SDL_Event *k)
 {
 	ShowImageKeyFlag = 1;
 }
-
-
-bool SetAchievement(std::string name) {
-	std::cout<<"Set achievement:"<<name<<std::endl;
-	return true;
-}
