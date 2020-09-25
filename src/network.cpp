@@ -184,6 +184,7 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	if(!game_ID) {
 	    if (lang() == RUSSIAN) {
             //CP866 Новая игра на
+            str_buf < "®¢ ï ¨£à  ­  ";
         } else {
             str_buf < "New Game on ";
         }
