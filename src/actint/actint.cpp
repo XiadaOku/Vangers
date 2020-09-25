@@ -1,5 +1,7 @@
 /* ---------------------------- INCLUDE SECTION ----------------------------- */
 
+#include <iostream>
+
 #include "../global.h"
 
 #include "../runtime.h"
@@ -26,8 +28,14 @@
 
 #include "../sound/hsound.h"
 
+#include "../iscreen/iscreen_options.h"
+#include "../iscreen/iscreen.h"
+#include "../network.h"
+
 /* ----------------------------- STRUCT SECTION ----------------------------- */
 /* ----------------------------- EXTERN SECTION ----------------------------- */
+
+extern iScreenOption** iScrOpt;
 
 extern int uvsTabuTaskFlag;
 
@@ -4230,6 +4238,23 @@ void actIntDispatcher::i_finit(void)
 
 	aciChangeWorld(CurrentWorld);
 	aciPrepareWorldsMenu();
+	
+	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
+	if (NetworkON && my_server_data.GameType == 2 && CurrentWorld != 7 && strcmp(game_name,"threall run")==0) {
+		aScrDisp->send_event(EV_TELEPORT, 7);
+	}
+	
+	if (NetworkON && my_server_data.GameType == 2 && CurrentWorld != 11 && strcmp(game_name,"submarine")==0) {
+		aScrDisp->send_event(EV_TELEPORT, 11);
+	}
+	
+	if (NetworkON && my_server_data.GameType == 0 && CurrentWorld != 11 && strcmp(game_name,"neptune")==0) {
+		aScrDisp->send_event(EV_TELEPORT, 11);
+	}
+	
+	if (NetworkON && CurrentWorld != 8 && strcmp(game_name,"tptest")==0) {
+		aScrDisp->send_event(EV_TELEPORT, 8);
+	}
 
 	flags &= ~AS_ISCREEN;
 	if(iscr_iP) iscr_iP -> finit();

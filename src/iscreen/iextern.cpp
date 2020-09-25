@@ -1641,25 +1641,31 @@ void iGetMultiGameParameters(void)
 	time_t tm;
 
 	my_server_data.GameType = iCurMultiGame;
+	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 
 	switch(iCurMultiGame){
 		case iMP_VAN_WAR:
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_INITIAL_CASH);
+			if(strcmp(game_name,"test")==0) value = 999999;
 			my_server_data.Van_War.InitialCash = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_ARTEFACTS_USING);
+			if(strcmp(game_name,"test")==0) value = 1;
 			my_server_data.Van_War.ArtefactsUsing = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_IN_ESCAVE_TIME);
+			if(strcmp(game_name,"test")==0) value = 2;
 			my_server_data.Van_War.InEscaveTime = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_TEAM_MODE);
 			my_server_data.Van_War.TeamMode = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_NASCENCY);
+			if(strcmp(game_name,"test")==0) value = 2;
 			my_server_data.Van_War.Nascency = value - 1;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_ACCESS);
+			if(strcmp(game_name,"test")==0) value = 0;
 			my_server_data.Van_War.WorldAccess = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_MAX_KILLS);
@@ -1670,45 +1676,75 @@ void iGetMultiGameParameters(void)
 			break;
 		case iMP_MECHOSOMA:
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_INITIAL_CASH);
+			if(strcmp(game_name,"skysoma")==0) value = 999999;
 			my_server_data.Mechosoma.InitialCash = value;
 
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_ARTEFACTS_USING);
+			if(strcmp(game_name,"skysoma")==0) value = 0;
 			my_server_data.Mechosoma.ArtefactsUsing = value;
 
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_IN_ESCAVE_TIME);
+			if(strcmp(game_name,"skysoma")==0) value = 1;
 			my_server_data.Mechosoma.InEscaveTime = value;
 
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_TEAM_MODE);
+			if(strcmp(game_name,"skysoma")==0) value = 0;
 			my_server_data.Mechosoma.TeamMode = value;
 
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_WORLD);
 			my_server_data.Mechosoma.World = value;
 
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_QUANTITY1);
+			if(strcmp(game_name,"skysoma")==0) value = 1;
 			my_server_data.Mechosoma.ProductQuantity1 = value;
 
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_QUANTITY2);
+			if(strcmp(game_name,"skysoma")==0) value = 1;
 			my_server_data.Mechosoma.ProductQuantity2 = value;
 
 			value = iGetMultiGameParameter(iMP_MECHOSOMA,iMP_ONE_AT_A_TIME);
+			if(strcmp(game_name,"skysoma")==0) value = 1;
 			my_server_data.Mechosoma.One_at_a_time = value;
 			break;
 		case iMP_PASSEMBLOSS:
 			value = iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_INITIAL_CASH);
+			if(strcmp(game_name,"threall run")==0) value = 999999;
+			if(strcmp(game_name,"test")==0) value = 999999;
+			if(strcmp(game_name,"pass 99")==0) value = 999999;
+			if(strcmp(game_name,"99 chekov")==0) value = 999999;
+			if(strcmp(game_name,"submarine")==0) value = 999999;
 			my_server_data.Passembloss.InitialCash = value;
 
 			value = iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_ARTEFACTS_USING);
+			if(strcmp(game_name,"test")==0) value = 1;
+			if(strcmp(game_name,"threall run")==0) value = 0;
+			if(strcmp(game_name,"pass 99")==0) value = 0;
+			if(strcmp(game_name,"99 chekov")==0) value = 0;
+			if(strcmp(game_name,"submarine")==0) value = 0;
 			my_server_data.Passembloss.ArtefactsUsing = value;
 
 			value = iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_IN_ESCAVE_TIME);
+			if(strcmp(game_name,"test")==0) value = 2;
+			if(strcmp(game_name,"threall run")==0) value = 2;
+			if(strcmp(game_name,"99 chekov")==0) value = 2;
+			if(strcmp(game_name,"pass 99")==0) value = 2;
+			if(strcmp(game_name,"submarine")==0) value = 2;
 			my_server_data.Passembloss.InEscaveTime = value;
 
 			time(&tm);
 
 			value = iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_CHECKPOINTS_NUM);
+			if(strcmp(game_name,"threall run")==0) value = iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_CHECKPOINTS_NUM)+1;
+			if(strcmp(game_name,"submarine")==0) value = (iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_CHECKPOINTS_NUM)*2) + 1;
+			if(strcmp(game_name,"99 chekov")==0) value = 99;
+			if(strcmp(game_name,"pass 99")==0) value = 99;
 			my_server_data.Passembloss.CheckpointsNumber = value;
 
 			value = iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_ESCAVE);
+			if(strcmp(game_name,"threall run")==0) value = 2;
+			if(strcmp(game_name,"99 chekov")==0) value = 2;
+			if(strcmp(game_name,"submarine")==0) value = 2;
+			if(strcmp(game_name,"test")==0) value = 2;
 			my_server_data.Passembloss.RandomEscave = value - 1;
 //			my_server_data.Passembloss.RandomEscave = tm % 3;
 			break;

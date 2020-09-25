@@ -184,7 +184,7 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	if(!game_ID) {
 	    if (lang() == RUSSIAN) {
             //CP866 Новая игра на
-            str_buf < "����� ��� �� ";
+            str_buf < "®¢ ï ¨£à  ­  ";
         } else {
             str_buf < "New Game on ";
         }
@@ -620,7 +620,7 @@ int InputEventBuffer::receive_waiting_for_event(int event, XSocket& sock,int ski
 	}
 	if(!skip_if_aint)
 	    if (lang() == RUSSIAN) {
-            ErrH.Abort("Сервер не отвечает", XERR_USER, event);
+            ErrH.Abort("‘¥à¢¥à ­¥ ®â¢¥ç ¥â", XERR_USER, event);
         } else {
             ErrH.Abort("Time out of Server's response receiving", XERR_USER, event);
         }
@@ -664,7 +664,7 @@ int InputEventBuffer::next_event() {
 	zCreateObjectQueue* temp;
 	if (event_ID == zCREATE_OBJECT_BY_SERVER) {
 		std::cout<<"zCREATE_OBJECT_BY_SERVER"<<std::endl;
-		//zmod - пакет "создай предмед"
+		//zmod - ¯ ª¥â "á®§¤ © ¯à¥¤¬¥¤"
 		*this > factory_number > ammo_count;
 		body_size = 0;
 		if(my_player_body.BirthTime) {
@@ -835,7 +835,7 @@ int restore_connection()
 	if(!main_socket){
 		if(number_of_reconnection_attempt-- <= 0)
 		    if (lang() == RUSSIAN) {
-                ErrH.Abort("Не могу восстановить соединение с Сервером");
+                ErrH.Abort("¥ ¬®£ã ¢®ááâ ­®¢¨âì á®¥¤¨­¥­¨¥ á ‘¥à¢¥à®¬");
             } else {
                 ErrH.Abort("Unable to restore connection to Server");
             }
@@ -1505,4 +1505,3 @@ int test_block(unsigned char* ptr, int size)
 
 
 //===================================================================================
-

@@ -699,12 +699,11 @@ Quaternion Quaternion::operator% (const Quaternion& q) const
 			w*q.y+q.w*y+z*q.x-x*q.z,
 			w*q.z+q.w*z+x*q.y-y*q.x);
 }
-
-
 double Quaternion::operator* (const Quaternion& q) const
 {
 	return w*q.w + x*q.x + y*q.y + z*q.z;
 }
+
 
 	/* Scalar operations */
 Quaternion& Quaternion::operator*= (double s)
@@ -740,17 +739,10 @@ Quaternion operator* (double s,const Quaternion& q)
 
 Quaternion Slerp(const Quaternion& A,const Quaternion& B,double t)
 {
-	double pre_theta = A*B;
-	if (fabs(pre_theta) > 1.0) {
-		return A;
-	}
-
-	double theta = acos(pre_theta);
+	double theta = acos(A*B);
 	double sin_theta = sin(theta);
-	if(fabs(sin_theta) < DBL_EPS) {
+	if(fabs(sin_theta) < DBL_EPS)
 		return A;
-	}
-
 	sin_theta = 1/sin_theta;
 	return A*(sin(theta*(1 - t))*sin_theta) + B*(sin(theta* t)*sin_theta);
 }
