@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "../global.h"
 #include "../lang.h"
 
@@ -23,7 +21,6 @@
 
 #include "../iscreen/controls.h"
 #include "../iscreen/iscreen_options.h"
-#include "../iscreen/iscreen.h"
 
 #include "../actint/item_api.h"
 #include "uvsapi.h"
@@ -62,8 +59,6 @@ int AUTOMATIC_WORLD_INDEX = WORLD_NECROSS;
 
 #define DUST
 #define AUTOMAT
-
-extern iScreenOption** iScrOpt;
 
 extern iGameMap* curGMap;
 extern int frame;
@@ -3630,8 +3625,8 @@ void VangerUnit::DrawQuant(void)
 				XGR_SetClip(UcutLeft,VcutUp,UcutRight,VcutDown);
 				aOutText32clip(R_scr.x,R_scr.y,165 | (2 << 16),pl->name,0,0,0);
 				XGR_SetClip(cclx,ccly,ccrx,ccry);
-				XGR_SetClipMode(ccm);		
-				break;		
+				XGR_SetClipMode(ccm);
+				break;
 			};
 			pl = (PlayerData*)pl -> next;
 		};
@@ -8335,7 +8330,8 @@ void CompasObject::Open(void)
 				p->Data.SensorT = FindSensor(p->Name);
 				break;
 		};
-		//if(!p->Data.SensorT) ErrH.Abort("Error in Compas Target Open");
+		if(!p->Data.SensorT)
+			ErrH.Abort("Error in Compas Target Open");
 		p = p->Next;
 	};
 };
@@ -12673,8 +12669,6 @@ void CreateBoozeeniadaString(void)
 	};
 
 	CHECK_BSIGN_DATA[NUM_CONTROL_BSIGN] = '\0';
-	
-	std::cout << "BoozeenaCode: " << CHECK_BSIGN_DATA << std::endl;
 
 	for(i = 0;i < 8;i++){
 		i1 = RND(2);
@@ -13732,25 +13726,6 @@ void NetworkGetStart(char* name,int& x,int& y)
 	int i,j,t;
 	SensorSortedData = new SensorDataType*[SnsTableSize];
 	StaticSort(SnsTableSize,(StaticObject**)SensorObjectData,(StaticObject**)SensorSortedData);
-	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-	
-	if (NetworkON && strcmp(game_name,"threall run")==0 && my_server_data.GameType == 2) {
-		x = 1580;
-		y = 420;
-		return;
-	}
-	
-	if (NetworkON && strcmp(game_name,"submarine")==0 && my_server_data.GameType == 2) {
-		x = 980;
-		y = 366;
-		return;
-	}
-	
-	if (NetworkON && strcmp(game_name,"neptune")==0 && my_server_data.GameType == 0) {
-		x = 980;
-		y = 366;
-		return;
-	}
 
 	for(i = 0;i < NETWORK_NUM_ESCAVE;i++){
 		if(!strcmp(name,NetworkEscaveName[i])){

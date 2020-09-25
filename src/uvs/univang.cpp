@@ -4,8 +4,6 @@
 		Author: K-D Lab::KranK, KoTo
 */
 
-#include <iostream>
-
 #include "../global.h"
 
 //XStream VOVA("VOVA.LST", XS_OUT);
@@ -44,11 +42,6 @@
 #include "diagen.h"
 #include "univang.h"
 
-#include "../iscreen/ikeys.h"
-#include "../iscreen/controls.h"
-#include "../iscreen/iscreen_options.h"
-#include "../iscreen/iscreen.h"
-
 const int TABUTASK_BAD = ACI_TABUTASK_FAILED;
 const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 
@@ -73,7 +66,6 @@ extern int NetworkON;
 extern NetRndType NetRnd;
 extern int ChangeArmor;
 extern int dgAbortStatus;
-extern iScreenOption** iScrOpt;
 
 void LoadingMessage(int flush = 0);
 void ChangeVanger(void);
@@ -796,12 +788,12 @@ void uniVangPrepare(void){
 	//zNfo  DEFAULT MECHOS 
 	// 16 = моток
 	int MechosID = 0;
-	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-	if (NetworkON) {
-		if (strcmp(game_name,"raffa run")==0) MechosID = 16;
-		else if (strcmp(game_name,"trak-trial")==0) MechosID = 7;
-		else if (strcmp(game_name,"neptune")==0) MechosID = 21; //жаба
-		else MechosID = 5;
+	if (NetworkON) switch (z_my_server_data.mod_id) {
+		case Z_MODS_RAFARUN_ID:		{ MechosID = 16; break; } // моток
+		case Z_MODS_TRAKTRIAL_ID:	{ MechosID =  7; break; } // аттрактор
+		case Z_MODS_NEPTUN_ID:		{ MechosID = 21; break; } // жаба
+		case Z_MODS_TEST_ID:		{ MechosID =  5; break; } // дряхлый душегуб
+		default: MechosID = 5; // дряхлый душегуб
 	}
 	v -> Pescave -> Pshop -> sellMechos(v -> Pmechos, MechosID);
 	v -> Pmechos -> type = MechosID;
@@ -2402,7 +2394,7 @@ void uvsShop::prepare_list_for_ActInt( uvsActInt*& Mechos, uvsActInt*& Item, int
 
 	while( pe ){
 		m_count++;
-		if (uvsMechosTable[((uvsMechos*)pe) -> type] -> type == UVS_CAR_TYPE::RAFFA)
+		if ( uvsMechosTable[((uvsMechos*)pe) -> type] -> type == UVS_CAR_TYPE::RAFFA )
 			raffa_on = 1;
 #ifdef _DEMO_
 		if (CAR_DEMO[((uvsMechos*)pe) -> type])
@@ -2481,7 +2473,7 @@ void uvsShop::prepare_list_for_ActInt( uvsActInt*& Mechos, uvsActInt*& Item, int
 	}
 
 	if (!raffa_on && where ){
-		pn = new uvsActInt; 
+		pn = new uvsActInt;
 		int _type_ = MAX_MECHOS_MAIN + RND(MAX_MECHOS_RAFFA);
 		((uvsActInt*)pn) -> type = _type_;
 
@@ -3027,15 +3019,17 @@ void uvsShop::sellMechos(uvsMechos*& Pm, int type){
 
 	if (!type) type = ~0;
 
-	if (Pm) addMechos( Pm );
-
-	if (last_type) Pm = (uvsMechos*)Pmechos;
-
-	while( Pm && ((Pm -> type >= first_constr) || ((Pm -> status & type) == 0))){
-		Pm = (uvsMechos*)Pm -> next;
+	if (Pm) {
+		addMechos(Pm);
 	}
 
-	if (last_type){
+	if (last_type) {
+		Pm = (uvsMechos*)Pmechos;
+
+		while( Pm && ((Pm -> type >= first_constr) || ((Pm -> status & type) == 0))) {
+			Pm = (uvsMechos*)Pm -> next;
+		}
+
 		uvsMechos*_pm_ = Pm;
 		while( Pm ){
 			if ((uvsMechosTable[Pm -> type]->price > uvsMechosTable[_pm_ -> type]->price) &&  (Pm -> type < first_constr))
@@ -3569,9 +3563,6 @@ void uvsShop::updateResource(void){
 #ifdef _DEMO_
 		if (i != UVS_ITEM_TYPE::CRUSTEST_CANNON_AMMO)
 #endif
-		std::cout << "items_add: " << i << std::endl;
-		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-		if (i == 16 && strcmp(game_name,"threall run")==0) continue;
 		if (  GetItem( Pitem, i, 0) == NULL )
 			for( j = 0; j < 4 + RND(10); j++ ) {
 				addItem(pi = new uvsItem(i));
@@ -5340,8 +5331,8 @@ void uvsEscave::add_goods_to_shop( void ){ //znfo - добавка товаро�
 				
 			if (n > 32) n = 32;
 
-/*			if (!uvsGoodsON)
-				n = 0; */
+			if (!uvsGoodsON)
+				n = 0;
 		} else {
 			n = 4 + RND(5) + 4;
 
@@ -5468,8 +5459,8 @@ void uvsSpot::add_goods_to_shop( void ){
 			n = uvsQuantity;
 			if (n > 32) n = 32;
 
-/*			if (!uvsGoodsON)
-				n = 0; */
+			if (!uvsGoodsON)
+				n = 0;
 		} else {
 			n = 4 + RND(5) + 4;
 
@@ -10350,11 +10341,7 @@ uvsVanger* uvsMakeNewGamerInEscave(uvsEscave* pe, int what ){
 					pm -> prev -> next = pm -> next;
 				}
 
-				char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-				if (strcmp(game_name,"threall run")==0) pm -> type = 5;
-				else if (strcmp(game_name,"skysoma")==0) pm -> type = 13;
-				else if (strcmp(game_name,"neptune")==0) pm -> type = 21;
-				else pm -> type = RND(MAX_MECHOS_RAFFA) + MAX_MECHOS_MAIN;
+				pm -> type = RND(MAX_MECHOS_RAFFA) + MAX_MECHOS_MAIN;
 				Gamer -> Pmechos = pm;
 				if (!Gamer -> Pmechos)
 					ErrH.Abort("uvsMakeNewGamer :: dont have any mechos in shop");

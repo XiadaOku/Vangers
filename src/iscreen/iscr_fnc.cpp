@@ -95,6 +95,8 @@ extern int iScreenLastInput;
 extern int iScreenChat;
 extern int iChatON;
 
+extern int IsMainMenu;
+
 /* --------------------------- PROTOTYPE SECTION ---------------------------- */
 
 int iGetEscaveTime(void);
@@ -417,7 +419,7 @@ const char* iSTR_MP_Mechos_assembled_in = iSTR_MP_Mechos_assembled_in1;
 const char* iSTR_NONE = iSTR_NONE1;
 const char* iSTR_EMPTY_SLOT = iSTR_EMPTY_SLOT1;
 const char* iSTR_Checkpoints_Number = iSTR_Checkpoints_Number1;
-const char* iSTR_DefaultPassword;
+const char* iSTR_DefaultPassword = iSTR_DefaultPassword1;
 
 #ifdef iMOVE_MOUSE_OBJECTS
 iScreenObject* iMovedObj = NULL;
@@ -2222,8 +2224,10 @@ void iHandleExtEvent(int code,int data)
 			mode = xsGetStatusMusic();
 			if(!iGetOptionValue(iMUSIC_ON)){
 				MusicON = 1;
-				if(mode != XCD_PLAYING){
-					StartCDTRACK();
+				if (CurrentWorld != -1) {
+					if (mode != XCD_PLAYING) {
+						IsMainMenu ? StartCDTRACK() : StartWTRACK();
+					}
 				}
 			}
 			else {

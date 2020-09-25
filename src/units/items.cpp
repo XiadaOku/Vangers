@@ -40,13 +40,10 @@
 #include "../sound/hsound.h"
 #include "magnum.h"
 
-#include "../iscreen/iscreen_options.h"
-#include "../iscreen/iscreen.h"
 
 extern int RAM16;
 extern iGameMap* curGMap;
 extern uchar* FireColorTable;
-extern iScreenOption** iScrOpt;
 
 const char DEBRIS_LIFE_TIME = 100;
 
@@ -3678,51 +3675,19 @@ void GloryPlace::Init(int ind)
 		}
 		return;
 	}
-	
-	if(NetworkON && my_server_data.GameType == PASSEMBLOSS && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(), "threall run") == 0) {
-		if(ind == 0) {
-			R_curr.x = 1580;	R_curr.y = 420; World = WORLD_GLORX; // НЕ МЕНЯТЬ !!! Связано с багом вылета клиента при смерти в пассе. если чек не на трех мирах.
-		} else {
-			World = WORLD_THREALL;
-			R_curr.x = GloryRnd.aiRnd(WorldTable[World]->x_size);
-			R_curr.y = GloryRnd.aiRnd(WorldTable[World]->y_size);
-		}
-		return;
-	}
-	
-	if (NetworkON && my_server_data.GameType == PASSEMBLOSS && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(), "submarine") == 0) {
-		World = WORLD_WEEXOW;
-		if (ind == 0) {
-			R_curr.x = 980;	R_curr.y = 366; World = WORLD_GLORX;
-		}
-		else {
-			switch (ind % 2) {
-				case 0:	R_curr.x = 1056;	R_curr.y = 369;	break;
-				case 1:	R_curr.x = 1865;	R_curr.y = 1050; break;
-			}
-		}
-		return;
-	}
-
-	if (NetworkON && my_server_data.GameType == PASSEMBLOSS && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(), "99 chekov") == 0) {
-		World = WORLD_GLORX;
-		R_curr.x = 1079;	R_curr.y = 8598;
-		return;
-	}
 
 	//classic
 	if(ind == 0) {
 		World = GloryRnd.aiRnd(3); // НЕ МЕНЯТЬ !!! Связано с багом вылета клиента при смерти в пассе. если чек не на трех мирах.
 	} else {
 		World = GloryRnd.aiRnd(WORLD_MAX);
+
 		while (World == WORLD_HMOK)
 			World = GloryRnd.aiRnd(WORLD_MAX);
 
-		if(z_my_server_data.mod_id == Z_MODS_RAFARUN_ID ) { //tarakan'i bega/ excludes hmok && threall
-			World = GloryRnd.aiRnd(WORLD_MAX);
-			while (World == WORLD_HMOK || World == WORLD_THREALL)
-				World = GloryRnd.aiRnd(WORLD_MAX);
-		}
+		if(z_my_server_data.mod_id == Z_MODS_RAFARUN_ID ) //tarakan'i bega/ excludes hmok && threall
+			while (World==WORLD_HMOK || World==WORLD_THREALL)
+		World = GloryRnd.aiRnd(WORLD_MAX);
 	};
 	R_curr.x = GloryRnd.aiRnd(WorldTable[World]->x_size);
 	if(World < MAIN_WORLD_MAX - 1)
@@ -3762,8 +3727,7 @@ void GloryPlace::Quant(void)
 
 			dx = getDistX(ActD.Active->R_curr.x,R_curr.x);
 			dy = getDistY(ActD.Active->R_curr.y,R_curr.y);
-			
-			if((dx*dx + dy*dy) < GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS &&
+			if((dx*dx + dy*dy) < GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS && 
 				((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))){
 					if(LightData){
 						LightData->Destroy();
