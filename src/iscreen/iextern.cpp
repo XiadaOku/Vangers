@@ -1738,6 +1738,7 @@ void iGetMultiGameParameters(void)
 			if(strcmp(game_name,"submarine")==0) value = (iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_CHECKPOINTS_NUM)*2) + 1;
 			if(strcmp(game_name,"99 chekov")==0) value = 99;
 			if(strcmp(game_name,"pass 99")==0) value = 99;
+			if(strcmp(game_name,"pass 990")==0) value = 990;
 			my_server_data.Passembloss.CheckpointsNumber = value;
 
 			value = iGetMultiGameParameter(iMP_PASSEMBLOSS,iMP_ESCAVE);
