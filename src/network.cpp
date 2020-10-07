@@ -182,21 +182,21 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	list = 0;
 	XBuffer str_buf;
 	if(!game_ID) {
-	    if (lang() == RUSSIAN) {
-            //CP866 ╨Э╨╛╨▓╨░╤П ╨╕╨│╤А╨░ ╨╜╨░
-			switch(RND(8)) {
-				case 0: str_buf < "Новая игра на cum ";
-				case 1: str_buf < "Новая игра на Ауф ";
-				case 2: str_buf < "Новая игра на шУе ";
-				case 3: str_buf < "Новая игра на Аид ";
-				case 4: str_buf < "Новая игра на хуЙ ";
-				case 5: str_buf < "Новая игра на pUF";
-				case 6: str_buf < "Новая игра на Kiv";
-				case 7: str_buf < "Ксиаде нечего делать на ";				
-			}
-        } else {
-            str_buf < "New Game on ";
-        }
+		switch(RND(12)) {
+			case 0: char  new_game_name = "Новая игра на cum ";
+			case 1: str_buf < char  new_game_name = "Новая игра на Ауф ";
+			case 2: str_buf < char  new_game_name = "Новая игра на шУе ";
+			case 3: str_buf < char  new_game_name = "Новая игра на Аид ";
+			case 4: str_buf < char  new_game_name = "Новая игра на хуЙ ";
+			case 5: str_buf < char  new_game_name = "Новая игра на pUF ";
+			case 6: str_buf < char  new_game_name = "Новая игра на Kiv ";
+			case 7: str_buf < char  new_game_name = "Новая игра на cx ";
+			case 8: str_buf < char  new_game_name = "Аид, гони cx на ";
+			case 9: str_buf < char  new_game_name = "Граф, гони лаунчер на ";
+			case 10: str_buf < char  new_game_name = "Новая игра на ппШ ";
+			default: str_buf < char  new_game_name = "Ксиаде нечего делать на ";				
+		}
+		str_buf < new_game_name;
 	}
 	if(!game_name)
 		if(domain_name)
