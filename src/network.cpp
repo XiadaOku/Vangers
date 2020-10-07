@@ -184,7 +184,16 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	if(!game_ID) {
 	    if (lang() == RUSSIAN) {
             //CP866 ╨Э╨╛╨▓╨░╤П ╨╕╨│╤А╨░ ╨╜╨░
-            str_buf < "Новая игра на ";
+			switch(RND(8)) {
+				case 0: str_buf < "Новая игра на cum ";
+				case 1: str_buf < "Новая игра на Ауф ";
+				case 2: str_buf < "Новая игра на шУе ";
+				case 3: str_buf < "Новая игра на Аид ";
+				case 4: str_buf < "Новая игра на хуЙ ";
+				case 5: str_buf < "Новая игра на pUF";
+				case 6: str_buf < "Новая игра на Kiv";
+				case 7: str_buf < "Ксиаде нечего делать на ";				
+			}
         } else {
             str_buf < "New Game on ";
         }
