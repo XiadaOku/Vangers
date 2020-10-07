@@ -296,6 +296,7 @@ int MMXsuppress;
 int SkipCD;
 
 int CurrentWorld = 0;
+int IsMainMenu = 0;
 
 int inTRall;
 int TimerMode = 1;
@@ -321,7 +322,6 @@ const char* AVInotFoundMSS = "Please ensure that the VANGERS CD-ROM is in the dr
 
 const char* nVER = "Patch 4.20";
 
-extern iScreenOption** iScrOpt;
 
 #include "video/winvideo.h"
 sWinVideo winVideo;
@@ -1003,7 +1003,7 @@ _MEM_STATISTIC_("AFTER curGMap  -> ");
 #ifdef _ACI_SKIP_SHOP_
 	XGR_SetPal(palbuf,0,255);
 #endif
-	
+
 	if(idOS == 1) vMap -> lockMem();
 	XGR_Flush(0,0,XGR_MAXX,XGR_MAXY);
 _MEM_STATISTIC_("AFTER LOADING RTO2 INIT -> ");
@@ -1925,14 +1925,14 @@ void iGameMap::draw(int self)
 
 		if(DepthShow) {
 			if(SkipShow) {
-				//ÐÐ°ÐºÐ»Ð¾Ð½ Ð¸Ð·Ð¾Ð±ÑÐ°Ð¶ÐµÐ½Ð¸Ñ
+				//Наклон изображения
 				vMap -> SlopTurnSkip(TurnAngle,SlopeAngle,ViewZ,focus,ViewX,ViewY,xc,yc,xsize/2,ysize/2);
 			} else {
 				vMap -> scaling_3D(A_g2s,ViewZ,focus,ViewX,ViewY,xc,yc,xside,yside,TurnAngle);
 			}
 		} else {
 			if(TurnAngle) {
-				//ÐÑÐ°ÑÐµÐ½Ð¸Ðµ
+				//Вращение
 				vMap -> turning(TurnSecX,-TurnAngle,ViewX,ViewY,xc,yc,xside,yside);
 			} else {
 				vMap -> scaling(TurnSecX,ViewX,ViewY,xc,yc,xside,yside);
@@ -1940,7 +1940,7 @@ void iGameMap::draw(int self)
 		}
 		
 		
-		//ÐÑÑÐ¸ÑÐ¾Ð²ÐºÐ° 3Ð´ Ð¼Ð¾Ð´ÐµÐ»ÐµÐ¹
+		//Отрисовка 3д моделей
 		if(curGMap) {
 			GameD.DrawQuant();
 		}
