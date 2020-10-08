@@ -1,6 +1,8 @@
 //zmod
 #include "zmod_client.h"
 
+#include <iostream>
+
 #ifdef _NetRally_
 #include "NetRally.h"
 #else
@@ -231,6 +233,7 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 			case 44: new_game_name = "Переводить на ";
 			case 45: new_game_name = "Ксиаде нечего делать на ";		
 		}
+		std::cout << RND(46) << std::endl;
 		str_buf < new_game_name;
 	}
 	if(!game_name)
