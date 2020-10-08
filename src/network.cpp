@@ -183,7 +183,7 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	char* new_game_name = "";
 	XBuffer str_buf;
 	if(!game_ID) {
-		switch(RND(45)) {
+		switch(RND(46)) {
 			case 0: new_game_name = "Новая игра на cum ";
 			case 1: new_game_name = "Новая игра на Ауф ";
 			case 2: new_game_name = "Новая игра на шУе ";
@@ -229,7 +229,7 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 			case 42: new_game_name = "Ставить Линукс на ";
 			case 43: new_game_name = "НЁХ на ";
 			case 44: new_game_name = "Переводить на ";
-			default: new_game_name = "Ксиаде нечего делать на ";				
+			case 45: new_game_name = "Ксиаде нечего делать на ";		
 		}
 		str_buf < new_game_name;
 	}
