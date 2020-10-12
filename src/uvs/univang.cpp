@@ -800,6 +800,7 @@ void uniVangPrepare(void){
 	if (NetworkON) {
 		if (strcmp(game_name,"raffa run")==0) MechosID = 16;
 		else if (strcmp(game_name,"trak-trial")==0) MechosID = 7;
+		else if (strcmp(game_name,"skysoma")==0) MechosID = 22;
 		else if (strcmp(game_name,"neptune")==0) MechosID = 21; //жаба
 		else MechosID = 5;
 	}
@@ -10352,7 +10353,7 @@ uvsVanger* uvsMakeNewGamerInEscave(uvsEscave* pe, int what ){
 
 				char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 				if (strcmp(game_name,"threall run")==0) pm -> type = 5;
-				else if (strcmp(game_name,"skysoma")==0) pm -> type = 13;
+				else if (strcmp(game_name,"skysoma")==0) pm -> type = 22;
 				else if (strcmp(game_name,"neptune")==0) pm -> type = 21;
 				else pm -> type = RND(MAX_MECHOS_RAFFA) + MAX_MECHOS_MAIN;
 				Gamer -> Pmechos = pm;
