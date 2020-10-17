@@ -3744,41 +3744,37 @@ void GloryPlace::Quant(void)
 	int i;
 	int dx,dy;
 	uchar** lt;
-	if(World == CurrentWorld && Enable){
-		lt = vMap->lineT;
-		for(i = -GLORY_PLACE_RADIUS;i < GLORY_PLACE_RADIUS;i++){
-			if(!lt[YCYCL(R_curr.y + i)]){
-				if(LightData){
-					LightData->Destroy();
-					LightData = NULL;
-				};
-				return;
-			};
-		};
-		
-		if(ActD.Active){
-			if(!LightData)
-				LightData = MapD.CreateLight(R_curr.x,R_curr.y,255,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::DYNAMIC | LIGHT_TYPE::TOR);
-
-			dx = getDistX(ActD.Active->R_curr.x,R_curr.x);
-			dy = getDistY(ActD.Active->R_curr.y,R_curr.y);
-			
+	lt = vMap->lineT;
+	for(i = -GLORY_PLACE_RADIUS;i < GLORY_PLACE_RADIUS;i++){
+		if(!lt[YCYCL(R_curr.y + i)]){
 			if(LightData){
 				LightData->Destroy();
 				LightData = NULL;
 			};
-			MapD.CreateLight(R_curr.x,R_curr.y,R_curr.z,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::STATIONARY);
-			for(i = 0;i < 5;i++)
-				EffD.CreateDeform(Vector(XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),255),DEFORM_ALL,PASSING_WAVE_PROCESS);
-			Enable = 0;					
-			UsedCheckNum++;
-			NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
-			if(UsedCheckNum >= GloryPlaceNum)
-				NetStatisticUpdate(NET_STATISTICS_END_RACE);
-			send_player_body(my_player_body);
-			SOUND_SUCCESS();	
+			return;
 		};
 	};
+	
+	if(!LightData)
+		LightData = MapD.CreateLight(R_curr.x,R_curr.y,255,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::DYNAMIC | LIGHT_TYPE::TOR);
+
+	dx = getDistX(ActD.Active->R_curr.x,R_curr.x);
+	dy = getDistY(ActD.Active->R_curr.y,R_curr.y);
+	
+	if(LightData){
+		LightData->Destroy();
+		LightData = NULL;
+	};
+	MapD.CreateLight(R_curr.x,R_curr.y,R_curr.z,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::STATIONARY);
+	for(i = 0;i < 5;i++)
+		EffD.CreateDeform(Vector(XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),255),DEFORM_ALL,PASSING_WAVE_PROCESS);
+	Enable = 0;					
+	UsedCheckNum++;
+	NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
+	if(UsedCheckNum >= GloryPlaceNum)
+		NetStatisticUpdate(NET_STATISTICS_END_RACE);
+	send_player_body(my_player_body);
+	SOUND_SUCCESS();	
 };
 
 extern aciPromptData aiMessageBuffer;
