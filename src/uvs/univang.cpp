@@ -34,6 +34,7 @@
 #ifdef _ROAD_
 #include "../units/uvsapi.h"
 #include "../units/compas.h"
+#include "../units/mechos.h"
 #include "../runtime.h"
 #endif
 
@@ -1044,13 +1045,14 @@ void uvsContimer::Quant(void){
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 
 	if (NetworkON && strcmp(game_name,"test")==0) {
-		if (ActD.Active->R_curr.z < 248) {
-			const char bot_tag[6] = "[bot]";
-			fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 5];
-			strcpy(fall_msg,bot_tag);
-			strcat(fall_msg,aciGetPlayerName());
-			strcat(fall_msg," fall");
-			message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
+			if (ActD.Active && ActD.Active->R_curr.z < 248) {
+				char *fall_msg;
+				const char bot_tag[6] = "[bot]";
+				fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 5];
+				strcpy(fall_msg,bot_tag);
+				strcat(fall_msg,aciGetPlayerName());
+				strcat(fall_msg," fall");
+				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
 		}
 	}
 }
