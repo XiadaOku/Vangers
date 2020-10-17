@@ -34,10 +34,26 @@
 #ifdef _ROAD_
 #include "../units/uvsapi.h"
 #include "../units/compas.h"
-#include "../units/mechos.h"
+#include "../units/track.h"
+#include "../units/hobj.h"
+#include "../units/moveland.h"
+#include "../units/effect.h"
+#include "../units/items.h"
 #include "../units/sensor.h"
+#include "../units/mechos.h"
 #include "../runtime.h"
 #endif
+
+#include "../units/uvsapi.h"
+#include "../units/compas.h"
+#include "../units/track.h"
+#include "../units/hobj.h"
+#include "../units/moveland.h"
+#include "../units/effect.h"
+#include "../units/items.h"
+#include "../units/sensor.h"
+#include "../units/mechos.h"
+#include "../runtime.h"
 
 #include "../3d/3d_math.h"
 #include "../3d/parser.h"
