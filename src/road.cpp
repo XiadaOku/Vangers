@@ -2005,7 +2005,7 @@ void iGameMap::draw(int self)
 		if(prmFlag & PRM_FPS) {
 			sysfont.draw(xc + xside - 150,yc - yside + 80,(unsigned char*)fps_string,224 + 15,-1);
 			status.init();
-			status <= ViewX < " " <= ViewY <" "<=ViewZ/* < ":" <= ActD.NumResolve*/;
+			status <" "<=ViewZ < " " <= ActD.Active->R_curr.z < " " <= ViewX < " " <= ViewY/* < ":" <= ActD.NumResolve*/;
 			sysfont.draw(xc + xside - 150,yc - yside + 96,(unsigned char*)status.GetBuf(),224 + 15,-1);
 			if(NetworkON)
 				sysfont.drawtext(xc - xside + 3,yc - yside + 32,network_analysis_buffer.address(),255,-1);
