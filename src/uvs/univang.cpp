@@ -35,11 +35,13 @@
 #include "../units/uvsapi.h"
 #include "../units/compas.h"
 #include "../units/mechos.h"
+#include "../units/sensor.h"
 #include "../runtime.h"
 #endif
 
 #include "../3d/3d_math.h"
 #include "../3d/parser.h"
+#include "../3d/3dobject.h"
 #include "../terra/vmap.h"
 #include "../sound/hsound.h"
 #include "diagen.h"
