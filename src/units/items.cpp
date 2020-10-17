@@ -3763,23 +3763,20 @@ void GloryPlace::Quant(void)
 			dx = getDistX(ActD.Active->R_curr.x,R_curr.x);
 			dy = getDistY(ActD.Active->R_curr.y,R_curr.y);
 			
-			if((dx*dx + dy*dy) < GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS &&
-				((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))){
-					if(LightData){
-						LightData->Destroy();
-						LightData = NULL;
-					};
-					MapD.CreateLight(R_curr.x,R_curr.y,R_curr.z,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::STATIONARY);
-					for(i = 0;i < 5;i++)
-						EffD.CreateDeform(Vector(XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),255),DEFORM_ALL,PASSING_WAVE_PROCESS);
-					Enable = 0;					
-					UsedCheckNum++;
-					NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
-					if(UsedCheckNum >= GloryPlaceNum)
-						NetStatisticUpdate(NET_STATISTICS_END_RACE);
-					send_player_body(my_player_body);
-					SOUND_SUCCESS();
-			};		
+			if(LightData){
+				LightData->Destroy();
+				LightData = NULL;
+			};
+			MapD.CreateLight(R_curr.x,R_curr.y,R_curr.z,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::STATIONARY);
+			for(i = 0;i < 5;i++)
+				EffD.CreateDeform(Vector(XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),255),DEFORM_ALL,PASSING_WAVE_PROCESS);
+			Enable = 0;					
+			UsedCheckNum++;
+			NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
+			if(UsedCheckNum >= GloryPlaceNum)
+				NetStatisticUpdate(NET_STATISTICS_END_RACE);
+			send_player_body(my_player_body);
+			SOUND_SUCCESS();	
 		};
 	};
 };
