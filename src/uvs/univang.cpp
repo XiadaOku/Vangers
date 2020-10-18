@@ -53,7 +53,6 @@
 #include "../particle/light.h"
 #include "../units/mechos.h"
 
-#include "../ai.h"
 #include "../units/magnum.h"
 #include "../particle/particle.h"
 #include "../terra/render.h"
