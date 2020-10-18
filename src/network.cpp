@@ -1364,7 +1364,7 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
         actual_msg = msg + 5;
         actual_col = 3;
     } 
-	else if (strncmp(msg, start_str)==0) {
+	if (strncmp(msg, start_str, 6)==0) {
 		name = (char*)"$";
         actual_msg = (char*)"ë‚†††††††††‡‚!";
         actual_col = 3;
