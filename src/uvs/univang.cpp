@@ -4,8 +4,6 @@
 		Author: K-D Lab::KranK, KoTo
 */
 
-#include <iostream>
-
 #include "../global.h"
 
 //XStream VOVA("VOVA.LST", XS_OUT);
@@ -34,39 +32,34 @@
 #ifdef _ROAD_
 #include "../units/uvsapi.h"
 #include "../units/compas.h"
-#include "../units/mechos.h"
-#include "../units/track.h"
-#include "../units/hobj.h"
-#include "../units/moveland.h"
-#include "../units/items.h"
-#include "../units/sensor.h"
-#include "../units/effect.h"
-#include "../units/mechos.h"
 #include "../runtime.h"
 #endif
 
-#include "../units/uvsapi.h"
-#include "../units/compas.h"
-#include "../units/mechos.h"
-#include "../units/track.h"
-#include "../units/hobj.h"
-#include "../units/moveland.h"
-#include "../units/items.h"
-#include "../units/sensor.h"
-#include "../units/effect.h"
-#include "../units/magnum.h"
-#include "../runtime.h"
-
 #include "../3d/3d_math.h"
 #include "../3d/parser.h"
-#include "../3d/3dgraph.h"
-#include "../3d/3dobject.h"
 #include "../terra/vmap.h"
-#include "../terra/world.h"
-#include "../terra/render.h"
 #include "../sound/hsound.h"
 #include "diagen.h"
 #include "univang.h"
+
+#include "../3d/3dgraph.h"
+#include "../3d/3dobject.h"
+#include "../units/hobj.h"
+#include "../units/track.h"
+#include "../units/items.h"
+#include "../terra/world.h"
+#include "../dast/poly3d.h"
+#include "../backg.h"
+#include "../particle/light.h"
+#include "../units/mechos.h"
+
+#include "../ai.h"
+#include "../units/magnum.h"
+#include "../particle/particle.h"
+#include "../terra/render.h"
+#include "../units/moveland.h"
+#include "../units/sensor.h"
+#include "../actint/actint.h"
 
 #include "../iscreen/ikeys.h"
 #include "../iscreen/controls.h"
