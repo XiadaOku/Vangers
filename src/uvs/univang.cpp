@@ -1060,8 +1060,8 @@ void uvsContimer::Quant(void){
 	}
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 
-	if (NetworkON && strcmp(game_name,"test")==0) {
-			if (ActD.Active && ActD.Active->R_curr.z < 248) {
+	if (NetworkON && strcmp(game_name,"wiring")==0) {
+			if (ActD.Active && ActD.Active->R_curr.z < 247) {
 				char *fall_msg;
 				const char bot_tag[6] = "[bot]";
 				fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 5];
