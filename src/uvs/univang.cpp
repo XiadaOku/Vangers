@@ -41,6 +41,7 @@
 #include "../sound/hsound.h"
 #include "diagen.h"
 #include "univang.h"
+#include "../iscreen/iscreen.h"
 
 #include "../3d/3dgraph.h"
 #include "../3d/3dobject.h"
@@ -60,10 +61,6 @@
 #include "../units/sensor.h"
 #include "../actint/actint.h"
 
-#include "../iscreen/ikeys.h"
-#include "../iscreen/controls.h"
-#include "../iscreen/iscreen_options.h"
-#include "../iscreen/iscreen.h"
 
 const int TABUTASK_BAD = ACI_TABUTASK_FAILED;
 const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
@@ -89,7 +86,7 @@ extern int NetworkON;
 extern NetRndType NetRnd;
 extern int ChangeArmor;
 extern int dgAbortStatus;
-extern iScreenOption** iScrOpt;
+extern actIntDispatcher* aScrDisp;
 
 void LoadingMessage(int flush = 0);
 void ChangeVanger(void);
@@ -147,6 +144,10 @@ void MLReset(void);
 
 int GeneralMapReload = 0;
 extern uchar** WorldPalData;
+extern iScreenOption** iScrOpt;
+
+
+
 
 const int uvsVANGER_ARRIVAL = 0;
 const int uvsVANGER_FAILED = 1;
