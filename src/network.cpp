@@ -1358,7 +1358,7 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
     char *name, *actual_msg;
     int actual_col;
 	const char bot_tag[6] = "[bot]";
-	const char start_str[6] = "/start";
+	const char start_str[7] = "/start";
     if (strncmp(msg, bot_tag, 5)==0) {
         name = (char*)"$";
         actual_msg = msg + 5;
