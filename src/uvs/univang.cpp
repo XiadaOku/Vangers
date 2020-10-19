@@ -1090,7 +1090,7 @@ void uvsContimer::Quant(void){
 			if (countFromCommand==400) {
 				char *start_msg;
 				const char bot_tag[6] = "[bot]";
-				start_msg = new char[strlen(bot_tag) + 9);
+				start_msg = new char(strlen(bot_tag) + 9);
 				strcpy(start_msg, bot_tag);
 				strcat(start_msg,"СТАРТ!!!");
 				message_dispatcher.send(start_msg, MESSAGE_FOR_ALL, 0);
