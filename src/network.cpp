@@ -17,6 +17,10 @@
 #endif
 #include "network.h"
 
+#include "iscreen/iscreen_options.h"
+#include "iscreen/iscreen.h"
+extern iScreenOption** iScrOpt;
+
 extern int MP_GAME;
 extern XStream fout;
 extern int frame;
@@ -1363,9 +1367,13 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
         name = (char*)"$";
         actual_msg = msg + 5;
         actual_col = 3;
-    } else if (strncmp(msg, start_str, 6)==0) {
+    } else if (strcmp(msg, start_str)==0) {
 		name = (char*)"$";
-        actual_msg = (char*)"Стааааааааарт!";
+		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
+		if  (strcmp(game_name, "test")==0) 
+			actual_msg = (char*)"Старт через 40 секунд";
+		else 
+			actual_msg = (char*)"Старт через 20 секунд";
         actual_col = 3;
 	} else {
         name = (char*)player_name;
