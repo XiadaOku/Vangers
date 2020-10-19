@@ -65,6 +65,8 @@
 const int TABUTASK_BAD = ACI_TABUTASK_FAILED;
 const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 
+int countFromCommand = 0;
+
 int RACE_WAIT =  300;
 int uvsKronActive = 0;
 int uvsVersion = 14;
@@ -1059,9 +1061,44 @@ void uvsContimer::Quant(void){
 		}
 	}
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-
+	
+	if (NetworkON && (is_start || countFromCommand)) {
+		is_start=0;
+		countFromCommand++;
+		if (strcmp(game_name,"ohota na mamonta")==0) {
+			if (countFromCommand==400) {
+				char *start_msg;
+				const char bot_tag[6] = "[bot]";
+				start_msg = new char[strlen(bot_tag) + 5];
+				strcpy(start_msg, bot_tag);
+				strcat(start_msg,"20 секунд мамонта");
+				message_dispatcher.send(start_msg, MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==800) {
+				char *start_msg;
+				const char bot_tag[6] = "[bot]";
+				start_msg = new char[strlen(bot_tag) + 5];
+				strcpy(start_msg, bot_tag);
+				strcat(start_msg,"СТАРТ!!!");
+				message_dispatcher.send(start_msg, MESSAGE_FOR_ALL, 0);
+				countFromCommand=0;
+			}
+		}
+		else {
+			if (countFromCommand==400) {
+				char *start_msg;
+				const char bot_tag[6] = "[bot]";
+				start_msg = new char[strlen(bot_tag) + 5];
+				strcpy(start_msg, bot_tag);
+				strcat(start_msg,"СТАРТ!!!");
+				message_dispatcher.send(start_msg, MESSAGE_FOR_ALL, 0);
+				countFromCommand=0;
+			}
+		}
+	}
+	
 	if (NetworkON && strcmp(game_name,"wiring")==0) {
-			if (ActD.Active && ActD.Active->R_curr.z < 247) {
+			if (ActD.Active && ActD.Active->R_curr.z < 247 && is_start) {
 				char *fall_msg;
 				const char bot_tag[6] = "[bot]";
 				fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 5];
