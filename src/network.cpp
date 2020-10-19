@@ -21,6 +21,8 @@
 #include "iscreen/iscreen.h"
 extern iScreenOption** iScrOpt;
 
+extern int is_start;
+
 extern int MP_GAME;
 extern XStream fout;
 extern int frame;

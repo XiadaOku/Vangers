@@ -82,6 +82,8 @@ int uvsTabuTaskFlag = 0;
 //int uvsGamerActive = 1;
 
 /* ----------------------------- EXTERN SECTION ---------------------------- */
+extern int is_start;
+
 extern int Dead,Quit;
 extern int GameQuantReturnValue;
 extern int NetworkON;
