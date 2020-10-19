@@ -60,7 +60,7 @@ jobs:
     - name: vangers -- create build dir
       run: msys2do mkdir build
     - name: vangers -- configure
-      run: msys2do cmake -G Ninja ..
+      run: msys2do cmake -DBINARY_SCRIPT=OFF -G Ninja ..
       working-directory: build
     - name: vangers -- make
       run: msys2do ninja

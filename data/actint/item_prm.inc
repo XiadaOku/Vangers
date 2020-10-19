@@ -2,7 +2,7 @@
 /* -------------------------------- WEAPONS --------------------------------- */
 
 // MacHOTine Gun (light)
-item_prm	$ITM01_ID	$ACI_WEAPON_DAMAGE	"5"
+item_prm	$ITM01_ID	$ACI_WEAPON_DAMAGE	"500"
 item_prm	$ITM01_ID	$ACI_WEAPON_LOAD	"50"
 item_prm	$ITM01_ID	$ACI_WEAPON_SHOTS_SEC	"3"
 item_prm	$ITM01_ID	$ACI_WEAPON_RANGE	"30"
