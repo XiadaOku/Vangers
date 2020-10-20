@@ -1069,16 +1069,16 @@ void uvsContimer::Quant(void){
 		countFromCommand++;
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==400) {
-				message_dispatcher.send("[bot]20 —Å–µ–∫—É–Ω–¥ –º–∞–º–æ–Ω—Ç–∞!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]20 ·•™„≠§ ¨†¨Æ≠‚†", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==800) {
-				message_dispatcher.send("[bot]–°–¢–ê–†–¢!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]ëíÄêí!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 			}
 		}
 		else {
 			if (countFromCommand==400) {
-				message_dispatcher.send("[bot]–°–¢–ê–†–¢!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]ëíÄêí!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 			}
 		}
