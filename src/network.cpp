@@ -1373,7 +1373,7 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		name = (char*)"$";
 		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 		if  (strcmp(game_name, "ohota na mamonta")==0) 
-			actual_msg = (char*)"Старт через 40 секунд";
+			actual_msg = (char*)"Старт мамонта через 20 секунд, остальных через 40";
 		else 
 			actual_msg = (char*)"Старт через 20 секунд";
         actual_col = 3;
