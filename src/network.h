@@ -7,7 +7,7 @@
 
 #define DEFAULT_SERVER_PORT	2197
 
-extern int is_start;
+extern bool is_start;
 
 extern double zMod_cycle;
 extern double zMod_flood_level_delta;

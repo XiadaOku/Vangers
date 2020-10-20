@@ -82,7 +82,7 @@ int uvsTabuTaskFlag = 0;
 //int uvsGamerActive = 1;
 
 /* ----------------------------- EXTERN SECTION ---------------------------- */
-extern int is_start;
+extern bool is_start;
 
 extern int Dead,Quit;
 extern int GameQuantReturnValue;
@@ -1064,8 +1064,7 @@ void uvsContimer::Quant(void){
 	}
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	
-	if (NetworkON && (is_start || countFromCommand)) {
-		is_start=0;
+	if (NetworkON && is_start) {
 		countFromCommand++;
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==300) {
@@ -1104,6 +1103,7 @@ void uvsContimer::Quant(void){
 			else if (countFromCommand==800) {
 				message_dispatcher.send("[bot]ëíÄêí!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
+				is_start=false;
 			}
 		}
 		else {
@@ -1125,6 +1125,7 @@ void uvsContimer::Quant(void){
 			else if (countFromCommand==400) {
 				message_dispatcher.send("[bot]ëíÄêí!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
+				is_start=false;
 			}
 		}
 	}
