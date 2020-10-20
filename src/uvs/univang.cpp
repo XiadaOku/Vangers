@@ -1070,7 +1070,7 @@ void uvsContimer::Quant(void){
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==400) {
 				char *start_msg;
-				const char bot_tag[6] = "[bot]";
+				char bot_tag[6] = "[bot]";
 				start_msg = new char(strlen(bot_tag) + 27);
 				strcpy(start_msg, bot_tag);
 				strcat(start_msg,"20 секунд мамонта");
@@ -1078,7 +1078,7 @@ void uvsContimer::Quant(void){
 			}
 			else if (countFromCommand==800) {
 				char *start_msg;
-				const char bot_tag[6] = "[bot]";
+				char bot_tag[6] = "[bot]";
 				start_msg = new char(strlen(bot_tag) + 9);
 				strcpy(start_msg, bot_tag);
 				strcat(start_msg,"СТАРТ!!!");
@@ -1089,7 +1089,7 @@ void uvsContimer::Quant(void){
 		else {
 			if (countFromCommand==400) {
 				char *start_msg;
-				const char bot_tag[6] = "[bot]";
+				char bot_tag[6] = "[bot]";
 				start_msg = new char(strlen(bot_tag) + 9);
 				strcpy(start_msg, bot_tag);
 				strcat(start_msg,"СТАРТ!!!");
