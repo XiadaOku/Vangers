@@ -1069,31 +1069,16 @@ void uvsContimer::Quant(void){
 		countFromCommand++;
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==400) {
-				char *start_msg;
-				char bot_tag[6] = "[bot]";
-				start_msg = new char(strlen(bot_tag) + 27);
-				strcpy(start_msg, bot_tag);
-				strcat(start_msg,"20 секунд мамонта");
-				message_dispatcher.send(start_msg, MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]20 секунд мамонта!!!", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==800) {
-				char *start_msg;
-				char bot_tag[6] = "[bot]";
-				start_msg = new char(strlen(bot_tag) + 9);
-				strcpy(start_msg, bot_tag);
-				strcat(start_msg,"СТАРТ!!!");
-				message_dispatcher.send(start_msg, MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 			}
 		}
 		else {
 			if (countFromCommand==400) {
-				char *start_msg;
-				char bot_tag[6] = "[bot]";
-				start_msg = new char(strlen(bot_tag) + 9);
-				strcpy(start_msg, bot_tag);
-				strcat(start_msg,"СТАРТ!!!");
-				message_dispatcher.send(start_msg, MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 			}
 		}
