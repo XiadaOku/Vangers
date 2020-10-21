@@ -1010,16 +1010,14 @@ void iScreenOption::SetValueCHR(const char* p)
 	if(objPtr){
 		switch(ObjectType){
 			case iSTRING:
-				if(ValueType == iOPTION_VALUE_CUR){
-					if (((iStringElement*)objPtr)->string != p) {
-						strcpy(((iStringElement*)objPtr) -> string, p);
-					}
-					((iStringElement*)objPtr) -> init_size();
-					((iStringElement*)objPtr) -> init_align();
-					obj = (iScreenObject*)((iStringElement*)objPtr) -> owner;
-					obj -> flags |= OBJ_REINIT;
-					obj -> flags |= OBJ_MUST_REDRAW;
+				if (((iStringElement*)objPtr)->string != p) {
+					strcpy(((iStringElement*)objPtr) -> string, p);
 				}
+				((iStringElement*)objPtr) -> init_size();
+				((iStringElement*)objPtr) -> init_align();
+				obj = (iScreenObject*)((iStringElement*)objPtr) -> owner;
+				obj -> flags |= OBJ_REINIT;
+				obj -> flags |= OBJ_MUST_REDRAW;
 				break;
 			case iS_STRING:
 				if(ValueType == iOPTION_VALUE_CUR){
