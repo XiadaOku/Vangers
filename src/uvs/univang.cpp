@@ -5569,8 +5569,8 @@ void uvsSpot::add_goods_to_shop( void ){
 			n = uvsQuantity;
 			if (n > 32) n = 32;
 
-/*			if (!uvsGoodsON)
-				n = 0; */
+			if (!uvsGoodsON)
+				n = uvsQuantity;
 		} else {
 			n = 4 + RND(5) + 4;
 
