@@ -5441,8 +5441,8 @@ void uvsEscave::add_goods_to_shop( void ){ //znfo - добавка товаро�
 				
 			if (n > 32) n = 32;
 
-/*			if (!uvsGoodsON)
-				n = 0; */
+			if (!uvsGoodsON)
+				n = uvsQuantity;
 		} else {
 			n = 4 + RND(5) + 4;
 
