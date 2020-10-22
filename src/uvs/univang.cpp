@@ -1139,7 +1139,9 @@ void uvsContimer::Quant(void){
 				strcat(fall_msg,aciGetPlayerName());
 				strcat(fall_msg," fall");
 				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
-				BulletCollision(999999, NULL);
+				VangerUnit* p;
+				p = (VangerUnit*)(ActD.Tail);
+				p->BulletCollision(999999, NULL);
 		}
 	}
 }
