@@ -1068,62 +1068,62 @@ void uvsContimer::Quant(void){
 		countFromCommand++;
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==300) {
-				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("[bot]4(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("[bot]3(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("[bot]2(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("[bot]1(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("[bot]20 секунд мамонта", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]20 секунд мамонта", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==700) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==720) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==740) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==760) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==780) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==800) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 			}
 		}
 		else {
 			if (countFromCommand==300) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 			}
@@ -1138,7 +1138,7 @@ void uvsContimer::Quant(void){
 				strcpy(fall_msg,bot_tag);
 				strcat(fall_msg,aciGetPlayerName());
 				strcat(fall_msg," fall");
-				message_dispatcher.send(fall_msg,MESSAGE_FOR_PLAYER,0);
+				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
 				VangerUnit* p;
 				p = (VangerUnit*)(ActD.Tail);
 				p->BulletCollision(9999999999999999, NULL);
