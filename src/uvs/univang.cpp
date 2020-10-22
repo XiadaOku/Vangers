@@ -82,7 +82,7 @@ int uvsTabuTaskFlag = 0;
 //int uvsGamerActive = 1;
 
 /* ----------------------------- EXTERN SECTION ---------------------------- */
-extern bool is_start;
+extern int is_start;
 
 extern int Dead,Quit;
 extern int GameQuantReturnValue;
@@ -1064,7 +1064,7 @@ void uvsContimer::Quant(void){
 	}
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	
-	if (NetworkON && is_start) {
+	if (NetworkON && is_start==1) {
 		countFromCommand++;
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==300) {
@@ -1103,7 +1103,7 @@ void uvsContimer::Quant(void){
 			else if (countFromCommand==800) {
 				message_dispatcher.send("[bot]‘’€’!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
-				is_start=false;
+				is_start=2;
 			}
 		}
 		else {
@@ -1125,12 +1125,12 @@ void uvsContimer::Quant(void){
 			else if (countFromCommand==400) {
 				message_dispatcher.send("[bot]‘’€’!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
-				is_start=false;
+				is_start=2;
 			}
 		}
 	}
 	
-	if (NetworkON && is_start && strcmp(game_name,"wiring")==0) {
+	if (NetworkON && is_start==2 && strcmp(game_name,"wiring")==0) {
 			if (ActD.Active && ActD.Active->R_curr.z < 247) {
 				char *fall_msg;
 				const char bot_tag[6] = "[bot]";
@@ -1141,7 +1141,8 @@ void uvsContimer::Quant(void){
 				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
 				VangerUnit* p;
 				p = (VangerUnit*)(ActD.Tail);
-				p->BulletCollision(9999999999999999, NULL);
+				p->BulletCollision(MaxArmor+MaxEnergy, NULL);
+				is_start = 0;
 		}
 	}
 }
