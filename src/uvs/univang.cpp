@@ -1139,7 +1139,7 @@ void uvsContimer::Quant(void){
 				strcat(fall_msg,aciGetPlayerName());
 				strcat(fall_msg," fall");
 				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
-				BulletCollision(MaxEnergy + MaxArmor, NULL);
+				BulletCollision(999999, NULL);
 		}
 	}
 }
