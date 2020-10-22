@@ -1432,9 +1432,6 @@ void MessageDispatcher::receive()
 		RemoveElement(pm = first());
 		delete pm;
 	}
-	if (strcmp(msg, "‘’€’!!!")==0) {
-		is_start=2;
-	}
 #ifdef _ROAD_
 	SOUND_BEEP();
     //zmod

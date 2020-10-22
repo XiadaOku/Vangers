@@ -1134,10 +1134,10 @@ void uvsContimer::Quant(void){
 			if (ActD.Active && ActD.Active->R_curr.z < 247) {
 				char *fall_msg;
 				const char bot_tag[6] = "[bot]";
-				fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 5];
+				fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 8];
 				strcpy(fall_msg,bot_tag);
 				strcat(fall_msg,aciGetPlayerName());
-				strcat(fall_msg," fall");
+				strcat(fall_msg," fall...");
 				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
 				VangerUnit* p;
 				p = (VangerUnit*)(ActD.Tail);
