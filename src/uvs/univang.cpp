@@ -1141,7 +1141,7 @@ void uvsContimer::Quant(void){
 				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
 				VangerUnit* p;
 				p = (VangerUnit*)(ActD.Tail);
-				p->BulletCollision(MaxArmor+MaxEnergy, NULL);
+				p->BulletCollision(aciMaxArmor+aciMaxEnergy, NULL);
 				is_start = 0;
 		}
 	}
