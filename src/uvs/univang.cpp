@@ -1108,22 +1108,22 @@ void uvsContimer::Quant(void){
 		}
 		else {
 			if (countFromCommand==300) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("[bot]‘’€’!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]‘’€’!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 			}
@@ -1134,6 +1134,7 @@ void uvsContimer::Quant(void){
 			if (ActD.Active && ActD.Active->R_curr.z < 247) {
 				VangerUnit* p;
 				p = (VangerUnit*)(ActD.Tail);
+				p->BulletCollision(9999999999999999, NULL);
 				char *fall_msg;
 				const char bot_tag[6] = "[bot]";
 				fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 8];
@@ -1141,7 +1142,6 @@ void uvsContimer::Quant(void){
 				strcat(fall_msg,aciGetPlayerName());
 				strcat(fall_msg," fall...");
 				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
-				p->BulletCollision(9999999999999999, p);
 				is_start = 0;
 		}
 	}
