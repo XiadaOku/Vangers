@@ -1131,7 +1131,7 @@ void uvsContimer::Quant(void){
 	}
 	
 	if (NetworkON && is_start==2 && strcmp(game_name,"wiring")==0) {
-		if (ActD.Active && ActD.Active->R_curr.z < 247) {
+		if (ActD.Active && (ActD.Active->R_curr.z < 244 || ActD.Active->R_curr.y < 14710 || ActD.Active->R_curr.y > 16025 || (ActD.Active->R_curr.y < 14770 && (ActD.Active->R_curr.x >= 1200 || ActD.Active->R_curr.x <= 1400))) {
 			VangerUnit* p;
 			char *fall_msg;
 			const char bot_tag[6] = "[bot]";
