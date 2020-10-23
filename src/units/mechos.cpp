@@ -5741,7 +5741,6 @@ void VangerUnit::Action(void)
 						}else{
 							if((dynamic_state & GROUND_COLLISION) && R_curr.z < 300){
 								jump_power = aiRelaxTime * (max_jump_power - 1) / (aiRelaxTimeMax*5);
-								if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0) jump_power=0;
 								controls(CONTROLS::JUMP_USING_ACCUMULATED_POWER,20);
 							};
 						};
@@ -5763,7 +5762,6 @@ void VangerUnit::Action(void)
 									d = vCheck.vabs();
 									if(d < aiMaxJumpRadius)	jump_power = d * (max_jump_power - 1) / aiMaxJumpRadius;
 									else jump_power = max_jump_power - 1;
-									if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0) jump_power = 0;
 									controls(CONTROLS::JUMP_USING_ACCUMULATED_POWER,20);
 									aiReactionMode = 1;
 									aiRelaxTime = 0;

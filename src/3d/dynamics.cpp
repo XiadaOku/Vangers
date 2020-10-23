@@ -29,6 +29,10 @@ struct ParticleProcess;
 
 #include "../iscreen/controls.h"
 
+#include "../iscreen/iscreen_options.h"
+#include "../iscreen/iscreen.h"
+extern iScreenOption** iScrOpt;
+
 #undef random
 #define random(num) ((int)(((long)_rand()*(num)) >> 15))
 
@@ -2480,7 +2484,7 @@ void Object::controls(int mode,int param)
 				}
 			break;
 		case CONTROLS::JUMP_USING_ACCUMULATED_POWER:
-			if(jump_power){
+			if(jump_power && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0)){
 				jump();
 				if(active)
 					SOUND_KIDPUSH();
