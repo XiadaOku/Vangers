@@ -1144,6 +1144,7 @@ void uvsContimer::Quant(void){
 				p->BulletCollision(9999999999999999, NULL);
 				p = (VangerUnit*)(p->NextTypeList);
 			}
+			is_start=3;
 		}
 	}
 }
