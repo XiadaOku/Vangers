@@ -5739,7 +5739,7 @@ void VangerUnit::Action(void)
 							if(aiStatus & AI_MOVE_FUNCTION_IMPULSE) aiMoveFunction = AI_MOVE_FUNCTION_IMPULSE;
 							else  aiMoveFunction = AI_MOVE_FUNCTION_WHEEL;
 						}else{
-							if((dynamic_state & GROUND_COLLISION) && R_curr.z < 300){
+							if((dynamic_state & GROUND_COLLISION) && R_curr.z < 300 && (!NetworkON || strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0)){
 								jump_power = aiRelaxTime * (max_jump_power - 1) / (aiRelaxTimeMax*5);
 								controls(CONTROLS::JUMP_USING_ACCUMULATED_POWER,20);
 							};
@@ -5757,7 +5757,7 @@ void VangerUnit::Action(void)
 						if(a > PI) a -= 2*PI;
 						switch(aiReactionMode){
 							case 0:
-								if(dynamic_state & TOUCH_OF_GROUND){
+								if(dynamic_state & TOUCH_OF_GROUND && (!NetworkON || strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0)){
 									vCheck = Vector(getDistX(TargetPoint.vPoint.x,R_curr.x),getDistY(TargetPoint.vPoint.y,R_curr.y),0);
 									d = vCheck.vabs();
 									if(d < aiMaxJumpRadius)	jump_power = d * (max_jump_power - 1) / aiMaxJumpRadius;
