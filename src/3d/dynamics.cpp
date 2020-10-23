@@ -2484,6 +2484,7 @@ void Object::controls(int mode,int param)
 				}
 			break;
 		case CONTROLS::JUMP_USING_ACCUMULATED_POWER:
+			if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0) break;
 			if(jump_power){
 				jump();
 				if(active)
@@ -2941,10 +2942,10 @@ void Object::mechous_analysis(double dt)
 	int i;
 	dt *= speed_correction_factor;
 	if(Status & SOBJ_AUTOMAT){
-		if(jump_power && ++jump_power > max_jump_power)
+		if(jump_power && ++jump_power > max_jump_power && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0))
 			jump();
 	} else {
-		if(jump_power && CheckStartJump(this)){
+		if(jump_power && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0) && CheckStartJump(this)){
 			jump();
 			if(active)
 				SOUND_KIDPUSH();
