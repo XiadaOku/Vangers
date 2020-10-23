@@ -590,7 +590,7 @@ void iQuantFirst(void)
         iPrepareOptions();
 
 #ifndef _ACI_SKIP_MAINMENU_
-        iSetOptionValueCHR(iPLAYER_NAME2, (lang() == RUSSIAN ? "‚Äö ¬≠–à“ê–∞" : "Vanger"));
+        iSetOptionValueCHR(iPLAYER_NAME2, (lang() == RUSSIAN ? "Ç†≠£•‡" : "Vanger"));
         iSetOptionValueCHR(iPLAYER_PASSWORD, iSTR_DefaultPassword);
         iSetOptionValueCHR(iHOST_NAME, "vangers.net");
         iSetOptionValueCHR(iSERVER_NAME, iSTR_NONE);

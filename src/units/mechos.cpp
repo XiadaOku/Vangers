@@ -13760,7 +13760,7 @@ void NetworkGetStart(char* name,int& x,int& y)
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	
 	if (NetworkON && strcmp(game_name,"threall run")==0 && my_server_data.GameType == 2) {
-		aciWorldLinksON();
+		aiMessageQueue.Send(AI_MESSAGE_SPIRAL,Speed,1);
 		x = 1580;
 		y = 420;
 		return;
