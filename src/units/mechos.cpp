@@ -13760,6 +13760,7 @@ void NetworkGetStart(char* name,int& x,int& y)
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	
 	if (NetworkON && strcmp(game_name,"threall run")==0 && my_server_data.GameType == 2) {
+		aciWorldLinksON();
 		x = 1580;
 		y = 420;
 		return;
