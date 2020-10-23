@@ -712,6 +712,17 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 	};
 	
 	if(pa > 0 && Armor <= 0 && p && NetworkON && p->ID == ID_VANGER){
+		if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechosumo")==0) {
+			if (is_start==1 || is_start==2) {
+				char *out_msg;
+				out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
+				strcpy(out_msg,"[bot]");
+				strcat(out_msg,aciGetPlayerName());
+				strcat(out_msg," выбыл...");
+				message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
+				is_start=3;
+			}
+		}
 		switch(my_server_data.GameType){
 			case VAN_WAR:
 				if(!(my_server_data.Van_War.TeamMode) || ((VangerUnit*)(p))->uvsPoint->Pmechos->color != uvsPoint->Pmechos->color)
@@ -791,17 +802,6 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 			if(Armor <= 0 && pa > 0){
 				PlayerDestroyFlag = 1;
 				GamerResult.vanger_kill++;
-				if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechosumo")==0) {
-					if (is_start==1 || is_start==2) {
-						char *out_msg;
-						out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
-						strcpy(out_msg,"[bot]");
-						strcat(out_msg,aciGetPlayerName());
-						strcat(out_msg,"выбыл...");
-						message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
-						is_start=3;
-					}
-				}
 				uvsPoint->KillStatic();
 			};			
 		};
