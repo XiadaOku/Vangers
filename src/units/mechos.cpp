@@ -793,10 +793,11 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 				GamerResult.vanger_kill++;
 				if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechosumo")==0) {
 					if (is_start==1 || is_start==2) {
+						char *out_msg;
 						out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
 						strcpy(out_msg,"[bot]");
 						strcat(out_msg,aciGetPlayerName());
-						strcat(out_msg," Ð²Ñ‹Ð±Ñ‹Ð»...");
+						strcat(out_msg,"¢ë¡ë«...");
 						message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
 						is_start=3;
 					}
