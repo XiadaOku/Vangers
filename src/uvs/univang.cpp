@@ -1131,20 +1131,21 @@ void uvsContimer::Quant(void){
 	}
 	
 	if (NetworkON && is_start==2 && strcmp(game_name,"wiring")==0) {
-			if (ActD.Active && ActD.Active->R_curr.z < 247) {
-				char *fall_msg;
-				const char bot_tag[6] = "[bot]";
-				fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 8];
-				strcpy(fall_msg,bot_tag);
-				strcat(fall_msg,aciGetPlayerName());
-				strcat(fall_msg," fall...");
-				message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
-				VangerUnit* p;
-				p = (VangerUnit*)(ActD.Tail);
-				while (p) {
-						p->BulletCollision(9999999999999999, NULL);
-				}
-				is_start = 0;
+		if (ActD.Active && ActD.Active->R_curr.z < 247) {
+			VangerUnit* p;
+			char *fall_msg;
+			const char bot_tag[6] = "[bot]";
+			fall_msg = new char[strlen(bot_tag) + strlen(aciGetPlayerName()) + 8];
+			strcpy(fall_msg,bot_tag);
+			strcat(fall_msg,aciGetPlayerName());
+			strcat(fall_msg," fall...");
+			message_dispatcher.send(fall_msg,MESSAGE_FOR_ALL,0);
+			p = (VangerUnit*)(ActD.Tail);
+			while (p) {
+				p->BulletCollision(9999999999999999, NULL);
+				p = (VangerUnit*)(p->NextTypeList);
+			}
+			is_start = 0;
 		}
 	}
 }
