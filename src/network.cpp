@@ -1377,6 +1377,11 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 			actual_msg = (char*)"Старт через 20 секунд";
         actual_col = 3;
 		is_start = 1;
+	} else if (strcmp(msg, "/finish")==0  && is_start==2) {
+		name = (char*)"$";
+		actual_msg = (char*)"Финиш";
+		actual_col = 3;
+		is_start = 0;
 	} else {
         name = (char*)player_name;
         actual_msg = msg;
