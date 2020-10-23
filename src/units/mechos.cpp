@@ -722,6 +722,16 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 				message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
 				is_start=3;
 			}
+		} else if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"wiring")==0) {
+			if (is_start==1 || is_start==2) {
+				char *out_msg;
+				out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
+				strcpy(out_msg,"[bot]");
+				strcat(out_msg,aciGetPlayerName());
+				strcat(out_msg," выбыл...");
+				message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
+				is_start=3;
+			}
 		}
 		switch(my_server_data.GameType){
 			case VAN_WAR:
