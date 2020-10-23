@@ -2484,7 +2484,8 @@ void Object::controls(int mode,int param)
 				}
 			break;
 		case CONTROLS::JUMP_USING_ACCUMULATED_POWER:
-			if(jump_power && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0)){
+			if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"truck-trial")==0) jump_power=0;
+			if(jump_power){
 				jump();
 				if(active)
 					SOUND_KIDPUSH();
