@@ -64,6 +64,7 @@ int AUTOMATIC_WORLD_INDEX = WORLD_NECROSS;
 #define AUTOMAT
 
 extern iScreenOption** iScrOpt;
+extern int is_start;
 
 extern iGameMap* curGMap;
 extern int frame;
@@ -790,6 +791,9 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 			if(Armor <= 0 && pa > 0){
 				PlayerDestroyFlag = 1;
 				GamerResult.vanger_kill++;
+				if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechosumo")==0) {
+					if (is_start==1 || is_start==2) is_start=3;
+				}
 				uvsPoint->KillStatic();
 			};			
 		};
