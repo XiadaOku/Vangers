@@ -871,6 +871,7 @@ int connect_to_server(ServerFindChain* p)
 
 		NetworkON = 1;
 		number_of_reconnection_attempt = 5;
+		message_dispatcher.send("тест test", MESSAGE_FOR_PLAYER, 0);
 
 		return GlobalStationID;
 		}
