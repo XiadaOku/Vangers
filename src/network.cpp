@@ -873,8 +873,9 @@ int connect_to_server(ServerFindChain* p)
 		number_of_reconnection_attempt = 5;
 		if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0) {
 			message_dispatcher.send("[bot]Нептун - Ван-Вар на Жабах на Виксове", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]Все выходят в мир, закупаются и едут к коридору", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]После старта все заезжают в коридор и начинается игра", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]Все выходят в мир, покупают снаряжение", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]И направляются к коридору на Виксов", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]После старта все переходят на Виксов и стартует игра", MESSAGE_FOR_PLAYER, 0); 
 		}
 		return GlobalStationID;
 		}
