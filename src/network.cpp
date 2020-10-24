@@ -871,8 +871,11 @@ int connect_to_server(ServerFindChain* p)
 
 		NetworkON = 1;
 		number_of_reconnection_attempt = 5;
-		message_dispatcher.send("тест test", MESSAGE_FOR_PLAYER, 0);
-
+		if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0) {
+			message_dispatcher.send("[bot]Нептун - Ван-Вар на Жабах на Виксове", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]Все выходят в мир, закупаются и едут к коридору", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]После старта все заезжают в коридор и начинается игра", MESSAGE_FOR_PLAYER, 0);
+		}
 		return GlobalStationID;
 		}
 	NetworkON = 0;
