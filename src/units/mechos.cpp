@@ -13759,9 +13759,6 @@ void NetworkGetStart(char* name,int& x,int& y)
 	StaticSort(SnsTableSize,(StaticObject**)SensorObjectData,(StaticObject**)SensorSortedData);
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	
-	if (NetworkON && strcmp(game_name,"test")==0) {
-		aiMessageQueue.Send(AI_MESSAGE_SPIRAL,1,2,0);
-	}
 	if (NetworkON && strcmp(game_name,"threall run")==0 && my_server_data.GameType == 2) {
 		x = 1580;
 		y = 420;
