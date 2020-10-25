@@ -1112,6 +1112,46 @@ void uvsContimer::Quant(void){
 				is_start=2;
 			}
 		}
+		else if (strcmp(game_name,"mechokvach")==0) {
+			if (countFromCommand==300) {
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==320) {
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==340) {
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==360) {
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==380) {
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==400) {
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==500) {
+				message_dispatcher.send("[bot]5(квач)", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==520) {
+				message_dispatcher.send("[bot]4(квач)", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==540) {
+				message_dispatcher.send("[bot]3(квач)", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==560) {
+				message_dispatcher.send("[bot]2(квач)", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==580) {
+				message_dispatcher.send("[bot]1(квач)", MESSAGE_FOR_ALL, 0);
+			}
+			else if (countFromCommand==600) {
+				message_dispatcher.send("[bot]Старт квача!!!", MESSAGE_FOR_ALL, 0);
+				countFromCommand=0;
+				is_start=2;
+			}
+		}
 		else {
 			if (countFromCommand==300) {
 				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
@@ -1200,6 +1240,9 @@ void uvsContimer::Quant(void){
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 			playerName=aciGetPlayerName();
+			EffD.CreateDeform(p->R_curr,DEFORM_ALL,PASSING_WAVE_PROCESS);
+			if(ActD.Active)
+				SOUND_AMPUTATOR_SHOT(getDistX(ActD.Active->R_curr.x,p->R_curr.x));
 		}
 	}
 }
