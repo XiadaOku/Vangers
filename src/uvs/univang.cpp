@@ -1180,7 +1180,7 @@ void uvsContimer::Quant(void){
 				d = d->NextDeviceList;
 			}
 			p = (VangerUnit*)(p->NextTypeList);
-		if (vector_log && !vector_msg) {
+		if (vector_log && vector_msg==0) {
 			vector_msg = 1;
 			char *kvach_msg;
 			kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
@@ -1189,7 +1189,7 @@ void uvsContimer::Quant(void){
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 		}
-		if (!vector_log && vector_msg) vector_msg = 0; 
+		if (vector_log==0 && vector_msg) vector_msg = 0; 
 		}
 	}
 }
