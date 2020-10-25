@@ -1137,21 +1137,6 @@ void uvsContimer::Quant(void){
 	}
 
 	if (is_start==-1) {
-		message_dispatcher.send("[bot]CODAE METEOR", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]HUMI OS LATIO", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]SIVI TOT COITU", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]MOR LENTE TOTA", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]ADURO TE BARUCH", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]SIVI DAS PERUSSI TUUS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]TERRUI MOX", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]BETH ETUR ESTE CORPOREUS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]VERA TUUS POST ULLUS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]AC A BILIS FAX IMUS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]COITUS SINGULUS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]MORS ET REGRETUS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]FERUS DAS LEVITAS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]AUGEO MORA LA VI ETAS", MESSAGE_FOR_PLAYER, 0);
-		message_dispatcher.send("[bot]CAPILLUS CARITA...", MESSAGE_FOR_PLAYER, 0);
 		VangerUnit* p;
 		p = (VangerUnit*)(ActD.Tail);
 		while (p) {
@@ -1195,12 +1180,6 @@ void uvsContimer::Quant(void){
 		}
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
-		if (ActD.Active) {
-			aciPutItem(ACI_RADAR_DEVICE, ActD.Active->R_curr.x, ActD.Active->R_curr.y);
-			is_start = 3;
-		}
-	}
-	else if (NetworkON && is_start==3 && strcmp(game_name,"mechokvach")==0) {
 		VangerUnit* p;
 		StuffObject* d;
 		int vector_log = 0;
