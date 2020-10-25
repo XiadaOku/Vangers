@@ -1177,10 +1177,11 @@ void uvsContimer::Quant(void){
 					vector_log=1;
 					vector_msg=0;
 					break;
-					};
+				}
 				d = d->NextDeviceList;
 				vector_msg = 1;
 			}
+		}
 		if (vector_log && vector_msg==0) {
 			char *kvach_msg;
 			kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
