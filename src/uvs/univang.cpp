@@ -1171,6 +1171,11 @@ void uvsContimer::Quant(void){
 		}
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
+		if (ActD.Active) {
+			aciPutItem(ACI_RADAR_DEVICE, ActD.Active->R_curr.x, ActD.Active->R_curr.y);
+			is_start = 3;
+		}
+	else if (NetworkON && is_start==3 && strcmp(game_name,"mechokvach")==0) {
 		VangerUnit* p;
 		StuffObject* d;
 		int vector_log = 0;
