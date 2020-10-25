@@ -1186,7 +1186,7 @@ void uvsContimer::Quant(void){
 		is_start=0;
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"wiring")==0) {
-		if (ActD.Active && (ActD.Active->R_curr.z < 244 || ActD.Active->R_curr.y <= 14710 || ActD.Active->R_curr.y >= 16025 || (ActD.Active->R_curr.y <= 14770 && (ActD.Active->R_curr.x >= 1200 || ActD.Active->R_curr.x <= 1400)))) {
+		if (ActD.Active && (ActD.Active->R_curr.z <= 240 || ActD.Active->R_curr.y <= 14710 || ActD.Active->R_curr.y >= 16025 || (ActD.Active->R_curr.y <= 14770 && (ActD.Active->R_curr.x >= 1200 || ActD.Active->R_curr.x <= 1400)))) {
 			char *out_msg;
 			out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
 			strcpy(out_msg,"[bot]");
