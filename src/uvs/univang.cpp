@@ -53,11 +53,9 @@
 #include "../backg.h"
 #include "../particle/light.h"
 #include "../units/mechos.h"
-#include "../units/effect.h"
 
 #include "../units/magnum.h"
 #include "../particle/particle.h"
-#include "../particle/df.h"
 #include "../terra/render.h"
 #include "../units/moveland.h"
 #include "../units/sensor.h"
@@ -1242,9 +1240,6 @@ void uvsContimer::Quant(void){
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 			playerName=aciGetPlayerName();
-			EffD.CreateDeform(p->R_curr,DEFORM_ALL,PASSING_WAVE_PROCESS);
-			if(ActD.Active)
-				SOUND_AMPUTATOR_SHOT(getDistX(ActD.Active->R_curr.x,p->R_curr.x));
 		}
 	}
 }

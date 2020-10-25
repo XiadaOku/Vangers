@@ -5037,11 +5037,13 @@ void VangerUnit::TouchSensor(SensorDataType* p)
 			break;
 		case SensorTypeList::KEY_UPDATE:
 			aiMessageQueue.Send(AI_MESSAGE_SPIRAL,Speed,1);//aiMessageData[AI_MESSAGE_SPIRAL].Send(Speed,1);
+			std::cout << "Зарядка спирали" << std::endl;
 			if(PassageCount < MaxPassageCount){
 				aiMessageQueue.Send(AI_MESSAGE_SPIRAL,Speed,2,0);//aiMessageData[AI_MESSAGE_SPIRAL].Send(Speed,2,0);
 				aciWorldLinksON();
 				PassageCount = MaxPassageCount;
 				SOUND_CHARGE_SPIRAL();
+				std::cout << "Спираль заряжена" << std::endl;
 			};
 			break;
 		case SensorTypeList::SENSOR:
