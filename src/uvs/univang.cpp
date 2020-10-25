@@ -1168,19 +1168,16 @@ void uvsContimer::Quant(void){
 		VangerUnit* p;
 		StuffObject* d;
 		p = (VangerUnit*)(ActD.Tail);
-		int vector_log, vector_msg = 0;
-		while(p){
-			vector_log = 0;
-			d = p->DeviceData;
-			while(d){
-				if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
-					vector_log=1;
-					vector_msg=0;
-					break;
-				}
-				d = d->NextDeviceList;
-				vector_msg = 1;
+		int vector_log = 0, vector_msg = 0;
+		d = p->DeviceData;
+		while(d){
+			if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
+				vector_log=1;
+				vector_msg=0;
+				break;
 			}
+			d = d->NextDeviceList;
+			vector_msg = 1;
 		}
 		if (vector_log && vector_msg==0) {
 			char *kvach_msg;
