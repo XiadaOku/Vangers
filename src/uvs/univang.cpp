@@ -1166,6 +1166,7 @@ void uvsContimer::Quant(void){
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
 		VangerUnit* p;
+		StuffObject* d;
 		p = (VangerUnit*)(ActD.Tail);
 		int vector_log, vector_msg;
 		while(p){
