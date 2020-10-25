@@ -1168,28 +1168,27 @@ void uvsContimer::Quant(void){
 		VangerUnit* p;
 		StuffObject* d;
 		p = (VangerUnit*)(ActD.Tail);
-		int vector_log, vector_msg;
+		int vector_log, vector_msg = 0;
 		while(p){
 			vector_log = 0;
 			d = p->DeviceData;
 			while(d){
 				if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
 					vector_log=1;
+					vector_msg=0;
 					break;
 					};
 				d = d->NextDeviceList;
+				vector_msg = 1;
 			}
-			p = (VangerUnit*)(p->NextTypeList);
 		if (vector_log && vector_msg==0) {
-			vector_msg = 1;
 			char *kvach_msg;
 			kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
 			strcpy(kvach_msg,"[bot]");
 			strcat(kvach_msg,aciGetPlayerName());
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
-		}
-		if (vector_log==0 && vector_msg) vector_msg = 0; 
+			vector_msg = 1;
 		}
 	}
 }
