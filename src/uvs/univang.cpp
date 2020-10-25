@@ -66,6 +66,7 @@ const int TABUTASK_BAD = ACI_TABUTASK_FAILED;
 const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 
 int countFromCommand = 0;
+char* playerName = "";
 
 int RACE_WAIT =  300;
 int uvsKronActive = 0;
@@ -1167,26 +1168,24 @@ void uvsContimer::Quant(void){
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
 		VangerUnit* p;
 		StuffObject* d;
+		int vector_log = 0;
 		p = (VangerUnit*)(ActD.Tail);
-		int vector_log = 0, vector_msg = 0;
 		d = p->DeviceData;
 		while(d){
 			if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
 				vector_log=1;
-				vector_msg=0;
 				break;
 			}
 			d = d->NextDeviceList;
-			vector_msg = 1;
 		}
-		if (vector_log && vector_msg==0) {
+		if (vector_log && strcmp(aciGetPlayerName(), playerName)!=0) {
 			char *kvach_msg;
 			kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
 			strcpy(kvach_msg,"[bot]");
 			strcat(kvach_msg,aciGetPlayerName());
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
-			vector_msg = 1;
+			playerName=aciGetPlayerName();
 		}
 	}
 }
