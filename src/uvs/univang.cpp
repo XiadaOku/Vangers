@@ -1176,7 +1176,7 @@ void uvsContimer::Quant(void){
 		}
 	}
 
-	if (is_start==-1) {
+	/*if (is_start==-1) {
 		VangerUnit* p;
 		p = (VangerUnit*)(ActD.Tail);
 		while (p) {
@@ -1184,9 +1184,9 @@ void uvsContimer::Quant(void){
 			p = (VangerUnit*)(p->NextTypeList);
 		}
 		is_start=0;
-	}
+	}*/
 	else if (NetworkON && is_start==2 && strcmp(game_name,"wiring")==0) {
-		if (ActD.Active && (ActD.Active->R_curr.z <= 240 || ActD.Active->R_curr.y <= 14710 || ActD.Active->R_curr.y >= 16025 || (ActD.Active->R_curr.y <= 14770 && (ActD.Active->R_curr.x >= 1200 || ActD.Active->R_curr.x <= 1400)))) {
+		if (ActD.Active && (ActD.Active->R_curr.z <= 240 || ActD.Active->R_curr.y <= 14710 || ActD.Active->R_curr.y >= 16025 || (ActD.Active->R_curr.y <= 14770 && (ActD.Active->R_curr.x >= 1200 && ActD.Active->R_curr.x <= 1400)) || (ActD.Active->R_curr.y >= 15800 && (ActD.Active->R_curr.x >= 1400 || ActD.Active->R_curr.x <= 1600)))) {
 			char *out_msg;
 			out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
 			strcpy(out_msg,"[bot]");

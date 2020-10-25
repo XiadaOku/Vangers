@@ -1373,12 +1373,14 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
         name = (char*)"$";
         actual_msg = msg + 5;
         actual_col = 3;
-    } else if (strcmp(msg, "/kill")==0) {
+    } 
+	/*else if (strcmp(msg, "/kill")==0) {
 		name = (char*)player_name;
         actual_msg = msg;
         actual_col = col;
 		is_start = -1;
-	} else if (strcmp(msg, "/start")==0  && is_start==0) {
+	} */
+	else if (strcmp(msg, "/start")==0  && is_start==0) {
 		name = (char*)"$";
 		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 		if  (strcmp(game_name, "ohota na mamonta")==0) 
