@@ -57,6 +57,7 @@
 
 #include "../units/magnum.h"
 #include "../particle/particle.h"
+#include "../particle/df.h"
 #include "../terra/render.h"
 #include "../units/moveland.h"
 #include "../units/sensor.h"
