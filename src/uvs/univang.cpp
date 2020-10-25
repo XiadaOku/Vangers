@@ -53,6 +53,7 @@
 #include "../backg.h"
 #include "../particle/light.h"
 #include "../units/mechos.h"
+#include "../units/effect.h"
 
 #include "../units/magnum.h"
 #include "../particle/particle.h"
