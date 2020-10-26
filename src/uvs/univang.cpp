@@ -1072,11 +1072,7 @@ void uvsContimer::Quant(void){
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	
 	if (NetworkON && is_start==1) {
-		if (strcmp(actualPlName,"")==0) {
-			std::cout<<"Name1: "<<aciGetPlayerName()<<std::endl;
-			actualPlName = aciGetPlayerName();
-			std::cout<<"Name2: "<<actualPlName<<std::endl;
-		}
+		if (strcmp(actualPlName,"")==0) actualPlName = aciGetPlayerName();
 		countFromCommand++;
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==300) {
@@ -1211,8 +1207,8 @@ void uvsContimer::Quant(void){
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechosumo")==0) {
 		if (ActD.Active && (ActD.Active->R_curr.y <= 8400 || ActD.Active->R_curr.y >= 8770 || ActD.Active->R_curr.x >= 1240 || ActD.Active->R_curr.x <= 900)) {
 			char *out_msg;
-			out_msg = new char[/*strlen("[bot]") + */strlen(aciGetPlayerName()) + 9];
-			/*strcpy(out_msg,"[bot]");*/
+			out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
+			strcpy(out_msg,"[bot]");
 			strcat(out_msg,aciGetPlayerName());
 			strcat(out_msg," выбыл...");
 			message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
@@ -1231,19 +1227,15 @@ void uvsContimer::Quant(void){
 		int vector_log = 0;
 		p = (VangerUnit*)(ActD.Tail);
 		dd = p->DeviceData;
-		while(p) {
-			while(dd){
-				if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
-					vector_log=1;
-					break;
-				}
-				dd = dd->NextDeviceList;
+		while(dd){
+			if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
+				vector_log=1;
+				break;
 			}
-			if (vector_log==1) break;
-			p = (VangerUnit*)(p->NextTypeList);
-			dd = p->DeviceData;
+			dd = dd->NextDeviceList;
 		}
-		if (vector_log && plName==0) {
+		if (vector_log==1) break;
+		if (vector_log==1 && plName==0) {
 			char *kvach_msg;
 			kvach_msg = new char[/*strlen("[bot]") + */strlen(actualPlName) + 8];
 			//strcpy(kvach_msg,"[bot]");
