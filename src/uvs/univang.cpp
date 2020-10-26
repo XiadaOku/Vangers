@@ -1234,7 +1234,7 @@ void uvsContimer::Quant(void){
 			}
 			dd = dd->NextDeviceList;
 		}
-		if (vector_log==1 && plName==0) {
+		if (vector_log==0 && plName==0) {
 			char *kvach_msg;
 			kvach_msg = new char[/*strlen("[bot]") + */strlen(actualPlName) + 8];
 			//strcpy(kvach_msg,"[bot]");
@@ -1243,7 +1243,7 @@ void uvsContimer::Quant(void){
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 			plName=1;
 		}
-		else if (vector_log==0 && plName==1) plName=0;
+		else if (vector_log==1 && plName==1) plName=0;
 	}
 	if ((NetworkON && is_start!=2  && plName==1) || !NetworkON) plName=0;
 }
