@@ -1680,7 +1680,7 @@ void iGetMultiGameParameters(void)
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_ACCESS);
 			if(strcmp(game_name,"test")==0) value = 0;
-			if(strcmp(game_name,"test")==0) value = 1;
+			if(strcmp(game_name,"wiring")==0) value = 1;
 			if(strcmp(game_name,"mechosumo")==0) value = 1;
 			if(strcmp(game_name,"mechokvach")==0) value = 1;
 			my_server_data.Van_War.WorldAccess = value;
