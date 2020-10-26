@@ -66,7 +66,7 @@ const int TABUTASK_BAD = ACI_TABUTASK_FAILED;
 const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 
 int countFromCommand = 0;
-char* playerName = "";
+int pName = 0;
 
 int RACE_WAIT =  300;
 int uvsKronActive = 0;
@@ -1232,18 +1232,18 @@ void uvsContimer::Quant(void){
 			}
 			d = d->NextDeviceList;
 		}
-		if (vector_log && strcmp(aciGetPlayerName(), playerName)!=0) {
+		if (vector_log && !pName) {
 			char *kvach_msg;
 			kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
 			strcpy(kvach_msg,"[bot]");
 			strcat(kvach_msg,aciGetPlayerName());
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
-			playerName=aciGetPlayerName();
+			pName=1;
 		}
-		else if (vector_log==0 && strcmp(aciGetPlayerName(), playerName)==0) playerName="";
+		else if (vector_log==0 && pName==1) pName=0;
 	}
-	if (NetworkON && is_start!=2  && strcmp(playerName, "")!=0) playerName="";
+	if (NetworkON && is_start!=2  && pName==1) pName=0;
 }
 
 char* uvsContimer::GetTime(void){
