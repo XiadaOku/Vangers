@@ -1231,17 +1231,20 @@ void uvsContimer::Quant(void){
 		int vector_log = 0;
 		p = (VangerUnit*)(ActD.Tail);
 		dd = p->DeviceData;
-		while(dd){
-			if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
-				vector_log=1;
-				break;
+		while(p) {
+			while(dd){
+				if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
+					vector_log=1;
+					break;
+				}
+				dd = dd->NextDeviceList;
 			}
-			dd = dd->NextDeviceList;
+			p = (VangerUnit*)(p->NextTypeList);
 		}
 		if (vector_log && plName==0) {
 			char *kvach_msg;
-			kvach_msg = new char[strlen("[bot]") + strlen(actualPlName) + 8];
-			strcpy(kvach_msg,"[bot]");
+			kvach_msg = new char[/*strlen("[bot]") + */strlen(actualPlName) + 8];
+			//strcpy(kvach_msg,"[bot]");
 			strcat(kvach_msg,actualPlName);
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
