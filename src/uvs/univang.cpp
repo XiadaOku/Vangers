@@ -1220,26 +1220,19 @@ void uvsContimer::Quant(void){
 		}
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
-		char *kvach_msg;
-		kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
-		strcpy(kvach_msg,"[bot]");
-		strcat(kvach_msg,aciGetPlayerName());
-		strcat(kvach_msg," квач...");
-		message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
-	}
-		/*VangerUnit* p;
-		StuffObject* d;
+		VangerUnit* p;
+		StuffObject* dd;
 		int vector_log = 0;
 		p = (VangerUnit*)(ActD.Tail);
-		d = p->DeviceData;
-		while(d){
-			if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
+		dd = p->DeviceData;
+		while(dd){
+			if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
 				vector_log=1;
 				break;
 			}
-			d = d->NextDeviceList;
+			dd = dd->NextDeviceList;
 		}
-		if (vector_log) {
+		if (vector_log && pName==0) {
 			char *kvach_msg;
 			kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
 			strcpy(kvach_msg,"[bot]");
@@ -1250,7 +1243,7 @@ void uvsContimer::Quant(void){
 		}
 		else if (vector_log==0 && pName==1) pName=0;
 	}
-	if (NetworkON && is_start!=2  && pName==1) pName=0;*/
+	if (NetworkON && is_start!=2  && pName==1) pName=0;
 }
 
 char* uvsContimer::GetTime(void){
