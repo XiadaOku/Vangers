@@ -1226,6 +1226,7 @@ void uvsContimer::Quant(void){
 		strcat(kvach_msg,aciGetPlayerName());
 		strcat(kvach_msg," квач...");
 		message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
+	}
 		/*VangerUnit* p;
 		StuffObject* d;
 		int vector_log = 0;
