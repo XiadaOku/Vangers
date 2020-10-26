@@ -1211,8 +1211,8 @@ void uvsContimer::Quant(void){
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechosumo")==0) {
 		if (ActD.Active && (ActD.Active->R_curr.y <= 8400 || ActD.Active->R_curr.y >= 8770 || ActD.Active->R_curr.x >= 1240 || ActD.Active->R_curr.x <= 900)) {
 			char *out_msg;
-			out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
-			strcpy(out_msg,"[bot]");
+			out_msg = new char[/*strlen("[bot]") + */strlen(aciGetPlayerName()) + 9];
+			/*strcpy(out_msg,"[bot]");*/
 			strcat(out_msg,aciGetPlayerName());
 			strcat(out_msg," выбыл...");
 			message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
@@ -1239,7 +1239,9 @@ void uvsContimer::Quant(void){
 				}
 				dd = dd->NextDeviceList;
 			}
+			if (vector_log==1) break;
 			p = (VangerUnit*)(p->NextTypeList);
+			dd = p->DeviceData;
 		}
 		if (vector_log && plName==0) {
 			char *kvach_msg;
