@@ -1232,7 +1232,7 @@ void uvsContimer::Quant(void){
 			}
 			d = d->NextDeviceList;
 		}
-		if (vector_log && !pName) {
+		if (vector_log) {
 			char *kvach_msg;
 			kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
 			strcpy(kvach_msg,"[bot]");
