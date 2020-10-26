@@ -1220,12 +1220,13 @@ void uvsContimer::Quant(void){
 		}
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
+		VangerUnit* p;
 		StuffObject* d;
 		int vector_log = 0;
-		d = (VangerUnit*)(ActD.Tail)->DeviceData;
+		p = (VangerUnit*)(ActD.Tail);
+		d = p->DeviceData;
 		if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
 			vector_log=1;
-			break;
 		}
 		if (vector_log) {
 			char *kvach_msg;
