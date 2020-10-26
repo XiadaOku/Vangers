@@ -1220,18 +1220,12 @@ void uvsContimer::Quant(void){
 		}
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
-		std::cout<<"Name: "<<aciGetPlayerName()<<std::endl;
-		VangerUnit* p;
 		StuffObject* d;
 		int vector_log = 0;
-		p = (VangerUnit*)(ActD.Tail);
-		d = p->DeviceData;
-		while(d){
-			if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
-				vector_log=1;
-				break;
-			}
-			d = d->NextDeviceList;
+		d = (VangerUnit*)(ActD.Tail)->DeviceData;
+		if(d->ActIntBuffer.type == ACI_RADAR_DEVICE){
+			vector_log=1;
+			break;
 		}
 		if (vector_log) {
 			char *kvach_msg;
