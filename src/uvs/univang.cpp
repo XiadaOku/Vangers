@@ -1240,6 +1240,10 @@ void uvsContimer::Quant(void){
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 			playerName=aciGetPlayerName();
+			if (((VangerUnit*)(ActD.mfActive))->uvsPoint->Pmechos->color==1)
+				((VangerUnit*)(ActD.mfActive))->set_body_color(COLORS_IDS::BODY_BLUE);
+			else
+				((VangerUnit*)(ActD.mfActive))->set_body_color(COLORS_IDS::BODY_RED);
 		}
 	}
 }
