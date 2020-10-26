@@ -1072,7 +1072,11 @@ void uvsContimer::Quant(void){
 	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	
 	if (NetworkON && is_start==1) {
-		if (strcmp(actualPlName,"")==0) actualPlName = aciGetPlayerName();
+		if (strcmp(actualPlName,"")==0) {
+			std::cout<<"Name1: "<<aciGetPlayerName()<<std::endl;
+			actualPlName = aciGetPlayerName();
+			std::cout<<"Name2: "<<actualPlName<<std::endl;
+		}
 		countFromCommand++;
 		if (strcmp(game_name,"ohota na mamonta")==0) {
 			if (countFromCommand==300) {
