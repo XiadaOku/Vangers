@@ -1240,12 +1240,10 @@ void uvsContimer::Quant(void){
 			strcat(kvach_msg," квач...");
 			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 			playerName=aciGetPlayerName();
-			VangerUnit* b;
-			b = (VangerUnit*)(ActD.mfActive);
-			b->set_body_color(1);	
 		}
+		else if (vector_log==0 && strcmp(aciGetPlayerName(), playerName)==0) playerName="";
 	}
-	else if (NetworkON && is_start!=2 && strcmp(playerName, "")!=0) playerName="";
+	if (NetworkON && is_start!=2  && strcmp(playerName, "")!=0) playerName="";
 }
 
 char* uvsContimer::GetTime(void){
