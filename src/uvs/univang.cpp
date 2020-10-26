@@ -1245,6 +1245,7 @@ void uvsContimer::Quant(void){
 			b->set_body_color(1);	
 		}
 	}
+	else if (NetworkON && is_start!=2 && strcmp(playerName, "")!=0) playerName="";
 }
 
 char* uvsContimer::GetTime(void){
