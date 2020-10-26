@@ -1234,7 +1234,6 @@ void uvsContimer::Quant(void){
 			}
 			dd = dd->NextDeviceList;
 		}
-		if (vector_log==1) break;
 		if (vector_log==1 && plName==0) {
 			char *kvach_msg;
 			kvach_msg = new char[/*strlen("[bot]") + */strlen(actualPlName) + 8];
