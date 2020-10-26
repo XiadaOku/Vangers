@@ -1220,6 +1220,7 @@ void uvsContimer::Quant(void){
 		}
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
+		std::cout<<"Name: "<<aciGetPlayerName()<<std::endl;
 		VangerUnit* p;
 		StuffObject* d;
 		int vector_log = 0;
