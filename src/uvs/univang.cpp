@@ -1224,26 +1224,26 @@ void uvsContimer::Quant(void){
 	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
 		VangerUnit* p;
 		StuffObject* dd;
-		int vector_log;
-		vector_log = 0;
+		int vector_log = 0;
 		p = (VangerUnit*)(ActD.Tail);
 		dd = p->DeviceData;
 		while(dd){
-			if (plName==1) break;
 			if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
-				char *kvach_msg;
-				kvach_msg = new char[/*strlen("[bot]") + */strlen(actualPlName) + 8];
-				//strcpy(kvach_msg,"[bot]");
-				strcat(kvach_msg,actualPlName);
-				strcat(kvach_msg," квач...");
-				message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
-				plName=1; 
 				vector_log=1;
 				break;
 			}
 			dd = dd->NextDeviceList;
 		}
-		if (vector_log==0 && plName==1) plName=0;
+		if (vector_log==1 && plName==0) {
+			char *kvach_msg;
+			kvach_msg = new char[/*strlen("[bot]") + */strlen(actualPlName) + 8];
+			//strcpy(kvach_msg,"[bot]");
+			strcat(kvach_msg,actualPlName);
+			strcat(kvach_msg," квач...");
+			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
+			plName=1;
+		}
+		else if (vector_log==0 && plName==1) plName=0;
 	}
 	if ((NetworkON && is_start!=2  && plName==1) || !NetworkON) plName=0;
 }
