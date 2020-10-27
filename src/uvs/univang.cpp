@@ -900,10 +900,18 @@ void uvsRestoreVanger(void){
 			int x, y;
 			NetworkGetStart(v -> Pescave -> name, x, y);
 			addVanger(v,x,y, 1);
+			if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0 && ActD.Active) {
+				aciWorldLinksON();
+				ActD.Active->PassageCount = ActD.Active->MaxPassageCount+1;
+			}
 		}else{
 			int x, y;
 			NetworkGetStart(v -> Pspot -> name, x, y);
 			addVanger(v,x, y, 1);
+			if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0 && ActD.Active) {
+				aciWorldLinksON();
+				ActD.Active->PassageCount = ActD.Active->MaxPassageCount+1;
+			}
 		}
 	}
 	while(p){
