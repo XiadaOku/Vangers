@@ -22,6 +22,7 @@
 extern iScreenOption** iScrOpt;
 
 int is_start = 0;
+int is_kill=0;
 
 extern int MP_GAME;
 extern XStream fout;
@@ -881,6 +882,7 @@ int connect_to_server(ServerFindChain* p)
 		}
 	NetworkON = 0;
 	is_start=0;
+	is_kill=0;
 	return 0;
 }
 int restore_connection()
@@ -921,6 +923,7 @@ void disconnect_from_server()
 	events_out.clear();
 	events_in.reset();
 	is_start=0;
+	is_kill=0;
 }
 void set_time_by_server(int n_measures)
 {
@@ -1376,12 +1379,12 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
         actual_msg = msg + 5;
         actual_col = 3;
     } 
-	/*else if (strcmp(msg, "/kill")==0) {
+	else if (is_kill==0 && strcmp(msg, "/kill")==0) {
 		name = (char*)player_name;
         actual_msg = msg;
         actual_col = col;
-		is_start = -1;
-	} */
+		is_kill = -1;
+	}
 	else if (strcmp(msg, "/start")==0  && is_start==0) {
 		name = (char*)"$";
 		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();

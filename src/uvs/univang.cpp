@@ -85,6 +85,7 @@ int uvsTabuTaskFlag = 0;
 
 /* ----------------------------- EXTERN SECTION ---------------------------- */
 extern int is_start;
+extern int is_kill;
 
 extern int Dead,Quit;
 extern int GameQuantReturnValue;
@@ -1186,15 +1187,15 @@ void uvsContimer::Quant(void){
 		}
 	}
 
-	/*if (is_start==-1) {
+	if (is_kill==-1 && ActD.Tail) {
 		VangerUnit* p;
 		p = (VangerUnit*)(ActD.Tail);
 		while (p) {
 			p->BulletCollision(9999999999999999, NULL);
 			p = (VangerUnit*)(p->NextTypeList);
 		}
-		is_start=0;
-	}*/
+		is_kill=0;
+	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"wiring")==0) {
 		if (ActD.Active && (ActD.Active->R_curr.z <= 240 || ActD.Active->R_curr.y <= 14710 || ActD.Active->R_curr.y >= 16025 || (ActD.Active->R_curr.y <= 14770 && (ActD.Active->R_curr.x >= 1200 && ActD.Active->R_curr.x <= 1400)) || (ActD.Active->R_curr.y >= 15800 && (ActD.Active->R_curr.x >= 1400 || ActD.Active->R_curr.x <= 1600)))) {
 			char *out_msg;
