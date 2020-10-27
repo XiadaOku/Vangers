@@ -1227,12 +1227,8 @@ void uvsContimer::Quant(void){
 		int vector_log = 0;
 		p = (VangerUnit*)(ActD.Tail);
 		dd = p->DeviceData;
-		while(dd){
-			if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
-				vector_log=1;
-				break;
-			}
-			dd = dd->NextDeviceList;
+		if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
+			vector_log=1;
 		}
 		if (vector_log==1 && plName==0) {
 			char *kvach_msg;
