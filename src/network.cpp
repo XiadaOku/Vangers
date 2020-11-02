@@ -1354,11 +1354,12 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
         actual_msg = msg + 5;
         actual_col = 3;
     } 
-	else if (is_kill==0 && strcmp(msg, "/kill")==0) {
+	else if (is_kill==0 && (strcmp(msg, "/kill")==0 || strcmp(msg, ".«è¤¤")==0)) {
 		name = (char*)player_name;
         actual_msg = msg;
         actual_col = col;
-		is_kill = -1;
+		if (strncmp((char*)player_name, "xiada", 5)==0)
+			is_kill = -1;
 	}
 	else if ((strcmp(msg, "/start")==0||strcmp(msg, ".ë¥äª¥")==0) && is_start==0) {
 		name = (char*)"$";

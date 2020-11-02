@@ -1193,6 +1193,7 @@ void uvsContimer::Quant(void){
 			p = (VangerUnit*)(p->NextTypeList);
 		}
 		is_kill=0;
+		if (is_start==2 || is_start==1) is_start=3;
 	}
 	else if (NetworkON && is_start==2 && strcmp(game_name,"wiring")==0) {
 		if (ActD.Active && (ActD.Active->R_curr.z <= 240 || ActD.Active->R_curr.y <= 14710 || ActD.Active->R_curr.y >= 16025 || (ActD.Active->R_curr.y <= 14770 && (ActD.Active->R_curr.x >= 1200 && ActD.Active->R_curr.x <= 1400)) || (ActD.Active->R_curr.y >= 15800 && (ActD.Active->R_curr.x >= 1400 || ActD.Active->R_curr.x <= 1600)))) {
