@@ -1,8 +1,6 @@
 //zmod
 #include "zmod_client.h"
 
-#include <iostream>
-
 #ifdef _NetRally_
 #include "NetRally.h"
 #else
@@ -19,8 +17,11 @@
 
 #include "iscreen/iscreen_options.h"
 #include "iscreen/iscreen.h"
+
 extern iScreenOption** iScrOpt;
 
+char kvachId[20];
+int kvachColor=-1;
 int is_start = 0;
 int is_kill=0;
 
@@ -858,6 +859,8 @@ int connect_to_server(ServerFindChain* p)
 	NetworkON = 0;
 	is_start=0;
 	is_kill=0;
+	kvachColor=-1;
+	strcpy(kvachId, "-------------------");
 	return 0;
 }
 int restore_connection()
@@ -899,6 +902,8 @@ void disconnect_from_server()
 	events_in.reset();
 	is_start=0;
 	is_kill=0;
+	kvachColor=-1;
+	strcpy(kvachId, "-------------------");
 }
 void set_time_by_server(int n_measures)
 {
@@ -1366,18 +1371,35 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 		if  (strcmp(game_name, "ohota na mamonta")==0) 
 			actual_msg = (char*)"Старт мамонта через 20 секунд, остальных через 40";
-		else if (strcmp(game_name, "mechokvach")==0) 
+		else if (strcmp(game_name, "mechokvach")==0) {
 			actual_msg = (char*)"Старт квача через 30 секунд, остальных через 20";
+			strcpy(kvachId, "-------------------");
+			kvachColor=-1;
+		}
 		else
 			actual_msg = (char*)"Старт через 20 секунд";
         actual_col = 3;
 		is_start = 1;
-	} else if ((strcmp(msg, "/finish")==0||strcmp(msg, ".аштшыр")==0) && (is_start==2 || is_start==3)) {
+	} 
+	else if ((strcmp(msg, "/finish")==0||strcmp(msg, ".аштшыр")==0) && (is_start==2 || is_start==3)) {
 		name = (char*)"$";
 		actual_msg = (char*)"Финиш";
 		actual_col = 3;
 		is_start = 0;
-	} else {
+		kvachColor=-1;
+		strcpy(kvachId, "-------------------");
+	} 
+	else if (strncmp(msg, "/kvach", 6)==0) {
+		name = (char*)"$";
+		actual_msg=(char*)player_name;
+		actual_col = 3;
+		
+		if (kvachColor==-1) kvachColor=col;
+		strcpy(kvachId, "-------------------");
+		for	(int i = 6; i < strlen(msg); i++) 
+			kvachId[i-6] = msg[i];
+	}
+	else {
         name = (char*)player_name;
         actual_msg = msg;
         actual_col = col;

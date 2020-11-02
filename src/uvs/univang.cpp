@@ -66,7 +66,9 @@ const int TABUTASK_BAD = ACI_TABUTASK_FAILED;
 const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 
 int countFromCommand = 0;
+int countFromDancin = 0;
 int plName = 0;
+int kvachColor1=0;
 
 int RACE_WAIT =  300;
 int uvsKronActive = 0;
@@ -85,6 +87,8 @@ int uvsTabuTaskFlag = 0;
 /* ----------------------------- EXTERN SECTION ---------------------------- */
 extern int is_start;
 extern int is_kill;
+extern char kvachId[20];
+extern int kvachColor;
 
 extern int Dead,Quit;
 extern int GameQuantReturnValue;
@@ -1242,18 +1246,131 @@ void uvsContimer::Quant(void){
 				dd = (StuffObject*)(dd->NextTypeList);
 			}
 			if (vector_log==1 && plName==0) {
+				char ddn[20];
 				char *kvach_msg;
-				kvach_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 8];
-				strcpy(kvach_msg,"[bot]");
-				strcat(kvach_msg,aciGetPlayerName());
-				strcat(kvach_msg," квач...");
+				VangerUnit* p;
+				p = (VangerUnit*)(ActD.Active);
+				itoa(p->ShellNetID, ddn, 10);
+				kvach_msg = new char[6 + strlen(ddn)];
+				strcpy(kvach_msg,"/kvach");
+				strcat(kvach_msg,ddn);
 				message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 				plName=1;
 			}
-			else if (vector_log==0 && plName==1) plName=0;
+			else if (vector_log==0 && plName==1) 
+				plName=0;
 		}
 	}
+	else if (NetworkON && strcmp(game_name,"dancin")==0 && ActD.Active) {
+		switch (countFromDancin%10) {
+			case 0:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 0;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::BODY_GREEN);
+				break;
+			case 1:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 1;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::BODY_RED);
+				break;
+			case 2:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 2;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::BODY_BLUE);
+				break;
+			case 3:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 3;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::BODY_YELLOW);
+				break;
+			case 4:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 4;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::BODY_CRIMSON);
+				break;
+			case 5:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 5;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::BODY_GRAY);
+				break;
+			case 6:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 6;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::ROTTEN_ITEM);
+				break;
+			case 7:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 7;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::MATERIAL_3);
+				break;
+			case 8:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 8;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::MATERIAL_1);
+				break;
+			case 9:
+				((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color = 9;
+				((VangerUnit*)(ActD.Active))->set_body_color(COLORS_IDS::MATERIAL_0);
+				break;
+		}
+		countFromDancin++;
+	}
 	if ((NetworkON && is_start!=2  && plName==1) || !NetworkON) plName=0;
+	
+	
+	
+	if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0 && !strcmp(kvachId, "-------------------")==0) {
+		if (ActD.Active) {
+			VangerUnit* p;
+			p = (VangerUnit*)(ActD.Tail);
+			while (p) {
+				char ddn[20];
+				itoa(p->ShellNetID, ddn, 10);
+				if (strncmp(ddn, kvachId, strlen(ddn))==0) {
+					kvachColor1=p->uvsPoint->Pmechos->color;
+					if (kvachColor == 4) {
+						p->uvsPoint->Pmechos->color = 1;
+						p->set_body_color(COLORS_IDS::BODY_RED);
+					}
+					else {
+						p->uvsPoint->Pmechos->color = 4;
+						p->set_body_color(COLORS_IDS::BODY_CRIMSON);
+					}
+				}
+				else {
+					if ((p->uvsPoint->Pmechos->color == 1 && kvachColor == 4) || (p->uvsPoint->Pmechos->color == 4 && kvachColor != 4)) {
+						p->uvsPoint->Pmechos->color = kvachColor;
+						switch(kvachColor){
+							case 0:
+								p->set_body_color(COLORS_IDS::BODY_GREEN);
+								break;
+							case 1:
+								p->set_body_color(COLORS_IDS::BODY_RED);			
+								break;
+							case 2:
+								p->set_body_color(COLORS_IDS::BODY_BLUE);
+								break;
+							case 3:
+								p->set_body_color(COLORS_IDS::BODY_YELLOW);
+								break;
+							case 4:
+								p->set_body_color(COLORS_IDS::BODY_CRIMSON);
+								break;
+							case 5:
+								p->set_body_color(COLORS_IDS::BODY_GRAY);
+								break;
+							case 6:
+								p->set_body_color(COLORS_IDS::ROTTEN_ITEM);
+								break;
+							case 7:
+								p->set_body_color(COLORS_IDS::MATERIAL_3);
+								break;
+							case 8:
+								p->set_body_color(COLORS_IDS::MATERIAL_1);
+								break;
+							case 9:
+								p->set_body_color(COLORS_IDS::MATERIAL_0);
+								break;
+						}
+					}
+				}
+				p = (VangerUnit*)(p->NextTypeList);
+			}
+			strcpy(kvachId, "-------------------");
+			kvachColor=kvachColor1;
+		}
+	}
 }
 
 char* uvsContimer::GetTime(void){
