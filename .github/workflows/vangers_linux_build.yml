@@ -29,10 +29,10 @@ jobs:
     - name: vangers -- prepare release folder
       run: |
         mkdir -p vangers/bin
-        cp build/src/vangers.exe vangers/bin/
-        strip vangers/bin/vangers.exe
-        cp build/server/vangers_server.exe vangers/bin/
-        strip vangers/bin/vangers_server.exe
+        cp build/src/vangers vangers/bin/
+        strip vangers/bin/vangers
+        cp build/server/vangers_server vangers/bin/
+        strip vangers/bin/vangers_server
     - uses: actions/upload-artifact@v1
       with:
         name: Vangers-Release-linux
