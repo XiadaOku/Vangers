@@ -1366,8 +1366,8 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 	else if ((strcmp(msg, "/start")==0||strcmp(msg, ".ыефке")==0) && is_start==0) {
 		name = (char*)"$";
 		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-		if  (strcmp(game_name, "ohota na mamonta")==0) 
-			actual_msg = (char*)"Старт мамонта через 20 секунд, остальных через 40";
+		if  (strcmp(game_name, "ohota na mamonta")==0 || strcmp(game_name,"mamont")==0) 
+			actual_msg = (char*)"Старт мамонта через 20 секунд, охотников через 40";
 		else if (strcmp(game_name, "mechokvach")==0) {
 			actual_msg = (char*)"Старт квача через 30 секунд, остальных через 20";
 			strcpy(kvachId, "-------------------");

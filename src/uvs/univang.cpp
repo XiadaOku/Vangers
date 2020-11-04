@@ -1083,7 +1083,7 @@ void uvsContimer::Quant(void){
 	
 	if (NetworkON && is_start==1) {
 		countFromCommand++;
-		if (strcmp(game_name,"ohota na mamonta")==0) {
+		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0) {
 			if (countFromCommand==300) {
 				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
