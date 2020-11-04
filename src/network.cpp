@@ -21,7 +21,6 @@
 extern iScreenOption** iScrOpt;
 
 char kvachId[20];
-int kvachColor=-1;
 int is_start = 0;
 int is_kill=0;
 
@@ -859,7 +858,6 @@ int connect_to_server(ServerFindChain* p)
 	NetworkON = 0;
 	is_start=0;
 	is_kill=0;
-	kvachColor=-1;
 	strcpy(kvachId, "-------------------");
 	return 0;
 }
@@ -902,7 +900,6 @@ void disconnect_from_server()
 	events_in.reset();
 	is_start=0;
 	is_kill=0;
-	kvachColor=-1;
 	strcpy(kvachId, "-------------------");
 }
 void set_time_by_server(int n_measures)
@@ -1374,7 +1371,6 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		else if (strcmp(game_name, "mechokvach")==0) {
 			actual_msg = (char*)"Старт квача через 30 секунд, остальных через 20";
 			strcpy(kvachId, "-------------------");
-			kvachColor=-1;
 		}
 		else
 			actual_msg = (char*)"Старт через 20 секунд";
@@ -1386,7 +1382,6 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		actual_msg = (char*)"Финиш";
 		actual_col = 3;
 		is_start = 0;
-		kvachColor=-1;
 		strcpy(kvachId, "-------------------");
 	} 
 	else if (strncmp(msg, "/kvach", 6)==0) {
@@ -1394,7 +1389,6 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		actual_msg=(char*)player_name;
 		actual_col = 3;
 		
-		if (kvachColor==-1) kvachColor=col;
 		strcpy(kvachId, "-------------------");
 		for	(int i = 6; i < strlen(msg); i++) 
 			kvachId[i-6] = msg[i];

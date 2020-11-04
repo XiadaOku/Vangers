@@ -68,7 +68,6 @@ const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 int countFromCommand = 0;
 int countFromDancin = 0;
 int plName = 0;
-int kvachColor1=0;
 
 int RACE_WAIT =  300;
 int uvsKronActive = 0;
@@ -88,7 +87,6 @@ int uvsTabuTaskFlag = 0;
 extern int is_start;
 extern int is_kill;
 extern char kvachId[20];
-extern int kvachColor;
 
 extern int Dead,Quit;
 extern int GameQuantReturnValue;
@@ -1318,8 +1316,7 @@ void uvsContimer::Quant(void){
 				char ddn[20];
 				itoa(p->ShellNetID, ddn, 10);
 				if (strncmp(ddn, kvachId, strlen(ddn))==0) {
-					kvachColor1=p->uvsPoint->Pmechos->color;
-					if (kvachColor == 4) {
+					if (p->uvsPoint->Pmechos->actualColor == 4) {
 						p->uvsPoint->Pmechos->color = 1;
 						p->set_body_color(COLORS_IDS::BODY_RED);
 					}
@@ -1329,9 +1326,9 @@ void uvsContimer::Quant(void){
 					}
 				}
 				else {
-					if ((p->uvsPoint->Pmechos->color == 1 && kvachColor == 4) || (p->uvsPoint->Pmechos->color == 4 && kvachColor != 4)) {
-						p->uvsPoint->Pmechos->color = kvachColor;
-						switch(kvachColor){
+					if (p->uvsPoint->Pmechos->color != p->uvsPoint->Pmechos->actualColor) {
+						p->uvsPoint->Pmechos->color = p->uvsPoint->Pmechos->actualColor;
+						switch(p->uvsPoint->Pmechos->color){
 							case 0:
 								p->set_body_color(COLORS_IDS::BODY_GREEN);
 								break;
@@ -1368,7 +1365,50 @@ void uvsContimer::Quant(void){
 				p = (VangerUnit*)(p->NextTypeList);
 			}
 			strcpy(kvachId, "-------------------");
-			kvachColor=kvachColor1;
+		}
+	}
+	else if (NetworkON && is_start==0 && strcmp(game_name,"mechokvach")==0) {
+		if (ActD.Active) {
+			VangerUnit* p;
+			p = (VangerUnit*)(ActD.Tail);
+			while (p) {
+				if (p->uvsPoint->Pmechos->color != p->uvsPoint->Pmechos->actualColor) {
+					p->uvsPoint->Pmechos->color = p->uvsPoint->Pmechos->actualColor;
+					switch(p->uvsPoint->Pmechos->color){
+						case 0:
+							p->set_body_color(COLORS_IDS::BODY_GREEN);
+							break;
+						case 1:
+							p->set_body_color(COLORS_IDS::BODY_RED);			
+							break;
+						case 2:
+							p->set_body_color(COLORS_IDS::BODY_BLUE);
+							break;
+						case 3:
+							p->set_body_color(COLORS_IDS::BODY_YELLOW);
+							break;
+						case 4:
+							p->set_body_color(COLORS_IDS::BODY_CRIMSON);
+							break;
+						case 5:
+							p->set_body_color(COLORS_IDS::BODY_GRAY);
+							break;
+						case 6:
+							p->set_body_color(COLORS_IDS::ROTTEN_ITEM);
+							break;
+						case 7:
+							p->set_body_color(COLORS_IDS::MATERIAL_3);
+							break;
+						case 8:
+							p->set_body_color(COLORS_IDS::MATERIAL_1);
+							break;
+						case 9:
+							p->set_body_color(COLORS_IDS::MATERIAL_0);
+							break;
+					}
+				}
+				p = (VangerUnit*)(p->NextTypeList);
+			}
 		}
 	}
 }
@@ -12018,6 +12058,7 @@ uvsVanger* uvsCreateNetVanger(int CarType, int Color, int PassageIndex,int TownT
 	pv -> status = UVS_VANGER_STATUS::MOVEMENT;
 	pv -> Pmechos -> type = CarType;
 	pv -> Pmechos -> color = Color;
+	pv -> Pmechos -> actualColor = pv->Pmechos->color;
 	pv -> Pworld = WorldTable[ CurrentWorld ];
 	pv -> owner = NULL;
 

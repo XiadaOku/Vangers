@@ -5841,6 +5841,7 @@ void VangerUnit::CreateVangerUnit(void)
 			NetID = CREATE_NET_ID(NID_VANGER);
 			ShellNetID = (NetID & (~(63 << 16))) | NID_SHELL;
 			uvsPoint->Pmechos->color = aciGetPlayerColor();
+			uvsPoint->Pmechos->actualColor = uvsPoint->Pmechos->color;
 		}else{
 			NetID = 0;
 			ShellNetID = 0;
@@ -13920,6 +13921,7 @@ void VangerUnit::ChangeVangerProcess(void)
 	if(!NetworkON){
 		uvsPoint->Pmechos->type = MechosChangerType;
 		uvsPoint->Pmechos->color = VangerChangerColor;
+		uvsPoint->Pmechos->actualColor = uvsPoint->Pmechos->color;
 	}else{
 		if(Status & SOBJ_ACTIVE){
 			uvsPoint->Pmechos->type = MechosChangerType;
@@ -13928,6 +13930,7 @@ void VangerUnit::ChangeVangerProcess(void)
 			uvsPoint->Pmechos->type = pNetPlayer->body.CarIndex;
 			uvsPoint->Pmechos->color = pNetPlayer->body.color;
 		};
+		uvsPoint->Pmechos->actualColor = uvsPoint->Pmechos->color;
 	};
 
 	sc = uvsMechosTable[uvsPoint->Pmechos->type];
