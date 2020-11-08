@@ -887,7 +887,7 @@ void VangerUnit::DestroyCollision(int l_16,Object* p)
 				char ddn[20];
 				char *kvach_msg;
 				VangerUnit* player;
-				player = (VangerUnit*)(ActD.Active);
+				player = (VangerUnit*)(p);
 				itoa(player->ShellNetID, ddn, 10);
 				kvach_msg = new char[6 + strlen(ddn)];
 				strcpy(kvach_msg,"/kvach");
