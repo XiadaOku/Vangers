@@ -23,6 +23,7 @@ extern iScreenOption** iScrOpt;
 char kvachId[20];
 int is_start = 0;
 int is_kill=0;
+extern int kvachTime;
 
 extern int MP_GAME;
 extern XStream fout;
@@ -1389,6 +1390,7 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		actual_msg=(char*)player_name;
 		actual_col = 3;
 		
+		kvachTime = 0;
 		strcpy(kvachId, "-------------------");
 		for	(int i = 6; i < strlen(msg); i++) 
 			kvachId[i-6] = msg[i];

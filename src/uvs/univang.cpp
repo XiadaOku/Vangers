@@ -1141,24 +1141,6 @@ void uvsContimer::Quant(void){
 			}
 			else if (countFromCommand==400) {
 				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
-			}
-			else if (countFromCommand==500) {
-				message_dispatcher.send("[bot]5(квач)", MESSAGE_FOR_PLAYER, 0);
-			}
-			else if (countFromCommand==520) {
-				message_dispatcher.send("[bot]4(квач)", MESSAGE_FOR_PLAYER, 0);
-			}
-			else if (countFromCommand==540) {
-				message_dispatcher.send("[bot]3(квач)", MESSAGE_FOR_PLAYER, 0);
-			}
-			else if (countFromCommand==560) {
-				message_dispatcher.send("[bot]2(квач)", MESSAGE_FOR_PLAYER, 0);
-			}
-			else if (countFromCommand==580) {
-				message_dispatcher.send("[bot]1(квач)", MESSAGE_FOR_PLAYER, 0);
-			}
-			else if (countFromCommand==600) {
-				message_dispatcher.send("[bot]Старт квача!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 				kvachTime=-1;

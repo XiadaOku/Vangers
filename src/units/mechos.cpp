@@ -883,18 +883,18 @@ void VangerUnit::DestroyCollision(int l_16,Object* p)
 
 	if (p && NetworkON && p->ID == ID_VANGER && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0) {
 		if (ActD.Active && is_start == 2 && kvachTime==-1) {
-			if (((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color == ((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->actualColor) {
+			if (((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color == ((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->actualColor &&
+			((VangerUnit*)(p))->uvsPoint->Pmechos->color != ((VangerUnit*)(p))->uvsPoint->Pmechos->actualColor) {
 				char ddn[20];
 				char *kvach_msg;
 				VangerUnit* player;
-				player = (VangerUnit*)(p);
+				player = (VangerUnit*)(ActD.Active);
 				itoa(player->ShellNetID, ddn, 10);
 				kvach_msg = new char[6 + strlen(ddn)];
 				strcpy(kvach_msg,"/kvach");
 				strcat(kvach_msg,ddn);
 				message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
 			}
-			kvachTime = 0;
 		}
 	}
 };
