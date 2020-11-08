@@ -67,7 +67,6 @@ const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 
 int countFromCommand = 0;
 int countFromDancin = 0;
-int plName = 0;
 
 int RACE_WAIT =  300;
 int uvsKronActive = 0;
@@ -86,6 +85,7 @@ int uvsTabuTaskFlag = 0;
 /* ----------------------------- EXTERN SECTION ---------------------------- */
 extern int is_start;
 extern int is_kill;
+int kvachTime = -1;
 extern char kvachId[20];
 
 extern int Dead,Quit;
@@ -1161,6 +1161,16 @@ void uvsContimer::Quant(void){
 				message_dispatcher.send("[bot]Старт квача!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
+				kvachTime=-1;
+
+				char ddn[20];
+				char *kvach_msg;
+				VangerUnit* player;
+				player = (VangerUnit*)(ActD.Active);
+				itoa(player->ShellNetID, ddn, 10);
+				kvach_msg = new char[6 + strlen(ddn)];
+				strcpy(kvach_msg,ddn);
+				message_dispatcher.send(kvach_msg,MESSAGE_FOR_PLAYER,0);
 			}
 		}
 		else {
@@ -1186,6 +1196,29 @@ void uvsContimer::Quant(void){
 			}
 		}
 	}
+	if (NetworkON && is_start==2 && kvachTime >= 0 && kvachTime < 200) {
+		kvachTime++;
+		if (kvachTime==100) {
+			message_dispatcher.send("[bot]5(квач)", MESSAGE_FOR_PLAYER, 0);
+		}
+		else if (kvachTime==120) {
+			message_dispatcher.send("[bot]4(квач)", MESSAGE_FOR_PLAYER, 0);
+		}
+		else if (kvachTime==140) {
+			message_dispatcher.send("[bot]3(квач)", MESSAGE_FOR_PLAYER, 0);
+		}
+		else if (kvachTime==160) {
+			message_dispatcher.send("[bot]2(квач)", MESSAGE_FOR_PLAYER, 0);
+		}
+		else if (kvachTime==180) {
+			message_dispatcher.send("[bot]1(квач)", MESSAGE_FOR_PLAYER, 0);
+		}
+		else if (kvachTime==200) {
+			message_dispatcher.send("[bot]Старт квача!!!", MESSAGE_FOR_PLAYER, 0);
+			kvachTime=-1;
+		}
+	}
+
 
 	if (is_kill==-1 && ActD.Tail) {
 		VangerUnit* p;
@@ -1229,34 +1262,6 @@ void uvsContimer::Quant(void){
 				p = (VangerUnit*)(p->NextTypeList);
 			}
 			is_start=3;
-		}
-	}
-	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0) {
-		if (ActD.Active) {
-			int vector_log = 0;
-			StuffObject* dd;
-			dd = (StuffObject*)(ActD.Active->DeviceData);
-			while(dd){
-				if(dd->ActIntBuffer.type == ACI_RADAR_DEVICE){
-					vector_log=1;
-					break;
-				}
-				dd = (StuffObject*)(dd->NextTypeList);
-			}
-			if (vector_log==1 && plName==0) {
-				char ddn[20];
-				char *kvach_msg;
-				VangerUnit* p;
-				p = (VangerUnit*)(ActD.Active);
-				itoa(p->ShellNetID, ddn, 10);
-				kvach_msg = new char[6 + strlen(ddn)];
-				strcpy(kvach_msg,"/kvach");
-				strcat(kvach_msg,ddn);
-				message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
-				plName=1;
-			}
-			else if (vector_log==0 && plName==1) 
-				plName=0;
 		}
 	}
 	else if (NetworkON && strcmp(game_name,"dancin")==0 && ActD.Active) {
@@ -1304,7 +1309,6 @@ void uvsContimer::Quant(void){
 		}
 		countFromDancin++;
 	}
-	if ((NetworkON && is_start!=2  && plName==1) || !NetworkON) plName=0;
 	
 	
 	

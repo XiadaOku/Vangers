@@ -9,6 +9,7 @@
 
 extern int is_start;
 extern int is_kill;
+extern int kvachTime;
 extern char kvachId[20];
 
 extern double zMod_cycle;

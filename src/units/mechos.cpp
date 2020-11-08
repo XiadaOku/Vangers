@@ -65,6 +65,7 @@ int AUTOMATIC_WORLD_INDEX = WORLD_NECROSS;
 
 extern iScreenOption** iScrOpt;
 extern int is_start;
+extern int kvachTime;
 
 extern iGameMap* curGMap;
 extern int frame;
@@ -722,7 +723,8 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 				message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
 				is_start=3;
 			}
-		} else if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"wiring")==0) {
+		} 
+		else if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"wiring")==0) {
 			if (is_start==1 || is_start==2) {
 				char *out_msg;
 				out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
@@ -833,6 +835,28 @@ void VangerUnit::DestroyCollision(int l_16,Object* p)
 		Armor = 0;
 
 	if(pa > 0 && Armor <= 0 && p){
+		if (NetworkON && p->ID == ID_VANGER && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechosumo")==0) {
+			if (is_start==1 || is_start==2) {
+				char *out_msg;
+				out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
+				strcpy(out_msg,"[bot]");
+				strcat(out_msg,aciGetPlayerName());
+				strcat(out_msg," выбыл...");
+				message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
+				is_start=3;
+			}
+		} 
+		else if (NetworkON && p->ID == ID_VANGER && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"wiring")==0) {
+			if (is_start==1 || is_start==2) {
+				char *out_msg;
+				out_msg = new char[strlen("[bot]") + strlen(aciGetPlayerName()) + 9];
+				strcpy(out_msg,"[bot]");
+				strcat(out_msg,aciGetPlayerName());
+				strcat(out_msg," выбыл...");
+				message_dispatcher.send(out_msg,MESSAGE_FOR_ALL,0);
+				is_start=3;
+			}
+		}
 		//NetDestroyID = GET_STATION(p->NetID);
 		if(NetworkON && p->ID == ID_VANGER){
 			switch(my_server_data.GameType){
@@ -856,6 +880,23 @@ void VangerUnit::DestroyCollision(int l_16,Object* p)
 			uvsPoint->KillStatic();		
 		};
 	};
+
+	if (p && NetworkON && p->ID == ID_VANGER && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0) {
+		if (ActD.Active && is_start == 2 && kvachTime==-1) {
+			if (((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->color == ((VangerUnit*)(ActD.Active))->uvsPoint->Pmechos->actualColor) {
+				char ddn[20];
+				char *kvach_msg;
+				VangerUnit* player;
+				player = (VangerUnit*)(ActD.Active);
+				itoa(player->ShellNetID, ddn, 10);
+				kvach_msg = new char[6 + strlen(ddn)];
+				strcpy(kvach_msg,"/kvach");
+				strcat(kvach_msg,ddn);
+				message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
+			}
+			kvachTime = 0;
+		}
+	}
 };
 											
 void TrackUnit::GetBranch(void)
