@@ -21,7 +21,9 @@
 extern iScreenOption** iScrOpt;
 
 char kvachId[20];
+char* kvachName = "";
 int is_start = 0;
+int whoIsKvach = 0;
 int is_kill=0;
 extern int kvachTime;
 
@@ -1370,8 +1372,10 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		if  (strcmp(game_name, "ohota na mamonta")==0 || strcmp(game_name,"mamont")==0) 
 			actual_msg = (char*)"Старт мамонта через 20 секунд, охотников через 40";
 		else if (strcmp(game_name, "mechokvach")==0) {
-			actual_msg = (char*)"Старт квача через 30 секунд, остальных через 20";
+			actual_msg = (char*)"Старт через 20 секунд";
 			strcpy(kvachId, "-------------------");
+			whoIsKvach=0;
+			kvachName="";
 		}
 		else
 			actual_msg = (char*)"Старт через 20 секунд";
@@ -1383,11 +1387,20 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		actual_msg = (char*)"Финиш";
 		actual_col = 3;
 		is_start = 0;
+		whoIsKvach=0;
+		kvachName="";
 		strcpy(kvachId, "-------------------");
 	} 
+	else if ((strcmp(msg, "я")==0||strcmp(msg, "z")==0 || strcmp(msg, "Я")==0||strcmp(msg, "Z")==0) && is_start==2 && whoIsKvach==1) {
+		whoIsKvach = 2;
+		kvachName = (char*)player_name;
+		name = (char*)player_name;
+        actual_msg = msg;
+        actual_col = col;
+	}
 	else if (strncmp(msg, "/kvach", 6)==0) {
 		name = (char*)"$";
-		actual_msg=(char*)player_name;
+		actual_msg = (char*)player_name;
 		actual_col = 3;
 		
 		kvachTime = 0;

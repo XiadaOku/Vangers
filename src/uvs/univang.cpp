@@ -85,7 +85,9 @@ int uvsTabuTaskFlag = 0;
 /* ----------------------------- EXTERN SECTION ---------------------------- */
 extern int is_start;
 extern int is_kill;
+extern int whoIsKvach;
 int kvachTime = -1;
+extern char* kvachName;
 extern char kvachId[20];
 
 extern int Dead,Quit;
@@ -1141,18 +1143,11 @@ void uvsContimer::Quant(void){
 			}
 			else if (countFromCommand==400) {
 				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send("[bot]Кто квач? (я/z)", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
+				whoIsKvach=1;
 				kvachTime=-1;
-
-				char ddn[20];
-				char *kvach_msg;
-				VangerUnit* player;
-				player = (VangerUnit*)(ActD.Active);
-				itoa(player->ShellNetID, ddn, 10);
-				kvach_msg = new char[6 + strlen(ddn)];
-				strcpy(kvach_msg,ddn);
-				message_dispatcher.send(kvach_msg,MESSAGE_FOR_PLAYER,0);
 			}
 		}
 		else {
@@ -1196,7 +1191,7 @@ void uvsContimer::Quant(void){
 			message_dispatcher.send("[bot]1(квач)", MESSAGE_FOR_PLAYER, 0);
 		}
 		else if (kvachTime==200) {
-			message_dispatcher.send("[bot]Старт квача!!!", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]Старт квача", MESSAGE_FOR_PLAYER, 0);
 			kvachTime=-1;
 		}
 	}
@@ -1291,7 +1286,20 @@ void uvsContimer::Quant(void){
 		}
 		countFromDancin++;
 	}
-	
+	else if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0 && whoIsKvach==2) {
+		if (strcmp(kvachName, aciGetPlayerName())==0) {
+			char ddn[20];
+			char *kvach_msg;
+			VangerUnit* player;
+			player = (VangerUnit*)(ActD.Active);
+			itoa(player->ShellNetID, ddn, 10);
+			kvach_msg = new char[6 + strlen(ddn)];
+			strcpy(kvach_msg,"/kvach");
+			strcat(kvach_msg,ddn);
+			message_dispatcher.send(kvach_msg,MESSAGE_FOR_ALL,0);
+		}
+		whoIsKvach=0;
+	}
 	
 	
 	if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0 && !strcmp(kvachId, "-------------------")==0) {
