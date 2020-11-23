@@ -15,18 +15,6 @@
 #endif
 #include "network.h"
 
-#include "iscreen/iscreen_options.h"
-#include "iscreen/iscreen.h"
-
-extern iScreenOption** iScrOpt;
-
-char kvachId[20];
-char* kvachName = "";
-int is_start = 0;
-int whoIsKvach = 0;
-int is_kill=0;
-extern int kvachTime;
-
 extern int MP_GAME;
 extern XStream fout;
 extern int frame;
@@ -192,33 +180,14 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	configured = 0;
 	prev = next = 0;
 	list = 0;
-	char* new_game_name = "";
 	XBuffer str_buf;
 	if(!game_ID) {
-		switch(RND(31)) {
-			case 0: new_game_name = "����� ��� �� pUF "; break;
-			case 1: new_game_name = "����� ��� �� Kiv "; break;
-			case 2: new_game_name = "����� ��� �� cx "; break;
-			case 3: new_game_name = "���, ���� cx �� "; break;
-			case 4: new_game_name = "���, ���� ����� �� "; break;
-			case 5: new_game_name = "������ ��� �� "; break;
-			case 6: new_game_name = "������� ����뫨 �� "; break;
-			case 7: new_game_name = "������ ��� ������ �� "; break;
-			case 8: new_game_name = "������� �������� �� "; break;
-			case 9: new_game_name = "��������஢��� � �� "; break;
-			case 10: new_game_name = "������� �ࢥ� "; break;
-			case 11: new_game_name = "�������� �ࢥ� "; break;
-			case 12: new_game_name = "������� ���� �� "; break;
-			case 13: new_game_name = "�������� ��࣠� �� "; break;
-			case 14: new_game_name = "����� ������ �� "; break;
-			case 15: new_game_name = "������� ��� �� "; break;
-			case 16: new_game_name = "������� �ࠢ��� �� "; break;
-			case 17: new_game_name = "�������� �� "; break;
-			case 18: new_game_name = "������ �� "; break;
-			case 19: new_game_name = "�⠢��� ����� �� "; break;
-			default: new_game_name = "�ᨠ�� ��祣� ������ �� "; break;		
-		}
-		str_buf < new_game_name;
+	    if (lang() == RUSSIAN) {
+            //CP866 Новая игра на
+            str_buf < "����� ��� �� ";
+        } else {
+            str_buf < "New Game on ";
+        }
 	}
 	if(!game_name)
 		if(domain_name)
@@ -649,14 +618,14 @@ int InputEventBuffer::receive_waiting_for_event(int event, XSocket& sock,int ski
 
 		receive(sock,1);
 	}
-	if(!skip_if_aint) 
-		
+	if(!skip_if_aint)
+        {
 	    if (lang() == RUSSIAN) {
             ErrH.Abort("Сервер не отвечает", XERR_USER, event);
         } else {
             ErrH.Abort("Time out of Server's response receiving", XERR_USER, event);
         }
-
+        }
 	event_ID = 0;
 	offset = next_event_pointer = 0;
 	return 0;
@@ -852,18 +821,10 @@ int connect_to_server(ServerFindChain* p)
 
 		NetworkON = 1;
 		number_of_reconnection_attempt = 5;
-		if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0) {
-			message_dispatcher.send("[bot]����� - ���-��� �� ����� �� ���ᮢ�", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]�� ��室�� � ���, ���㯠�� ᭠�殮���", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]� ���ࠢ������ � ��ਤ��� �� ���ᮢ", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]��᫥ ���� �� ���室�� �� ���ᮢ � ������ ���", MESSAGE_FOR_PLAYER, 0); 
-		}
+
 		return GlobalStationID;
 		}
 	NetworkON = 0;
-	is_start=0;
-	is_kill=0;
-	strcpy(kvachId, "-------------------");
 	return 0;
 }
 int restore_connection()
@@ -874,14 +835,14 @@ int restore_connection()
 	DOUT("Connection lost");
 	current_server_addr.connect(main_socket);
 	if(!main_socket){
-		if(number_of_reconnection_attempt-- <= 0) 
-
+		if(number_of_reconnection_attempt-- <= 0)
+            {
 		    if (lang() == RUSSIAN) {
                 ErrH.Abort("Не могу восстановить соединение с Сервером");
             } else {
                 ErrH.Abort("Unable to restore connection to Server");
             }
-
+            }
 		return 0;
 	}
 	number_of_reconnection_attempt = 5;
@@ -905,9 +866,6 @@ void disconnect_from_server()
 	delay(256);
 	events_out.clear();
 	events_in.reset();
-	is_start=0;
-	is_kill=0;
-	strcpy(kvachId, "-------------------");
 }
 void set_time_by_server(int n_measures)
 {
@@ -1355,73 +1313,11 @@ void PlayersList::parsing_total_body_query()
 *******************************************************************************/
 MessageElement::MessageElement(const char* player_name, char* msg,int col)
 {
-    char *name, *actual_msg;
-    int actual_col;
-	const char bot_tag[6] = "[bot]";
-    if (strncmp(msg, bot_tag, 5)==0) {
-        name = (char*)"$";
-        actual_msg = msg + 5;
-        actual_col = 3;
-    } 
-	else if (is_kill==0 && (strcmp(msg, "/kill")==0 || strcmp(msg, ".�褤")==0)) {
-		name = (char*)player_name;
-        actual_msg = msg;
-        actual_col = col;
-		if (strncmp((char*)player_name, "xiada", 5)==0)
-			is_kill = -1;
-	}
-	else if ((strcmp(msg, "/start")==0||strcmp(msg, ".�䪥")==0) && is_start==0) {
-		name = (char*)"$";
-		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
-		if  (strcmp(game_name, "ohota na mamonta")==0 || strcmp(game_name,"mamont")==0) 
-			actual_msg = (char*)"���� ������ �१ 20 ᥪ㭤, ��⭨��� �१ 40";
-		else if (strcmp(game_name, "mechokvach")==0) {
-			actual_msg = (char*)"���� �१ 20 ᥪ㭤";
-			strcpy(kvachId, "-------------------");
-			whoIsKvach=0;
-			kvachName="";
-		}
-		else
-			actual_msg = (char*)"���� �१ 20 ᥪ㭤";
-        actual_col = 3;
-		is_start = 1;
-	} 
-	else if ((strcmp(msg, "/finish")==0||strcmp(msg, ".������")==0) && (is_start==2 || is_start==3)) {
-		name = (char*)"$";
-		actual_msg = (char*)"�����";
-		actual_col = 3;
-		is_start = 0;
-		whoIsKvach=0;
-		kvachName="";
-		strcpy(kvachId, "-------------------");
-	} 
-	else if ((strcmp(msg, "�")==0||strcmp(msg, "z")==0 || strcmp(msg, "�")==0||strcmp(msg, "Z")==0) && is_start==2 && whoIsKvach==1) {
-		whoIsKvach = 2;
-		kvachName = (char*)player_name;
-		name = (char*)player_name;
-        actual_msg = msg;
-        actual_col = col;
-	}
-	else if (strncmp(msg, "/kvach", 6)==0) {
-		name = (char*)"$";
-		actual_msg = (char*)player_name;
-		actual_col = 3;
-		
-		kvachTime = 0;
-		strcpy(kvachId, "-------------------");
-		for	(int i = 6; i < strlen(msg); i++) 
-			kvachId[i-6] = msg[i];
-	}
-	else {
-        name = (char*)player_name;
-        actual_msg = msg;
-        actual_col = col;
-    }
-	message = new char[strlen(name) + strlen(actual_msg) + 3];
-	strcpy(message,name);
+	message = new char[strlen(player_name) + strlen(msg) + 3];
+	strcpy(message,player_name);
 	strcat(message,": ");
-	strcat(message,actual_msg);
-	color = actual_col;
+	strcat(message,msg);
+	color = col;
 	//zmod
     time = SDL_GetTicks();
 }
@@ -1466,7 +1362,7 @@ void MessageDispatcher::receive()
 	if(ListSize > max_number_of_messages){
 		RemoveElement(pm = first());
 		delete pm;
-	}
+		}
 #ifdef _ROAD_
 	SOUND_BEEP();
     //zmod
