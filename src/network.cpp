@@ -152,6 +152,7 @@ int create_server(int port)
 					&ProcessInformation	// pointer to PROCESS_INFORMATION
 					)){
 		CloseHandle(ProcessInformation.hThread);
+
 		if(avaible_servers.talk_to_server(XSocketLocalHostADDR,port,0,1))
 			return avaible_servers.size();
 		}
@@ -619,7 +620,7 @@ int InputEventBuffer::receive_waiting_for_event(int event, XSocket& sock,int ski
 	}
 	if(!skip_if_aint)
 	    if (lang() == RUSSIAN) {
-            ErrH.Abort("Ð¡ÐµÑ€Ð²ÐµÑ€ Ð½Ðµ Ð¾Ñ‚Ð²ÐµÑ‡Ð°ÐµÑ‚", XERR_USER, event);
+            ErrH.Abort("Сервер не отвечает", XERR_USER, event);
         } else {
             ErrH.Abort("Time out of Server's response receiving", XERR_USER, event);
         }
@@ -663,7 +664,7 @@ int InputEventBuffer::next_event() {
 	zCreateObjectQueue* temp;
 	if (event_ID == zCREATE_OBJECT_BY_SERVER) {
 		std::cout<<"zCREATE_OBJECT_BY_SERVER"<<std::endl;
-		//zmod - Ð¿Ð°ÐºÐµÑ‚ "ÑÐ¾Ð·Ð´Ð°Ð¹ Ð¿Ñ€ÐµÐ´Ð¼ÐµÐ´"
+		//zmod - пакет "создай предмед"
 		*this > factory_number > ammo_count;
 		body_size = 0;
 		if(my_player_body.BirthTime) {
@@ -834,7 +835,7 @@ int restore_connection()
 	if(!main_socket){
 		if(number_of_reconnection_attempt-- <= 0)
 		    if (lang() == RUSSIAN) {
-                ErrH.Abort("ÐÐµ Ð¼Ð¾Ð³Ñƒ Ð²Ð¾ÑÑÑ‚Ð°Ð½Ð¾Ð²Ð¸Ñ‚ÑŒ ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ðµ Ñ Ð¡ÐµÑ€Ð²ÐµÑ€Ð¾Ð¼");
+                ErrH.Abort("Не могу восстановить соединение с Сервером");
             } else {
                 ErrH.Abort("Unable to restore connection to Server");
             }
