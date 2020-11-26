@@ -1,4 +1,3 @@
-
 /*
 		Client - Server interface header
 */
