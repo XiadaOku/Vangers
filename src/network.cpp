@@ -195,38 +195,35 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	char* new_game_name = "";
 	XBuffer str_buf;
 	if(!game_ID) {
-		switch(RND(31)) {
-			case 0: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜ я┐╜я┐╜ pUF "; break;
-			case 1: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜ я┐╜я┐╜ Kiv "; break;
-			case 2: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜ я┐╜я┐╜ cx "; break;
-			case 3: new_game_name = "я┐╜я┐╜я┐╜, я┐╜я┐╜я┐╜я┐╜ cx я┐╜я┐╜ "; break;
-			case 4: new_game_name = "я┐╜я┐╜я┐╜, я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 5: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 6: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜ыли я┐╜я┐╜ "; break;
-			case 7: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 8: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 9: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ровя┐╜я┐╜я┐╜ я┐╜ я┐╜я┐╜ "; break;
-			case 10: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜рвея┐╜ "; break;
-			case 11: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜рвея┐╜ "; break;
-			case 12: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 13: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ргая┐╜ я┐╜я┐╜ "; break;
-			case 14: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 15: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 16: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜равя┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 17: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 18: new_game_name = "я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			case 19: new_game_name = "я┐╜тавя┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;
-			default: new_game_name = "я┐╜сиая┐╜я┐╜ я┐╜я┐╜чегя┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ "; break;		
+		switch(RND(20)) {
+			case 1: new_game_name = "Аид, когда CX на "; break;
+			case 2: new_game_name = "Позвать ФЕКа на "; break;
+			case 3: new_game_name = "Поставить линукс на "; break;
+			case 4: new_game_name = "Убить Димона на "; break;
+			case 5: new_game_name = "Забыть про старт на "; break;
+			case 6: new_game_name = "Взять вектор на "; break;
+			case 7: new_game_name = "Написать говнокод на "; break;
+			case 8: new_game_name = "Сделать костыли на "; break;
+			case 9: new_game_name = "Положить сервер "; break;
+			case 10: new_game_name = "Удалить сервер "; break;
+			case 11: new_game_name = "Обогнать торгаша на "; break;
+			case 12: new_game_name = "Дебажить на "; break;
+			case 13: new_game_name = "Получить бан на "; break;
+			case 14: new_game_name = "Призвать свина на "; break;
+			default: new_game_name = "Ксиаде нечего делать на "; break;		
 		}
 		str_buf < new_game_name;
 	}
-	if(!game_name)
-		if(domain_name)
-			str_buf < domain_name;
+	if (RND(40) == 1) str_buf < "ara ara";
+	else {
+		if(!game_name)
+			if(domain_name)
+				str_buf < domain_name;
+			else
+				str_buf <= (IP & 0xff) < "." <= ((IP >> 8) & 0xff) < "." <= ((IP >> 16) & 0xff) < "." <= ((IP >> 24) & 0xff);
 		else
-			str_buf <= (IP & 0xff) < "." <= ((IP >> 8) & 0xff) < "." <= ((IP >> 16) & 0xff) < "." <= ((IP >> 24) & 0xff);
-	else
-		str_buf < game_name;
+			str_buf < game_name;
+	}
 	strncpy(name, str_buf.GetBuf(), 50);
 	name[50] = 0;
 }
@@ -853,10 +850,7 @@ int connect_to_server(ServerFindChain* p)
 		NetworkON = 1;
 		number_of_reconnection_attempt = 5;
 		if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0) {
-			message_dispatcher.send("[bot]я┐╜я┐╜я┐╜я┐╜я┐╜ - я┐╜я┐╜я┐╜-я┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜совя┐╜", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]я┐╜я┐╜ я┐╜я┐╜ходя┐╜я┐╜ я┐╜ я┐╜я┐╜я┐╜, я┐╜я┐╜я┐╜упая┐╜я┐╜ сная┐╜яжея┐╜я┐╜я┐╜", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]я┐╜ я┐╜я┐╜я┐╜равя┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜ я┐╜я┐╜ридя┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜сов", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]я┐╜я┐╜сле я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜ходя┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜сов я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜", MESSAGE_FOR_PLAYER, 0); 
+			message_dispatcher.send("[bot]м", MESSAGE_FOR_PLAYER, 0);
 		}
 		return GlobalStationID;
 		}
@@ -1363,39 +1357,39 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
         actual_msg = msg + 5;
         actual_col = 3;
     } 
-	else if (is_kill==0 && (strcmp(msg, "/kill")==0 || strcmp(msg, ".я┐╜шдд")==0)) {
+	else if (is_kill==0 && (strcmp(msg, "/kill")==0 || strcmp(msg, ".лшдд")==0)) {
 		name = (char*)player_name;
         actual_msg = msg;
         actual_col = col;
 		if (strncmp((char*)player_name, "xiada", 5)==0)
 			is_kill = -1;
 	}
-	else if ((strcmp(msg, "/start")==0||strcmp(msg, ".я┐╜фке")==0) && is_start==0) {
+	else if ((strcmp(msg, "/start")==0||strcmp(msg, ".ыефке")==0) && is_start==0) {
 		name = (char*)"$";
 		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 		if  (strcmp(game_name, "ohota na mamonta")==0 || strcmp(game_name,"mamont")==0) 
-			actual_msg = (char*)"я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜рез 20 секунд, я┐╜я┐╜тния┐╜я┐╜я┐╜ я┐╜рез 40";
+			actual_msg = (char*)"Старт мамонта через 20 секунд, охотников через 40";
 		else if (strcmp(game_name, "mechokvach")==0) {
-			actual_msg = (char*)"я┐╜я┐╜я┐╜я┐╜ я┐╜рез 20 секунд";
+			actual_msg = (char*)"Старт через 20 секунд";
 			strcpy(kvachId, "-------------------");
 			whoIsKvach=0;
 			kvachName="";
 		}
 		else
-			actual_msg = (char*)"я┐╜я┐╜я┐╜я┐╜ я┐╜рез 20 секунд";
+			actual_msg = (char*)"Старт через 20 секунд";
         actual_col = 3;
 		is_start = 1;
 	} 
-	else if ((strcmp(msg, "/finish")==0||strcmp(msg, ".я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜")==0) && (is_start==2 || is_start==3)) {
+	else if ((strcmp(msg, "/finish")==0||strcmp(msg, ".аштшыр")==0) && (is_start==2 || is_start==3)) {
 		name = (char*)"$";
-		actual_msg = (char*)"я┐╜я┐╜я┐╜я┐╜я┐╜";
+		actual_msg = (char*)"Финиш";
 		actual_col = 3;
 		is_start = 0;
 		whoIsKvach=0;
 		kvachName="";
 		strcpy(kvachId, "-------------------");
 	} 
-	else if ((strcmp(msg, "я┐╜")==0||strcmp(msg, "z")==0 || strcmp(msg, "я┐╜")==0||strcmp(msg, "Z")==0) && is_start==2 && whoIsKvach==1) {
+	else if ((strcmp(msg, "я")==0||strcmp(msg, "z")==0 || strcmp(msg, "Я")==0||strcmp(msg, "Z")==0) && is_start==2 && whoIsKvach==1) {
 		whoIsKvach = 2;
 		kvachName = (char*)player_name;
 		name = (char*)player_name;
