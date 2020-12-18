@@ -12558,7 +12558,7 @@ void CheckPlayerList(void)
 
 void NetEvent4Uvs(PlayerData* p)
 {		
-	p->uvsPoint = (void*)(uvsCreateNetVanger(p->body.CarIndex,p->body.color,p->body.Data0,p->body.Data1));	
+	p->uvsPoint = (void*)(uvsCreateNetVanger(p->body.CarIndex,p->body.color,p->body.Data0,p->body.Data1,p->body.color));	
 	p->CreatePlayerFlag = 1;	
 };
 

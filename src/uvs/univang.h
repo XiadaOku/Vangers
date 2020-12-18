@@ -1374,4 +1374,4 @@ void uvsChangeTownTabuTask(int type);
 void uvsCheckKronIventTabuTask(int KronType, int Kroncount, int MYresult = 0, int MYitem = 0);
 void uvsKronDeleteItem(int type, int param2, int param1);
 int ActInt_param2(int InType);
-uvsVanger* uvsCreateNetVanger(int CarType, int Color, int PassageIndex,int TownTabutaskID);
+uvsVanger* uvsCreateNetVanger(int CarType, int Color, int PassageIndex,int TownTabutaskID, int KvachColor);

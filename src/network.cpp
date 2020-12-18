@@ -22,10 +22,19 @@ extern iScreenOption** iScrOpt;
 
 char kvachId[20];
 char* kvachName = "";
+char* spamMess = "";
 int is_start = 0;
 int whoIsKvach = 0;
 int is_kill=0;
+int spamN=0;
 extern int kvachTime;
+
+int isRollcall = -1;
+char* rollcallNicknames = new char[10000]();
+
+int checkModVersion;
+int numCheckModVersion;
+char* modVersion = "0.01";
 
 extern int MP_GAME;
 extern XStream fout;
@@ -210,6 +219,7 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 			case 12: new_game_name = "Дебажить на "; break;
 			case 13: new_game_name = "Получить бан на "; break;
 			case 14: new_game_name = "Призвать свина на "; break;
+			case 15: new_game_name = "Виден коридор на "; break;
 			default: new_game_name = "Ксиаде нечего делать на "; break;		
 		}
 		str_buf < new_game_name;
@@ -850,13 +860,18 @@ int connect_to_server(ServerFindChain* p)
 		NetworkON = 1;
 		number_of_reconnection_attempt = 5;
 		if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0) {
-			message_dispatcher.send("[bot]м", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]я┐╜я┐╜я┐╜я┐╜я┐╜ - я┐╜я┐╜я┐╜-я┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜совя┐╜", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]я┐╜я┐╜ я┐╜я┐╜ходя┐╜я┐╜ я┐╜ я┐╜я┐╜я┐╜, я┐╜я┐╜я┐╜упая┐╜я┐╜ сная┐╜яжея┐╜я┐╜я┐╜", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]я┐╜ я┐╜я┐╜я┐╜равя┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜ я┐╜я┐╜ридя┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜сов", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]я┐╜я┐╜сле я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜ходя┐╜я┐╜ я┐╜я┐╜ я┐╜я┐╜я┐╜сов я┐╜ я┐╜я┐╜я┐╜я┐╜я┐╜я┐╜ я┐╜я┐╜я┐╜", MESSAGE_FOR_PLAYER, 0); 
 		}
 		return GlobalStationID;
 		}
 	NetworkON = 0;
 	is_start=0;
 	is_kill=0;
+	spamN=0;
+	isRollcall=-1;
 	strcpy(kvachId, "-------------------");
 	return 0;
 }
@@ -900,7 +915,9 @@ void disconnect_from_server()
 	events_out.clear();
 	events_in.reset();
 	is_start=0;
+	isRollcall=-1;
 	is_kill=0;
+	spamN=0;
 	strcpy(kvachId, "-------------------");
 }
 void set_time_by_server(int n_measures)
@@ -1406,6 +1423,113 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 		for	(int i = 6; i < strlen(msg); i++) 
 			kvachId[i-6] = msg[i];
 	}
+	else if ((strncmp(msg, "/mess", 5)==0 || strncmp(msg, ".ьуыы", 5)==0) && strncmp((char*)player_name, "xiada", 5)==0) {
+		name = (char*)"$";
+		actual_msg = (char*)"spamN";
+		actual_col = 3;
+		
+		char* spamNum = new char[3]();
+		char* spamMsg = new char[150]();
+		int j = -1;
+		
+		for	(int i = 6; i < strlen(msg); i++) {
+			if (j == -1)
+				spamNum[i-6] = msg[i];
+			
+			if (j >= 0) {
+				spamMsg[j] = msg[i];
+				j++;
+			}
+
+			if (j == -1 && ((char*)(msg))[i] == ((char*)(" "))[0]) {
+				j = 0;
+			}
+		}
+		
+		spamN = atoi(spamNum);
+		if (strcmp((char*)spamMsg, (char*)"-old") != 0 && strcmp((char*)spamMsg, (char*)"-щдв") != 0) {
+			spamMess = (char*)spamMsg;
+		}
+		
+		for (int n = 0; n < spamN; n++) {
+			message_dispatcher.send(spamMess, MESSAGE_FOR_ALL, 0);
+		}
+	}
+	else if (strcmp(msg, "/check")==0||strcmp(msg, ".срусл")==0) {
+		name = (char*)player_name;
+        actual_msg = msg;
+        actual_col = col;
+		checkModVersion = 1;
+		numCheckModVersion = 0;
+	}
+	else if (strcmp(msg, modVersion)==0) {
+		name = (char*)player_name;
+        actual_msg = msg;
+        actual_col = col;
+		numCheckModVersion++;
+	}
+	else if ((strcmp(msg, "/rollcall")==0 || strcmp(msg, ".кщддсфдд")==0) && isRollcall==-1) {
+		name = (char*)"$";
+		actual_msg = (char*)"Прекличка";
+		actual_col = 3;
+		isRollcall = 0;
+		rollcallNicknames = new char[10000]();
+		rollcallNicknames[0] = ((char*)(";"))[0];
+	} 
+	else if ((strcmp(msg, "/rcancel")==0 || strcmp(msg, ".ксфтсуд")==0) && isRollcall!=-1) {
+		name = (char*)"$";
+		actual_msg = (char*)"Прекличка отменена";
+		actual_col = 3;
+		isRollcall = -1;
+		rollcallNicknames = new char[10000]();
+	} 
+	else if ((strcmp(msg, "/scancel")==0 || strcmp(msg, ".ысфтсуд")==0) && is_start==1) {
+		name = (char*)"$";
+		actual_msg = (char*)"Старт отменен";
+		actual_col = 3;
+		is_start = 0;
+		char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
+		if (strcmp(game_name, "mechokvach")==0) {
+			strcpy(kvachId, "-------------------");
+			whoIsKvach=0;
+			kvachName="";
+		}
+	} 
+	else if ((strcmp(msg, "я")==0||strcmp(msg, "z")==0 || strcmp(msg, "Я")==0||strcmp(msg, "Z")==0) && isRollcall>-1) {
+		name = (char*)player_name;
+        actual_msg = msg;
+        actual_col = col;
+		char* nickname = new char[40]();
+		int isRAZDELITELL = -1;
+		for (int i = 0; i < strlen(rollcallNicknames); i++) {
+			if (rollcallNicknames[i] == ((char*)(";"))[0]) {
+				if (strncmp(name, nickname, strlen(name))==0 && strlen(name)==strlen(nickname)) {
+					break;
+				}
+				rollcallNicknames[i] = ((char*)("|"))[0];
+				for (int j = 0; j < strlen(name); j++) {
+					rollcallNicknames[i+j+1] = name[j];
+				}
+				rollcallNicknames[i+strlen(name)+1] = ((char*)(";"))[0];
+				isRollcall += 1;
+				name = (char*)player_name;
+				actual_msg = (char*)"Готов";
+				actual_col = 4;
+				break;
+			}
+			else if (rollcallNicknames[i] == ((char*)("|"))[0]) {
+				if (strncmp(name, nickname, strlen(name))==0 && strlen(name)==strlen(nickname)) {
+					break;
+				}
+				isRAZDELITELL=0;
+				nickname = new char[40]();
+			}
+			else if (isRAZDELITELL>-1) {
+				nickname[isRAZDELITELL] = rollcallNicknames[i];
+				isRAZDELITELL++;
+			}
+		}
+	}
 	else {
         name = (char*)player_name;
         actual_msg = msg;
@@ -1434,11 +1558,13 @@ void MessageDispatcher::send(char* message,int mode,int parameter)
 			cors = 1 << (parameter - 1);
 			break;
 		}
+	if ((strncmp(message, "/mess", 5)==0 || strncmp(message, ".ьуыы", 5)==0) && strncmp(CurPlayerName, "xiada", 5)==0)
+		cors = 1 << (parameter - 1);
 	events_out.begin_direct_send(cors);
 	events_out < message < char(0);
 	events_out.end_body();
 	events_out.send(1);
-
+	
 	MessageElement* p = new MessageElement(CurPlayerName, message, my_player_body.color);
 	AddElement(p);
 	if(ListSize > max_number_of_messages){
