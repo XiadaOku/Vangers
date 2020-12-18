@@ -1123,47 +1123,44 @@ void uvsContimer::Quant(void){
 	
 	if (NetworkON && is_start==1) {
 		countFromCommand++;
-		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
-			if (countFromCommand==1) {
-				message_dispatcher.send("Старт мамонта через 20 секунд, охотников через 40", MESSAGE_FOR_ALL, 0);
-			}
+		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0) {
 			if (countFromCommand==300) {
-				message_dispatcher.send("5(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("4(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("3(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("2(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("1(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("20 секунд мамонта", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]20 секунд мамонта", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==700) {
-				message_dispatcher.send("5", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==720) {
-				message_dispatcher.send("4", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==740) {
-				message_dispatcher.send("3", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==760) {
-				message_dispatcher.send("2", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==780) {
-				message_dispatcher.send("1", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==800) {
-				message_dispatcher.send("СТАРТ!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
-				is_start=0;
+				is_start = 0;
 			}
 		}
 		else if (strcmp(game_name,"mechokvach")==0) {
@@ -1193,22 +1190,22 @@ void uvsContimer::Quant(void){
 		}
 		else {
 			if (countFromCommand==300) {
-				message_dispatcher.send("5", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("4", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("3", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("2", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("1", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("СТАРТ!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 			}
@@ -1238,45 +1235,42 @@ void uvsContimer::Quant(void){
 	}
 	if (NetworkON && is_start==7) {
 		countFromCommand++;
-		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
+		if (strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
 			if (countFromCommand==1) {
-				message_dispatcher.send("Старт мамонта через 5 секунд, охотников через 25", MESSAGE_FOR_ALL, 0);
-			}
-			if (countFromCommand==1) {
-				message_dispatcher.send("5(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==20) {
-				message_dispatcher.send("4(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==40) {
-				message_dispatcher.send("3(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==60) {
-				message_dispatcher.send("2(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==80) {
-				message_dispatcher.send("1(мамонт)", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==100) {
-				message_dispatcher.send("20 секунд мамонта", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]20 секунд мамонта", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("5", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==420) {
-				message_dispatcher.send("4", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==440) {
-				message_dispatcher.send("3", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==460) {
-				message_dispatcher.send("2", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==480) {
-				message_dispatcher.send("1", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==500) {
-				message_dispatcher.send("СТАРТ!!!", MESSAGE_FOR_ALL, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=0;
 			}
@@ -1308,22 +1302,22 @@ void uvsContimer::Quant(void){
 		}
 		else {
 			if (countFromCommand==1) {
-				message_dispatcher.send("5", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==21) {
-				message_dispatcher.send("4", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==41) {
-				message_dispatcher.send("3", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==61) {
-				message_dispatcher.send("2", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==81) {
-				message_dispatcher.send("1", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==101) {
-				message_dispatcher.send("СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 			}
