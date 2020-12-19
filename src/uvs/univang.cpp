@@ -1095,14 +1095,15 @@ void uvsContimer::Quant(void){
 	if (isRollcall>-1) {
 		rollcallTime++;
 		if (rollcallTime == 240 || isRollcall >= players_list.size()) {
-			message_dispatcher.send("-----------------", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]-----------------", MESSAGE_FOR_PLAYER, 0);
 			char *rollsize = new char[3]();
 			itoa(players_list.size(), rollsize, 10);
 			char *arollsize = new char[3]();
 			itoa(isRollcall, arollsize, 10);
 		
-			char *roll_msg = new char[strlen(rollsize) + strlen(arollsize) + 1]();
-			strcpy(roll_msg, arollsize);
+			char *roll_msg = new char[strlen(rollsize) + strlen(arollsize) + 6]();
+			strcpy(roll_msg, "[bot]");
+			strcat(roll_msg, arollsize);
 			strcat(roll_msg, "/");
 			strcat(roll_msg, rollsize);
 			message_dispatcher.send(roll_msg, MESSAGE_FOR_PLAYER, 0);
@@ -1112,7 +1113,7 @@ void uvsContimer::Quant(void){
 			isRollcall=-1;
 		}
 		else if (rollcallTime == 240) {
-			message_dispatcher.send("Перекличка отменена", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send("[bot]Перекличка отменена", MESSAGE_FOR_PLAYER, 0);
 		}
 	}
 	
@@ -1436,15 +1437,16 @@ void uvsContimer::Quant(void){
 		checkModVersion++;
 	}
 	if (NetworkON && checkModVersion==10) {
-		message_dispatcher.send("-----------------", MESSAGE_FOR_PLAYER, 0);
+		message_dispatcher.send("[bot]-----------------", MESSAGE_FOR_PLAYER, 0);
 		
 		char *psize = new char[3]();
 		itoa(players_list.size(), psize, 10);
 		char *charNCheck = new char[3]();
 		itoa(numCheckModVersion, charNCheck, 10);
 		
-		char *check_msg = new char[strlen(charNCheck) + strlen(psize) + 1]();
-		strcpy(check_msg, charNCheck);
+		char *check_msg = new char[strlen(charNCheck) + strlen(psize) + 6]();
+		strcpy(check_msg, "[bot]");
+		strcat(check_msg, charNCheck);
 		strcat(check_msg, "/");
 		strcat(check_msg, psize);
 		message_dispatcher.send(check_msg, MESSAGE_FOR_PLAYER, 0);
