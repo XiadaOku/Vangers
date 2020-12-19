@@ -90,6 +90,7 @@ int kvachTime = -1;
 extern char* kvachName;
 extern char kvachId[20];
 int rollcallTime = 0;
+int rollcallNum = 0;
 
 extern int isRollcall;
 extern char* rollcallNicknames;
@@ -1094,7 +1095,10 @@ void uvsContimer::Quant(void){
 	}
 	if (isRollcall>-1) {
 		rollcallTime++;
-		if (rollcallTime == 240 || isRollcall >= players_list.size()) {
+		if (rollcallTime == 1)
+			message_dispatcher.send("[bot]Перекличка", MESSAGE_FOR_PLAYER, 0);
+			rollcallNum = players_list.size();
+		if (rollcallTime == 240 || isRollcall >= rollcallNum) {
 			message_dispatcher.send("[bot]-----------------", MESSAGE_FOR_PLAYER, 0);
 			char *rollsize = new char[3]();
 			itoa(players_list.size(), rollsize, 10);
@@ -1114,6 +1118,8 @@ void uvsContimer::Quant(void){
 		}
 		else if (rollcallTime == 240) {
 			message_dispatcher.send("[bot]Перекличка отменена", MESSAGE_FOR_PLAYER, 0);
+			isRollcall = -1;
+			rollcallNicknames = new char[10000]();
 		}
 	}
 	
@@ -1124,7 +1130,7 @@ void uvsContimer::Quant(void){
 	
 	if (NetworkON && is_start==1) {
 		countFromCommand++;
-		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0) {
+		if (strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
 			if (countFromCommand==300) {
 				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
@@ -1161,7 +1167,7 @@ void uvsContimer::Quant(void){
 			else if (countFromCommand==800) {
 				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
-				is_start = 0;
+				is_start=0;
 			}
 		}
 		else if (strcmp(game_name,"mechokvach")==0) {
@@ -1236,7 +1242,10 @@ void uvsContimer::Quant(void){
 	}
 	if (NetworkON && is_start==7) {
 		countFromCommand++;
-		if (strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
+		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
+			if (countFromCommand==1) {
+				message_dispatcher.send("Старт мамонта через 5 секунд, охотников через 25", MESSAGE_FOR_PLAYER, 0);
+			}
 			if (countFromCommand==1) {
 				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
@@ -12197,15 +12206,12 @@ uvsSpot* uvsGetSpotByID(int type){
 }
 
 
-uvsVanger* uvsCreateNetVanger(int CarType, int Color, int PassageIndex,int TownTabutaskID, int KvachColor){
+uvsVanger* uvsCreateNetVanger(int CarType, int Color, int PassageIndex,int TownTabutaskID){
 	uvsVanger *pv = FindFreeVanger();
 	pv -> shape = UVS_VANGER_SHAPE::NETWORK;
 	pv -> status = UVS_VANGER_STATUS::MOVEMENT;
 	pv -> Pmechos -> type = CarType;
-	if (KvachColor == 4 || KvachColor == 1)
-		pv -> Pmechos -> color = KvachColor;
-	else 
-		pv -> Pmechos -> color = Color;
+	pv -> Pmechos -> color = Color;
 	pv -> Pmechos -> actualColor = Color;
 	pv -> Pworld = WorldTable[ CurrentWorld ];
 	pv -> owner = NULL;

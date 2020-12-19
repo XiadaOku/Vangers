@@ -712,7 +712,7 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 		Energy = 0;
 	};
 	
-	if(pa > 0 && Armor <= 0 && p && NetworkON && p->ID == ID_VANGER){
+	if(pa > 0 && Armor <= 0 && p && NetworkON && p->ID == ID_VANGER && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0)){
 		if (NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechosumo")==0) {
 			if (is_start==1 || is_start==2) {
 				char *out_msg;
@@ -811,7 +811,7 @@ void VangerUnit::BulletCollision(int pow,GeneralObject* p)
 
 			if(s) uvsCheckKronIventTabuTask(UVS_KRON_EVENT::SHOT,s);
 
-			if(Armor <= 0 && pa > 0){
+			if(Armor <= 0 && pa > 0 && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0)){
 				PlayerDestroyFlag = 1;
 				GamerResult.vanger_kill++;
 				uvsPoint->KillStatic();
@@ -834,7 +834,7 @@ void VangerUnit::DestroyCollision(int l_16,Object* p)
 	if((Armor -= l_16) < 0)
 		Armor = 0;
 
-	if(pa > 0 && Armor <= 0 && p){
+	if(pa > 0 && Armor <= 0 && p && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0)){
 		if (NetworkON && p->ID == ID_VANGER && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechosumo")==0) {
 			if (is_start==1 || is_start==2) {
 				char *out_msg;
@@ -5088,7 +5088,7 @@ void VangerUnit::TouchSensor(SensorDataType* p)
 		case SensorTypeList::SENSOR:
 			if(DoorFlag){
 				if(p->Owner){
-					if(p->Owner->Type == EngineTypeList::DOOR){
+					if(p->Owner->Type == EngineTypeList::DOOR && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0)) {
 						d = (DoorEngine*)(p->Owner);
 						if(d->Luck > 0){
 							if((int)(RND(d->Luck)) <= aiCutLuck){
@@ -5882,7 +5882,7 @@ void VangerUnit::CreateVangerUnit(void)
 			NetID = CREATE_NET_ID(NID_VANGER);
 			ShellNetID = (NetID & (~(63 << 16))) | NID_SHELL;
 			uvsPoint->Pmechos->color = aciGetPlayerColor();
-			uvsPoint->Pmechos->actualColor = uvsPoint->Pmechos->color;
+			uvsPoint->Pmechos->actualColor = aciGetPlayerColor();
 		}else{
 			NetID = 0;
 			ShellNetID = 0;
@@ -7623,9 +7623,9 @@ void VangerUnit::ItemQuant(void)
 				if(GunSlotData[ItemMatrix->nSlot[i]].pData)
 					GunSlotData[ItemMatrix->nSlot[i]].Quant();
 			};
-			if(Armor <= 0) Destroy();
+			if(Armor <= 0 && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0)) Destroy();
 		}else{
-			if(Armor <= 0){
+			if(Armor <= 0 && !(NetworkON && strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"mechokvach")==0)){
 				if(DeviceData){
 					p = DeviceData;
 					while(p){
@@ -12558,7 +12558,7 @@ void CheckPlayerList(void)
 
 void NetEvent4Uvs(PlayerData* p)
 {		
-	p->uvsPoint = (void*)(uvsCreateNetVanger(p->body.CarIndex,p->body.color,p->body.Data0,p->body.Data1,p->body.color));	
+	p->uvsPoint = (void*)(uvsCreateNetVanger(p->body.CarIndex,p->body.color,p->body.Data0,p->body.Data1));	
 	p->CreatePlayerFlag = 1;	
 };
 
