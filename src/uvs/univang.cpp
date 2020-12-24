@@ -1147,7 +1147,7 @@ void uvsContimer::Quant(void){
 	
 	if (NetworkON && is_start==1) {
 		countFromCommand++;
-		if (strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
+		if (isMod(ID_MAMMOTH)) {
 			if (countFromCommand==300) {
 				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
 			}
@@ -1259,7 +1259,7 @@ void uvsContimer::Quant(void){
 	}
 	if (NetworkON && is_start==7) {
 		countFromCommand++;
-		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
+		if (isMod(ID_MAMMOTH)) {
 			if (countFromCommand==1) {
 				message_dispatcher.send("Старт мамонта через 5 секунд, охотников через 25", MESSAGE_FOR_PLAYER, 0);
 			}

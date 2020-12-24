@@ -36,6 +36,17 @@ int checkModVersion;
 int numCheckModVersion;
 char* modVersion = "0.01";
 
+//[╨║╨╛╨╗╨▓╨╛ ╨╝╨╛╨┤╨╛╨▓][╨╝╨░╨║╤Б╨╕╨╝╨░╨╗╤М╨╜╨╛╨╡ ╨║╨╛╨╗╨▓╨╛ ╨╜╨░╨╖╨▓╨░╨╜╨╕╨╣][╨╝╨░╨║╤Б╨╕╨╝╨░╨╗╤М╨╜╨░╤П ╨┤╨╗╨╕╨╜╨░ ╨╜╨░╨╖╨▓╨░╨╜╨╕╤П]
+char modsArray[][4][40] = 
+{
+	{"khox run", "нюхнем коксу", "кокс ран"},
+	{"truck-trial", "truck trial", "трак-триал", "трак триал"},
+	{"arena", "арена"},
+	{"raffa run", "тараканьи бега"},
+	{"neptune", "нептун"},
+	{"mammoth_hunt", "mamont", "охота на мамонта", "мамонт"}
+};
+
 extern int MP_GAME;
 extern XStream fout;
 extern int frame;
@@ -1240,6 +1251,13 @@ void void_network_quant()
 		events_in.ignore_event();
 		events_in.next_event();
 	}
+}
+int isMod(int id) {
+	for (int name = 0; name < sizeof(modsArray[id])/sizeof(*modsArray[id]); name++) {
+		if (!modsArray[id][name]) break;
+		if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(), modsArray[id][name])==0) return true;
+	}
+	return false;
 }
 /*******************************************************************************
 				Player's List
