@@ -1097,13 +1097,30 @@ void uvsContimer::Quant(void){
 		rollcallTime++;
 		if (rollcallTime == 1)
 			message_dispatcher.send("[bot]Перекличка", MESSAGE_FOR_PLAYER, 0);
-			rollcallNum = players_list.size();
+			rollcallNum = 0;
+			PlayerData* pd;
+			pd = players_list.first();
+			while (pd) {
+				if (pd->status == GAMING_STATUS) {
+					rollcallNum++;
+				}
+				pd = (PlayerData*)pd -> next;
+			}
 		if (rollcallTime == 240 || isRollcall >= rollcallNum) {
 			message_dispatcher.send("[bot]-----------------", MESSAGE_FOR_PLAYER, 0);
 			char *rollsize = new char[3]();
-			itoa(players_list.size(), rollsize, 10);
+			int plsize = 0;
+			PlayerData* pd;
+			pd = players_list.first();
+			while (pd) {
+				if (pd->status == GAMING_STATUS) {
+					plsize++;
+				}
+				pd = (PlayerData*)pd -> next;
+			}
+			port_itoa(plsize, rollsize, 10);
 			char *arollsize = new char[3]();
-			itoa(isRollcall, arollsize, 10);
+			port_itoa(isRollcall, arollsize, 10);
 		
 			char *roll_msg = new char[strlen(rollsize) + strlen(arollsize) + 6]();
 			strcpy(roll_msg, "[bot]");
@@ -1112,7 +1129,7 @@ void uvsContimer::Quant(void){
 			strcat(roll_msg, rollsize);
 			message_dispatcher.send(roll_msg, MESSAGE_FOR_PLAYER, 0);
 		}
-		if (isRollcall >= players_list.size()) {
+		if (isRollcall >= plsize) {
 			is_start = 7;
 			isRollcall=-1;
 		}
