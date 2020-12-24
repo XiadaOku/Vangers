@@ -1129,7 +1129,7 @@ void uvsContimer::Quant(void){
 			strcat(roll_msg, rollsize);
 			message_dispatcher.send(roll_msg, MESSAGE_FOR_PLAYER, 0);
 		}
-		if (isRollcall >= plsize) {
+		if (isRollcall >= rollcallNum) {
 			is_start = 7;
 			isRollcall=-1;
 		}
