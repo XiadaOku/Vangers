@@ -3410,7 +3410,6 @@ void iScreenDispatcher::input_string_quant(void)
 	iListElementPtr* tmp;
 	iScreenObject* obj;
 	unsigned char* ptr = NULL;
-	unsigned char code;
 	HFont* hfnt = NULL;
 
 	switch(ActiveEl -> type){
@@ -3427,6 +3426,7 @@ void iScreenDispatcher::input_string_quant(void)
 	}
 
 	while(KeyBuf -> size) {
+		unsigned char code;
 		SDL_Event *event = KeyBuf->get();
 		if (event->type != SDL_KEYDOWN && event->type != SDL_TEXTINPUT)
 			continue;
