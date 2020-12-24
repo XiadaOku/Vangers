@@ -1447,7 +1447,7 @@ void uvsContimer::Quant(void){
 			char *kvach_msg;
 			VangerUnit* player;
 			player = (VangerUnit*)(ActD.Active);
-			itoa(player->ShellNetID, ddn, 10);
+			port_itoa(player->ShellNetID, ddn, 10);
 			kvach_msg = new char[6 + strlen(ddn)];
 			strcpy(kvach_msg,"/kvach");
 			strcat(kvach_msg,ddn);
@@ -1466,9 +1466,9 @@ void uvsContimer::Quant(void){
 		message_dispatcher.send("[bot]-----------------", MESSAGE_FOR_PLAYER, 0);
 		
 		char *psize = new char[3]();
-		itoa(players_list.size(), psize, 10);
+		port_itoa(players_list.size(), psize, 10);
 		char *charNCheck = new char[3]();
-		itoa(numCheckModVersion, charNCheck, 10);
+		port_itoa(numCheckModVersion, charNCheck, 10);
 		
 		char *check_msg = new char[strlen(charNCheck) + strlen(psize) + 6]();
 		strcpy(check_msg, "[bot]");
@@ -1485,7 +1485,7 @@ void uvsContimer::Quant(void){
 			p = (VangerUnit*)(ActD.Tail);
 			while (p) {
 				char ddn[20];
-				itoa(p->ShellNetID, ddn, 10);
+				port_itoa(p->ShellNetID, ddn, 10);
 				if (strncmp(ddn, kvachId, strlen(ddn))==0) {
 					if (p->uvsPoint->Pmechos->actualColor == 4) {
 						p->uvsPoint->Pmechos->color = 1;
