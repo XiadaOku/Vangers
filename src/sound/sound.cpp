@@ -591,19 +591,19 @@ void StartWTRACK(void)
 #endif
 }
 
-void MainMenuSoundQuant(int TRACK){
+void MainMenuSoundQuant(int TRACK) {
 #ifndef _DEMO_
 	if(!MusicON) return;
 
 	int status = xsGetStatusMusic();
 
 	if (SoundVolumeCD == -1)
-			SoundVolumeCD = xsGetVolumeMusic();
-
+		SoundVolumeCD = xsGetVolumeMusic();
+	
 	xsPlayOneTrackMusic(2);
 	TimeCD = TrackCDTime[2];
+	
 	time(&lastTimeCD);
-	}
 	activeWTRACK = 1;
 #endif
 }
