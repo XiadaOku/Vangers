@@ -194,11 +194,7 @@ static time_t lastTimeCD = 0;
 
 void InstallSOUND(void)
 {
-    if (lang() == RUSSIAN) {
-        TrackCDTime = new int[11] { 0, 1, 174, 108, 128, 238, 130, 181, 120, 151, 200 };
-    } else {
-        TrackCDTime = new int[11] { 0, 1, 174, 108, 128, 238, 130, 181, 120, 151, 60 };
-    }
+	TrackCDTime = new int[11] { 0, 1, 174, 108, 128, 238, 130, 181, 120, 151, 200 };
 
 	if(!SoundInit(EFFECT_KHZ, 16)){
 		std::cout<<"\nInitialization of sound failed, mute mode accepted...\n";
@@ -588,22 +584,10 @@ void StartWTRACK(void)
 {
 #ifndef _DEMO_
 	if(!MusicON) return;
-	int w_id = CurrentWorld;
-
-	if (CurrentWorld == -1)
-		w_id = getWID();
-
-	if(w_id >= 0 && w_id <= 3){
-//		xsPlayOneTrackCD(ST_FOSTRAL + w_id);
-		xsPlayOneTrackMusic(ST_FOSTRAL + w_id);
-		TimeCD = TrackCDTime[ST_FOSTRAL + w_id];
-	} else {
-		if(w_id > 3){
-//			xsPlayOneTrackCD(ST_SECRETS);
-			xsPlayOneTrackMusic(ST_SECRETS);
-			TimeCD = TrackCDTime[ST_SECRETS];
-		}
-	}
+	int w_id = RND(10);
+	xsPlayOneTrackMusic(ST_FOSTRAL + w_id);
+	TimeCD = TrackCDTime[ST_FOSTRAL + w_id];
+	
 	time(&lastTimeCD);
 	activeWTRACK = 1;
 #endif
