@@ -412,7 +412,6 @@ void SoundQuant(void)
 		time(&l_time);
 
 		if (l_time - lastTimeCD > TimeCD){
-			std::cout<<"bbb"<<std::endl;
 			StartWTRACK();
 		}
 	}
@@ -563,9 +562,9 @@ void StartWTRACK(void)
 {
 #ifndef _DEMO_
 	if(!MusicON) return;
-	int w_id = RND(10);
-	xsPlayOneTrackMusic(ST_FOSTRAL + w_id);
-	TimeCD = TrackCDTime[ST_FOSTRAL + w_id];
+	int w_id = RND(11);
+	xsPlayOneTrackMusic(w_id);
+	TimeCD = TrackCDTime[w_id];
 	
 	time(&lastTimeCD);
 	activeWTRACK = 1;
@@ -627,8 +626,24 @@ void LastSoundQuant(void){
 	time(&l_time);
 
 	if (l_time - lastTimeCD > TimeCD){
-		std::cout<<"aaa"<<std::endl;
-		StartWTRACK();
+//		int status = xsGetStatusCD();
+		int status = xsGetStatusMusic();
+		if (status & XCD_PAUSED){
+			if (LastTrack == ST_DOUBLE){
+//				xsPlayCD(ST_THEEND);
+				xsPlayMusic(ST_THEEND);
+				TimeCD = TrackCDTime[ST_THEEND] + TrackCDTime[ST_THEEND_DOUBLE];
+			}else{
+				if (LastTrack == ST_THEEND_DOUBLE)
+//					xsPlayCD(LastTrack);
+					xsPlayMusic(LastTrack);
+				else
+//					xsPlayOneTrackCD(LastTrack);
+					xsPlayOneTrackMusic(LastTrack);
+				TimeCD = TrackCDTime[LastTrack];
+			}
+			time(&lastTimeCD);
+		}
 	} 
 }
 
