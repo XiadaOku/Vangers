@@ -404,38 +404,17 @@ void SoundQuant(void)
 	if(!EffectInUse) return;
 
 	if(MusicON){
-		int _world_ = CurrentWorld;
-
-		int Distance = DISTANCE_TO_TOWN;
-			
-		if (_world_ > 3) {
-			_world_ = 4;
-			Distance = DISTANCE_TO_SICRET;
-		}
-
-//		int len = GetEscaveDist();
 			
 		if (SoundVolumeCD == -1)
-//			SoundVolumeCD = xsGetVolumeCD();
 			SoundVolumeCD = xsGetVolumeMusic();
 			
-/*		if ( len == -1 )
-			xsSetVolumeCD(0);
-		else*/ {
-			time_t l_time;
-			time(&l_time);
+		time_t l_time;
+		time(&l_time);
 
-			if (l_time - lastTimeCD > TimeCD){
-//				int status = xsGetStatusCD();
-				int status = xsGetStatusMusic();
-				if (status & XCD_PAUSED)
-					StartWTRACK();
-			}
-
-//			if(len > Distance) len = 0; else len = Distance - abs(len);
+		if (l_time - lastTimeCD > TimeCD){
+			std::cout<<"bbb"<<std::endl;
+			StartWTRACK();
 		}
-
-//		xsSetVolumeCD(len*SoundVolumeCD/Distance);
 	}
 
 	int DiffSound = SoundFlag ^ lastSoundFlag;
@@ -648,6 +627,7 @@ void LastSoundQuant(void){
 	time(&l_time);
 
 	if (l_time - lastTimeCD > TimeCD){
+		std::cout<<"aaa"<<std::endl;
 		StartWTRACK();
 	} 
 }
