@@ -597,31 +597,24 @@ void MainMenuSoundQuant(int TRACK){
 #ifndef _DEMO_
 	if(!MusicON) return;
 
-//	int track = xsGetCurTrackCD();
-//	int status = xsGetStatusCD();
 	int status = xsGetStatusMusic();
 
 	if (SoundVolumeCD == -1)
-//			SoundVolumeCD = xsGetVolumeCD();
 			SoundVolumeCD = xsGetVolumeMusic();
 
-//	if ( TRACK != track || !activeWTRACK )
 	time_t l_time;
 	time(&l_time);
 
 	if (l_time - lastTimeCD > TimeCD){
-//		int status = xsGetStatusCD();
 		int status = xsGetStatusMusic();
 		if (status & XCD_PAUSED){
-//			xsPlayOneTrackCD(TRACK);
-			xsPlayOneTrackMusic(TRACK);
-			TimeCD = TrackCDTime[TRACK];
+			xsPlayOneTrackMusic(2);
+			TimeCD = TrackCDTime[2];
 			time(&lastTimeCD);
 		}
 	} else 	if ( !activeWTRACK ){
-//		xsPlayOneTrackCD(TRACK);
-		xsPlayOneTrackMusic(TRACK);
-		TimeCD = TrackCDTime[TRACK];
+		xsPlayOneTrackMusic(2);
+		TimeCD = TrackCDTime[2];
 		time(&lastTimeCD);
 	}
 	activeWTRACK = 1;
@@ -634,15 +627,12 @@ void LastStartWTRACK(int TRACK)
 	LastTrack = TRACK;
 
 	if (TRACK == ST_DOUBLE){
-//		xsPlayCD(ST_THEEND);
 		xsPlayMusic(ST_THEEND);
 		TimeCD = TrackCDTime[ST_THEEND] + TrackCDTime[ST_THEEND_DOUBLE];
 	}else{
 		if (TRACK == ST_THEEND_DOUBLE)
-//			xsPlayCD(TRACK);
 			xsPlayMusic(TRACK);
 		else
-//			xsPlayOneTrackCD(TRACK);
 			xsPlayOneTrackMusic(TRACK);
 		TimeCD = TrackCDTime[TRACK];
 	}
@@ -658,24 +648,7 @@ void LastSoundQuant(void){
 	time(&l_time);
 
 	if (l_time - lastTimeCD > TimeCD){
-//		int status = xsGetStatusCD();
-		int status = xsGetStatusMusic();
-		if (status & XCD_PAUSED){
-			if (LastTrack == ST_DOUBLE){
-//				xsPlayCD(ST_THEEND);
-				xsPlayMusic(ST_THEEND);
-				TimeCD = TrackCDTime[ST_THEEND] + TrackCDTime[ST_THEEND_DOUBLE];
-			}else{
-				if (LastTrack == ST_THEEND_DOUBLE)
-//					xsPlayCD(LastTrack);
-					xsPlayMusic(LastTrack);
-				else
-//					xsPlayOneTrackCD(LastTrack);
-					xsPlayOneTrackMusic(LastTrack);
-				TimeCD = TrackCDTime[LastTrack];
-			}
-			time(&lastTimeCD);
-		}
+		StartWTRACK();
 	} 
 }
 
