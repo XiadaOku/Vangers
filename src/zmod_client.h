@@ -11,7 +11,7 @@
 //#define zRECORDER_ENABLED
 
 #define zCOLOR_ORANGE	255
-#define zCOLOR_GREEN	254
+#define zCOLOR_GREEN	179
 #define zCOLOR_WHITE	223
 #define zCOLOR_BLACK	191
 #define zCOLOR_YELLOW	175

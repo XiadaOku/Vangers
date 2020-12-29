@@ -222,8 +222,8 @@
 #define iSTR_BLUE1			"BLUE"
 #define iSTR_BLUE2			"‘ˆˆ‰"
 
-#define iSTR_GREEN1			"GREEN"
-#define iSTR_GREEN2			"‡…‹…›‰"
+#define iSTR_GREEN1			"PURPLE"
+#define iSTR_GREEN2			"”ˆ‹…’‚›‰"
 
 #define iSTR_RED1			"RED"
 #define iSTR_RED2			"Š€‘›‰"

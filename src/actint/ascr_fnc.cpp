@@ -1271,7 +1271,7 @@ void aMS_RightUnpress(int fl, int x, int y)
 #define MAP_VANGER	1
 #define MAP_INSECT	2
 
-static int aciMapVngColors[11] = { 254, 143, 156, 175, 200, 200, 239, 230, 224, 254, 156 };
+static int aciMapVngColors[11] = { 177, 143, 156, 175, 200, 200, 239, 230, 224, 254, 156 };
 
 void show_map(int x,int y,int sx,int sy)
 {
@@ -5701,7 +5701,7 @@ void aciLoadUVSList(XStream& fh,uvsActInt** p,int list_type)
 #define ACI_FRAG_TIMER		300
 #define ACI_FRAG_FONT		0
 
-const unsigned ACI_FRAG_COL0	 = (252 | (246 << 8));
+const unsigned ACI_FRAG_COL0	 = (179 | (175 << 8));
 const unsigned ACI_FRAG_COL1	 = (143 | (135 << 8));
 const unsigned ACI_FRAG_COL2	 = (156 | (151 << 8));
 const unsigned ACI_FRAG_COL3	 = (173 | (166 << 8));

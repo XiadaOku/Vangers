@@ -44,8 +44,8 @@
 #define iSTR_WORLD_ARK_A_ZNOY_CHAR2	"А"
 
 // Color letters...
-#define iSTR_COLOR_GREEN_CHAR1		"G"
-#define iSTR_COLOR_GREEN_CHAR2		"З"
+#define iSTR_COLOR_GREEN_CHAR1		"P"
+#define iSTR_COLOR_GREEN_CHAR2		"Ф"
 
 #define iSTR_COLOR_ORANGE_CHAR1 	"O"
 #define iSTR_COLOR_ORANGE_CHAR2 	"О"
@@ -99,8 +99,8 @@
 #define iSTR_Blue1			"Blue"
 #define iSTR_Blue2			"Синий"
 
-#define iSTR_Green1			"Green"
-#define iSTR_Green2			"Зелёный"
+#define iSTR_Green1			"Purple"
+#define iSTR_Green2			"Фиолетовый"
 
 #define iSTR_Red1			"Red"
 #define iSTR_Red2			"Красный"

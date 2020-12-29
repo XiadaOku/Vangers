@@ -78,9 +78,9 @@ unsigned char COLORS_VALUE_TABLE[2*COLORS_IDS::MAX_COLORS_IDS] =
 	224, 	3,			      // 5 - WEAPON,                     
 	224,	7,			      // 6 - TUBE,                            
 			   			                                        
-	128, 	3,			      // 7 - BODY_RED,                  
-	144, 	3,			      // 8 - BODY_BLUE,               
-	160, 	3,			      // 9 - BODY_YELLOW,         
+	128, 	4,			      // 7 - BODY_RED,                  
+	144, 	4,			      // 8 - BODY_BLUE,               
+	160, 	4,			      // 9 - BODY_YELLOW,         
 	228, 	4,			      // 10 - BODY_GRAY,              
 	112, 	4,			      // 11 - YELLOW_CHARGED, 
 	
@@ -93,13 +93,13 @@ unsigned char COLORS_VALUE_TABLE[2*COLORS_IDS::MAX_COLORS_IDS] =
 	112,	4,			      // 18 - MATERIAL_6,               
 	120,	4,			      // 19 - MATERIAL_7,               
 	184,	4,        		      // 20 - BLACK
-	240,	3,		              // 21 - BODY_GREEN
+	177,	5,		              // 21 - BODY_GREEN
 
 	136,	4,				// 22 - SKYFARMER_KERNOBOO
 	128,    4,				// 23 - SKYFARMER_PIPETKA
 	224, 	4,			        // 24 - ROTTEN_ITEM
 
-	192, 	3			        // 25 - BODY_CRIMSON
+	192, 	4			        // 25 - BODY_CRIMSON
 };
 
 // Visualization adjust params loaded in dynamics.cpp
