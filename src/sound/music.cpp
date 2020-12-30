@@ -16,28 +16,24 @@ static int volume = 128;
 
 const char* getTrackPathName(int track) {
 	switch (track) {
-		case ST_INTRO:			//2
-			return "resource/music/track02.ogg";
-		case ST_FOSTRAL:		//3
-			return "resource/music/track03.ogg";
-		case ST_GLORX:			//4
-			return "resource/music/track04.ogg";
-		case ST_NECROSS:		//5
-			return "resource/music/track05.ogg";
-		case ST_XPLO:			//6
-			return "resource/music/track06.ogg";
-		case ST_SECRETS:		//7
-			return "resource/music/track07.ogg";
-		case ST_GAMEOVER:		//8
-			return "resource/music/track08.ogg";
-		case ST_THEEND:			//9
-			return "resource/music/track09.ogg";
-		case ST_THEEND_DOUBLE:	//10
-			return "resource/music/track10.ogg";
-		case ST_DOUBLE:			//11
-			return "resource/music/track01.ogg";
-		default:
-			return "resource/music/track01.ogg";
+		case 1:	
+			return "resource/music/FUCKILOSTMYRUBBOX.ogg";
+		case 2:	
+			return "resource/music/GORBS.ogg";
+		case 3:	
+			return "resource/music/INFERNALDISCO.ogg";
+		case 4:	
+			return "resource/music/IWANNARIDEMYMOGGY.ogg";
+		case 5:	
+			return "resource/music/FOSTRALLER.ogg";
+		case 6:	
+			return "resource/music/MOREBEEBS.ogg";
+		case 7:	
+			return "resource/music/OUTRO.ogg";
+		case 8:	
+			return "resource/music/THATTABUTASKAGAIN.ogg";
+		default: 
+			return "resource/music/MOGGYWAVES.ogg";
 	}
 }
 

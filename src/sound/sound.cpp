@@ -34,7 +34,7 @@ int lastSoundFlag = 0;
 int SoundVolumeCD = -1;
 int SoundVolumePanning = 1;
 int MusicON = 1;
-static int LastTrack = 2;
+static int LastTrack = 0;
 
 struct SndParameters {
 	int channel;
@@ -194,7 +194,7 @@ static time_t lastTimeCD = 0;
 
 void InstallSOUND(void)
 {
-	TrackCDTime = new int[11] { 0, 1, 174, 108, 128, 238, 130, 181, 120, 151, 200 };
+	TrackCDTime = new int[9] { 201, 173, 76, 216, 126, 209, 184, 48, 224 };
 
 	if(!SoundInit(EFFECT_KHZ, 16)){
 		std::cout<<"\nInitialization of sound failed, mute mode accepted...\n";
@@ -562,7 +562,7 @@ void StartWTRACK(void)
 {
 #ifndef _DEMO_
 	if(!MusicON) return;
-	int w_id = RND(11);
+	int w_id = RND(9);
 	xsPlayOneTrackMusic(w_id);
 	TimeCD = TrackCDTime[w_id];
 	
@@ -586,13 +586,13 @@ void MainMenuSoundQuant(int TRACK){
 	if (l_time - lastTimeCD > TimeCD){
 		int status = xsGetStatusMusic();
 		if (status & XCD_PAUSED){
-			xsPlayOneTrackMusic(2);
-			TimeCD = TrackCDTime[2];
+			xsPlayOneTrackMusic(0);
+			TimeCD = TrackCDTime[0];
 			time(&lastTimeCD);
 		}
 	} else 	if ( !activeWTRACK ){
-		xsPlayOneTrackMusic(2);
-		TimeCD = TrackCDTime[2];
+		xsPlayOneTrackMusic(0);
+		TimeCD = TrackCDTime[0];
 		time(&lastTimeCD);
 	}
 	activeWTRACK = 1;
@@ -604,16 +604,8 @@ void LastStartWTRACK(int TRACK)
 	if(!MusicON) return;
 	LastTrack = TRACK;
 
-	if (TRACK == ST_DOUBLE){
-		xsPlayMusic(ST_THEEND);
-		TimeCD = TrackCDTime[ST_THEEND] + TrackCDTime[ST_THEEND_DOUBLE];
-	}else{
-		if (TRACK == ST_THEEND_DOUBLE)
-			xsPlayMusic(TRACK);
-		else
-			xsPlayOneTrackMusic(TRACK);
-		TimeCD = TrackCDTime[TRACK];
-	}
+	xsPlayOneTrackMusic(TRACK);
+	TimeCD = TrackCDTime[TRACK];
 
 	time(&lastTimeCD);
 	activeWTRACK = 1;
@@ -626,22 +618,10 @@ void LastSoundQuant(void){
 	time(&l_time);
 
 	if (l_time - lastTimeCD > TimeCD){
-//		int status = xsGetStatusCD();
 		int status = xsGetStatusMusic();
 		if (status & XCD_PAUSED){
-			if (LastTrack == ST_DOUBLE){
-//				xsPlayCD(ST_THEEND);
-				xsPlayMusic(ST_THEEND);
-				TimeCD = TrackCDTime[ST_THEEND] + TrackCDTime[ST_THEEND_DOUBLE];
-			}else{
-				if (LastTrack == ST_THEEND_DOUBLE)
-//					xsPlayCD(LastTrack);
-					xsPlayMusic(LastTrack);
-				else
-//					xsPlayOneTrackCD(LastTrack);
-					xsPlayOneTrackMusic(LastTrack);
-				TimeCD = TrackCDTime[LastTrack];
-			}
+			xsPlayOneTrackMusic(LastTrack);
+			TimeCD = TrackCDTime[LastTrack];
 			time(&lastTimeCD);
 		}
 	} 

@@ -2213,25 +2213,25 @@ void ShowImageRTO::Init(int id)
 
 	switch(GameOverTrigger){
 		case GAME_OVER_EXPLOSION:
-			LastStartWTRACK(ST_GAMEOVER);
+			LastStartWTRACK(7);
 			break;
 		case GAME_OVER_INFERNAL_LOCKED:
-			LastStartWTRACK(ST_THEEND);
+			LastStartWTRACK(2);
 			break;
 		case GAME_OVER_SPOBS_LOCKED:
-			LastStartWTRACK(ST_THEEND);
+			LastStartWTRACK(3);
 			break;
 		case GAME_OVER_ALL_LOCKED:
-			LastStartWTRACK(ST_THEEND_DOUBLE);
+			LastStartWTRACK(8);
 			break;
 		case GAME_OVER_LUCKY:
-			LastStartWTRACK(ST_INTRO);
+			LastStartWTRACK(6);
 			break;
 		case GAME_OVER_LAMPASSO:
-			LastStartWTRACK(ST_GAMEOVER);
+			LastStartWTRACK(1);
 			break;
 		case GAME_OVER_ABORT:
-			LastStartWTRACK(ST_INTRO);
+			LastStartWTRACK(0);
 			break;
 		case GAME_OVER_NETWORK:
 			break;
