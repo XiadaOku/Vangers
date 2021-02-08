@@ -670,7 +670,7 @@ int InputEventBuffer::receive_waiting_for_event(int event, XSocket& sock,int ski
 	if(!skip_if_aint)
         {
 	    if (lang() == RUSSIAN) {
-            ErrH.Abort("РЎРµСЂРІРµСЂ РЅРµ РѕС‚РІРµС‡Р°РµС‚", XERR_USER, event);
+            ErrH.Abort("������ �� ��������", XERR_USER, event);
         } else {
             ErrH.Abort("Time out of Server's response receiving", XERR_USER, event);
         }
@@ -715,7 +715,7 @@ int InputEventBuffer::next_event() {
 	zCreateObjectQueue* temp;
 	if (event_ID == zCREATE_OBJECT_BY_SERVER) {
 		std::cout<<"zCREATE_OBJECT_BY_SERVER"<<std::endl;
-		//zmod - РїР°РєРµС‚ "СЃРѕР·РґР°Р№ РїСЂРµРґРјРµРґ"
+		//zmod - ����� "������ �������"
 		*this > factory_number > ammo_count;
 		body_size = 0;
 		if(my_player_body.BirthTime) {
@@ -870,12 +870,7 @@ int connect_to_server(ServerFindChain* p)
 
 		NetworkON = 1;
 		number_of_reconnection_attempt = 5;
-		if (strcmp(iScrOpt[iSERVER_NAME]->GetValueCHR(),"neptune")==0) {
-			message_dispatcher.send("[bot]����� - ���-��� �� ����� �� ���ᮢ�", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]�� ��室�� � ���, ���㯠�� ᭠�殮���", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]� ���ࠢ������ � ��ਤ��� �� ���ᮢ", MESSAGE_FOR_PLAYER, 0);
-			message_dispatcher.send("[bot]��᫥ ���� �� ���室�� �� ���ᮢ � ������ ���", MESSAGE_FOR_PLAYER, 0); 
-		}
+
 		return GlobalStationID;
 		}
 	NetworkON = 0;
@@ -897,7 +892,7 @@ int restore_connection()
 		if(number_of_reconnection_attempt-- <= 0)
             {
 		    if (lang() == RUSSIAN) {
-                ErrH.Abort("РќРµ РјРѕРіСѓ РІРѕСЃСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРѕРµРґРёРЅРµРЅРёРµ СЃ РЎРµСЂРІРµСЂРѕРј");
+                ErrH.Abort("�� ���� ������������ ���������� � ��������");
             } else {
                 ErrH.Abort("Unable to restore connection to Server");
             }
@@ -1590,7 +1585,7 @@ void MessageDispatcher::send(char* message,int mode,int parameter)
 	events_out < message < char(0);
 	events_out.end_body();
 	events_out.send(1);
-	
+
 	MessageElement* p = new MessageElement(CurPlayerName, message, my_player_body.color);
 	AddElement(p);
 	if(ListSize > max_number_of_messages){
