@@ -1,10 +1,6 @@
 name: Vangers Windows 32bit Build
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master, 60fps, hd_v2 ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -63,7 +59,7 @@ jobs:
       run: msys2do cmake -G Ninja ..
       working-directory: build
     - name: vangers -- make
-      run: msys2do ninja
+      run: msys2do ninja vangers vangers_server
       working-directory: build
     - name: vangers -- prepare release folder
       run: |
