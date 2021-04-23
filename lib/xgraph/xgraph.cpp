@@ -770,15 +770,58 @@ void XGR_Screen::close(void)
 }
 
 int UI_OR_GAME=1;
+const int colors_num = 6;
+const uint8_t pal_colors[colors_num*3] = {0, 0, 0, 8, 24, 32, 23, 42, 12, 52, 104, 86, 136, 192, 112, 255, 255, 255};
 
 void XGR_Screen::blitScreen(uint32_t *dst, uint8_t *src) { 
-	int x, y; 
 	SDL_Color color;
-
-	for (y = XGR_ScreenSurface->h; y > 0; y--) {
-		for (x = XGR_ScreenSurface->w; x > 0; x--) {
-			color = XGR_Palette->colors[*src];
-			*(dst++) = SDL_MapRGBA(XGR32_ScreenSurface->format, color.r, color.g, color.b, color.a);
+	const int pixel_size = 2;
+	uint8_t red, green, blue, alpha_color;
+	float colors_distance, min_colors_distance;
+	int min_colors_index;
+	int red1, green1, blue1;
+	int store, width_pixel = XGR_ScreenSurface->w / pixel_size;
+	uint8_t save[XGR_ScreenSurface->h / pixel_size * width_pixel * 3];
+	
+	for (int y = 0; y < XGR_ScreenSurface->h; y++) {
+		for (int x = 0; x < XGR_ScreenSurface->w; x++) {
+			if (y % pixel_size != 0 || x % pixel_size != 0) { 
+				store = int(y / pixel_size) * width_pixel + int(x / pixel_size);
+				red = save[store*3];
+				green = save[store*3 + 1];
+				blue = save[store*3 + 2];
+			}
+			else {
+				color = XGR_Palette->colors[*src];
+				red = color.r;
+				green = color.g;
+				blue = color.b;
+			}
+			alpha_color = 0;
+			
+			if (y % pixel_size == 0 && x % pixel_size == 0) {
+				for (int i = 0; i < colors_num; i++) {
+					red1 = red - pal_colors[i*3];
+					green1 = green - pal_colors[i*3 + 1];
+					blue1 = blue - pal_colors[i*3 + 2];
+					
+					colors_distance = red1*red1*30 + green1*green1*59 + blue1*blue1*11;
+					if (colors_distance <= min_colors_distance || i == 0) { 
+						min_colors_distance = colors_distance;
+						min_colors_index = i;
+					}
+				}
+				red = pal_colors[min_colors_index*3];
+				green = pal_colors[min_colors_index*3 + 1];
+				blue = pal_colors[min_colors_index*3 + 2];
+				
+				store = int(y / pixel_size) * width_pixel + int(x / pixel_size);
+				save[store*3] =  red;
+				save[store*3 + 1] =  green;
+				save[store*3 + 2] =  blue;
+			}
+			
+			*(dst++) = SDL_MapRGBA(XGR32_ScreenSurface->format, red, green, blue, alpha_color);
 			src++;
 		}
 	}
