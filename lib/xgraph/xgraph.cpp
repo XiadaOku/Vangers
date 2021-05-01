@@ -771,17 +771,173 @@ void XGR_Screen::close(void)
 
 int UI_OR_GAME=1;
 
-void XGR_Screen::blitScreen(uint32_t *dst, uint8_t *src) { 
-	int x, y; 
-	SDL_Color color;
+//размер пикселя
+const int pixel_size = 2;
 
-	for (y = XGR_ScreenSurface->h; y > 0; y--) {
-		for (x = XGR_ScreenSurface->w; x > 0; x--) {
+//кол-во цветов на палитру (динамику съело использование в функции)
+//палитра цветов. Есть цикл на нахождение ближайшего цвета из палитры
+const int colors_num = 6;
+const uint8_t pal_colors[colors_num*3] = {0, 0, 0, 8, 24, 32, 23, 42, 12, 52, 104, 86, 136, 192, 112, 255, 255, 255};
+
+//шаг для циклов буффера
+const int x_step = pixel_size * 3, y_step = pixel_size * 3, x_start = pixel_size * 1, y_start = pixel_size * 1;
+
+int frames = 0;
+const int frames_update = 20 * 5;
+
+//быстрый корень
+unsigned int root(unsigned int a) {
+   unsigned int x;
+   x = (a/0x3f + 0x3f)>>1;
+   x = (a/x + x)>>1;
+   x = (a/x + x)>>1;
+   return x; 
+}
+
+//скорость перемещения курсора и радиус Фонаря
+int speedX, speedY, light_r = 0;
+
+void XGR_Screen::blitScreen(uint32_t *dst, uint8_t *src) { 
+	SDL_Color color;
+	uint8_t red, green, blue, alpha_color;
+	float colors_distance, min_colors_distance;		//различие цветов. Текущее и минимальное
+	int min_colors_index;	//индексня наиболее похожего цвета из палитры
+	int red1, green1, blue1;	//новые промежуточные цвета для палитры. Нужны для условий и дальнейших действий с ними
+	int store, width_pixel = XGR_ScreenSurface->w / pixel_size;	//индексня для буффера цветов для пикселизации и кол-во пикселей в строке
+	uint8_t* save = new uint8_t[XGR_ScreenSurface->h / pixel_size * width_pixel * 3](); //одномерное представление двумерного массива для сейва цветов 
+	int light_i = 50, delta_x, delta_y;		//интенсивность света, расстояние до пикселя от центра Фонаря (для определения степени освещенности)
+	float light;	//Освещенность
+	int delta_step = -1;	//значение на которое проходит src за строку
+	uint8_t *src0 = src;	//изначальное значение src
+	
+	int light_x = XGR_MouseObj.PosX + XGR_MouseObj.SizeX/2;		//x координата Фонаря
+	int light_y = XGR_MouseObj.PosY + XGR_MouseObj.SizeY/2;		//y координата Фонаря
+	
+	if (frames >= frames_update) { frames = 0; }
+	
+	if (speedX == XGR_MouseObj.PosX - XGR_MouseObj.LastPosX && speedY == XGR_MouseObj.PosY - XGR_MouseObj.LastPosY && light_r > 0) { 
+		light_r = std::max(light_r - 5, 0);
+	}
+	else if (speedX != XGR_MouseObj.PosX - XGR_MouseObj.LastPosX || speedY != XGR_MouseObj.PosY - XGR_MouseObj.LastPosY) {
+		speedX = XGR_MouseObj.PosX - XGR_MouseObj.LastPosX;
+		speedY = XGR_MouseObj.PosY - XGR_MouseObj.LastPosY;
+		light_r = std::min(int(root(speedX*speedX + speedY*speedY))*2, 50);
+	}
+	
+	
+	src += x_start;
+	for (int y = y_start; y < XGR_ScreenSurface->h; y += y_step) {
+		for (int x = x_start; x < XGR_ScreenSurface->w; x += x_step) {			
 			color = XGR_Palette->colors[*src];
-			*(dst++) = SDL_MapRGBA(XGR32_ScreenSurface->format, color.r, color.g, color.b, color.a);
-			src++;
+			red = color.r;
+			green = color.g;
+			blue = color.b;
+			
+			//поиск ближайшего цвета из палитры
+			for (int i = 0; i < colors_num; i++) {
+				red1 = red - pal_colors[i*3];
+				green1 = green - pal_colors[i*3 + 1];
+				blue1 = blue - pal_colors[i*3 + 2];
+				
+				colors_distance = red1*red1*30 + green1*green1*59 + blue1*blue1*11;
+				if (colors_distance <= min_colors_distance || i == 0) { 
+					min_colors_distance = colors_distance;
+					min_colors_index = i;
+				}
+			}
+			red = pal_colors[min_colors_index*3];
+			green = pal_colors[min_colors_index*3 + 1];
+			blue = pal_colors[min_colors_index*3 + 2];
+			
+			//Фонарь
+			delta_x = (light_x - x);
+			delta_y = (light_y - y);
+			light = root(delta_x*delta_x + delta_y*delta_y);
+			if (light < light_r) {
+				light_i = light_r+5;
+				light = light_i - int(light_i/light_r*light);
+				red = (red + light);
+				green = (green + light);
+				blue = (blue + light);
+			}
+			store = int(y / pixel_size) * width_pixel + int(x / pixel_size);
+			save[store*3] = red;
+			save[store*3 + 1] = green;
+			save[store*3 + 2] = blue;
+			
+			//если есть место слева
+			if (int((store*3 - 3) / (width_pixel*3)) == int((store*3) / (width_pixel*3))) {
+				save[store*3 - 3] = red;
+				save[store*3 - 3 + 1] = green;
+				save[store*3 - 3 + 2] = blue;
+			}
+			//если есть место справа
+			if (int((store*3 + 5) / (width_pixel*3)) == int((store*3) / (width_pixel*3))) {
+				save[store*3 + 3] = red;
+				save[store*3 + 3 + 1] = green;
+				save[store*3 + 3 + 2] = blue;
+			}
+			//если есть место выше
+			if (store*3 - width_pixel*3 >= 0) {
+				save[store*3 - width_pixel*3] = red;
+				save[store*3 - width_pixel*3 + 1] = green;
+				save[store*3 - width_pixel*3 + 2] = blue;
+
+				//если есть место слева выше
+				if (int((store*3 - 3) / (width_pixel*3)) == int((store*3) / (width_pixel*3))) {
+					save[store*3 - width_pixel*3 - 3] = red;
+					save[store*3 - width_pixel*3 - 3 + 1] = green;
+					save[store*3 - width_pixel*3 - 3 + 2] = blue;
+				}
+				//если есть место справа выше
+				if (int((store*3 + 5) / (width_pixel*3)) == int((store*3) / (width_pixel*3))) {
+					save[store*3 - width_pixel*3 + 3] = red;
+					save[store*3 - width_pixel*3 + 3 + 1] = green;
+					save[store*3 - width_pixel*3 + 3 + 2] = blue;
+				}
+			}
+			//если есть место ниже
+			if (store*3 + width_pixel*3 + 2 < int(XGR_ScreenSurface->h / pixel_size * width_pixel * 3)) {
+				save[store*3 + width_pixel*3] = red;
+				save[store*3 + width_pixel*3 + 1] = green;
+				save[store*3 + width_pixel*3 + 2] = blue;
+				
+				//если есть место слева ниже
+				if (int((store*3 - 3) / (width_pixel*3)) == int((store*3) / (width_pixel*3))) {
+					save[store*3 + width_pixel*3 - 3] = red;
+					save[store*3 + width_pixel*3 - 3 + 1] = green;
+					save[store*3 + width_pixel*3 - 3 + 2] = blue;
+				}
+				//если есть место справа ниже
+				if (int((store*3 + 5) / (width_pixel*3)) == int((store*3) / (width_pixel*3))) {
+					save[store*3 + width_pixel*3 + 3] = red;
+					save[store*3 + width_pixel*3 + 3 + 1] = green;
+					save[store*3 + width_pixel*3 + 3 + 2] = blue;
+				}
+			}
+			
+			save[store*3] = 0;
+			save[store*3 + 1] = 0;
+			save[store*3 + 2] = 0;
+			
+			src += x_step;
+		}
+		if (delta_step == -1) { delta_step = abs(src - src0)%(XGR_ScreenSurface->w * y_step) - x_start; }
+		src += (XGR_ScreenSurface->w * y_step) - delta_step;
+	}
+	
+	for (int y = 0; y < XGR_ScreenSurface->h; y++) {
+		for (int x = 0; x < XGR_ScreenSurface->w; x++) {
+			store = int(y / pixel_size) * width_pixel + int(x / pixel_size);
+			red = save[store*3];
+			green = save[store*3 + 1];
+			blue = save[store*3 + 2];
+			alpha_color = 0;
+			
+			*(dst++) = SDL_MapRGBA(XGR32_ScreenSurface->format, red, green, blue, alpha_color);
 		}
 	}
+	frames += 1;
 } 
 
 void XGR_Screen::set_render_buffer(SDL_Surface *buf) {
@@ -905,9 +1061,9 @@ void XGR_Screen::getpal(void* p)
 	int i;
 	unsigned char* ptr = (unsigned char*)p;
 	for(i = 0; i < 256; i++){
-		*ptr ++ = XGR_Palette->colors[i].r >> 2;
-		*ptr ++ = XGR_Palette->colors[i].g >> 2;
-		*ptr ++ = XGR_Palette->colors[i].b >> 2;
+		*ptr ++ = XGR_Palette->colors[i].r;
+		*ptr ++ = XGR_Palette->colors[i].g;
+		*ptr ++ = XGR_Palette->colors[i].b;
 	}
 }
 
@@ -925,9 +1081,9 @@ void XGR_Screen::setpal(void* ptr,int start,int count)
 	// ptr is XGR_ColorData*
 	XGR_ColorData* pal = (XGR_ColorData*)ptr;
 	for (i = 0; i < count; i++) {
-		XGR_Palette->colors[i].r = pal[i].R << 2;
-		XGR_Palette->colors[i].g = pal[i].G << 2;
-		XGR_Palette->colors[i].b = pal[i].B << 2;
+		XGR_Palette->colors[i].r = pal[i].R;
+		XGR_Palette->colors[i].g = pal[i].G;
+		XGR_Palette->colors[i].b = pal[i].B;
 	}
 	SDL_SetPaletteColors(XGR_Palette, XGR_Palette->colors, start, count);
   	averageColorPalette.r = XGR_Palette->colors[220].r;
