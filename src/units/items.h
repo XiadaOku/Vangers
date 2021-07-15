@@ -375,6 +375,7 @@ struct GloryPlace final : GeneralObject
 	void Init(int ind);
 	void Quant(void);	
 	void CloseWorld(void);
+	void CheckEscape(Vector &checkCoords, int dx, int dy);
 };
 
 const int GLORY_PLACE_RADIUS = 40;

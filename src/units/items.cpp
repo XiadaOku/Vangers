@@ -3621,6 +3621,71 @@ int UsedCheckNum;
 
 aiRndType GloryRnd;
 
+
+namespace ForAprilFoolsDay {
+	int jumpRND(void) {
+		return RND(3);
+	}
+
+	const int escapeVelocity = 16;
+	const int jumpRadius = GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS*4;
+	
+	Vector escapeDelta = Vector(1 << 10, 1 << 10, 0);
+
+	Vector escapeCoords;
+	Vector escapeToActual;
+	Vector prevMechosCoords = Vector(-1, -1, 255);
+	
+	int jumps = 0;
+	bool isEscape = false;
+	bool isNewCheck = false;
+	
+}
+
+void GloryPlace::CheckEscape(Vector &checkCoords, int dx, int dy) {
+	using namespace ForAprilFoolsDay;
+
+	if (isNewCheck) {
+		jumps = jumpRND();
+		isEscape = false;
+		isNewCheck = false;
+	}
+	
+	if (isEscape) {
+		escapeToActual = Vector(abs(getDistX(escapeCoords.x, checkCoords.x)), abs(getDistY(escapeCoords.y, checkCoords.y)), 255);
+		if (escapeToActual == Vector(0, 0, 255)) {
+			isEscape = false;
+		}
+		else {
+			if (LightData) {
+				LightData->Destroy();
+				LightData = NULL;
+			}
+			
+			if (escapeToActual.x > escapeToActual.y) {
+				checkCoords.x = XCYCL(checkCoords.x + min(escapeToActual.x, escapeVelocity) * SIGN(escapeCoords.x - checkCoords.x));
+				checkCoords.y = YCYCL(checkCoords.y + min(escapeToActual.y, (int)round((double)escapeToActual.y / ceil((double)escapeToActual.x / escapeVelocity))) * SIGN(escapeCoords.y - checkCoords.y));
+			}
+			else if (escapeToActual.x == escapeToActual.y) {
+				checkCoords.x = XCYCL(checkCoords.x + min(escapeToActual.x, escapeVelocity) * SIGN(escapeCoords.x - checkCoords.x));
+				checkCoords.y = YCYCL(checkCoords.y + min(escapeToActual.y, escapeVelocity) * SIGN(escapeCoords.y - checkCoords.y));
+			}
+			else {
+				checkCoords.x = XCYCL(checkCoords.x + min(escapeToActual.x, (int)round((double)escapeToActual.x / ceil((double)escapeToActual.y / escapeVelocity))) * SIGN(escapeCoords.x - checkCoords.x));
+				checkCoords.y = YCYCL(checkCoords.y + min(escapeToActual.y, escapeVelocity) * SIGN(escapeCoords.y - checkCoords.y));
+			}
+		}
+	}
+	else if (prevMechosCoords != Vector(-1, -1, 0) && jumps > 0 && !isEscape && (dx*dx + dy*dy) < jumpRadius &&
+	((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))) {
+		escapeCoords.x = XCYCL(checkCoords.x + SIGN(ActD.Active->R_curr.x - prevMechosCoords.x) * escapeDelta.x);
+		escapeCoords.y = YCYCL(checkCoords.y + SIGN(ActD.Active->R_curr.y - prevMechosCoords.y) * escapeDelta.y);
+
+		isEscape = true;
+		jumps--;
+	}
+}
+
 void GloryPlace::Init(int ind)
 {
 	ID = ID_GLORY_PLACE;
@@ -3629,6 +3694,7 @@ void GloryPlace::Init(int ind)
 	Status = 0;
 	LightData = NULL;
 	Index = ind;
+	ForAprilFoolsDay::isNewCheck = true;
 
 	//zMod fixed
 
@@ -3704,49 +3770,66 @@ void GloryPlace::CloseWorld(void)
 	};
 };
 
-void GloryPlace::Quant(void)
-{
-	int i;
-	int dx,dy;
+void GloryPlace::Quant(void) {
+	using namespace ForAprilFoolsDay;
+	
+	bool isCheckOnScreen = true;
+	int dx, dy;
 	uchar** lt;
-	if(World == CurrentWorld && Enable){
-		lt = vMap->lineT;
-		for(i = -GLORY_PLACE_RADIUS;i < GLORY_PLACE_RADIUS;i++){
-			if(!lt[YCYCL(R_curr.y + i)]){
-				if(LightData){
-					LightData->Destroy();
-					LightData = NULL;
-				};
-				return;
-			};
-		};
-		
-		if(ActD.Active){
-			if(!LightData)
-				LightData = MapD.CreateLight(R_curr.x,R_curr.y,255,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::DYNAMIC | LIGHT_TYPE::TOR);
-
+	
+	if(World == CurrentWorld && Enable) {
+		if (ActD.Active) {
 			dx = getDistX(ActD.Active->R_curr.x,R_curr.x);
 			dy = getDistY(ActD.Active->R_curr.y,R_curr.y);
-			if((dx*dx + dy*dy) < GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS && 
-				((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))){
-					if(LightData){
+			
+			CheckEscape(R_curr, dx, dy);
+			
+			if (!LightData) {
+				LightData = MapD.CreateLight(R_curr.x, R_curr.y, 255, GLORY_PLACE_RADIUS, 32, LIGHT_TYPE::DYNAMIC | LIGHT_TYPE::TOR);
+			}
+
+			lt = vMap->lineT;
+			for (int i = -GLORY_PLACE_RADIUS; i < GLORY_PLACE_RADIUS; i++){
+				if (!lt[YCYCL(R_curr.y + i)]) {
+					if (LightData) {
 						LightData->Destroy();
 						LightData = NULL;
-					};
-					MapD.CreateLight(R_curr.x,R_curr.y,R_curr.z,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::STATIONARY);
-					for(i = 0;i < 5;i++)
-						EffD.CreateDeform(Vector(XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),255),DEFORM_ALL,PASSING_WAVE_PROCESS);
-					Enable = 0;					
-					UsedCheckNum++;
-					NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
-					if(UsedCheckNum >= GloryPlaceNum)
-						NetStatisticUpdate(NET_STATISTICS_END_RACE);
-					send_player_body(my_player_body);
-					SOUND_SUCCESS();
-			};		
-		};
-	};
-};
+					}
+					return;
+				}
+			}
+
+
+			if((dx*dx + dy*dy) < GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS && 
+			((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))) {
+				if (LightData) {
+					LightData->Destroy();
+					LightData = NULL;
+				}
+				
+				MapD.CreateLight(R_curr.x, R_curr.y, R_curr.z, GLORY_PLACE_RADIUS, 32, LIGHT_TYPE::STATIONARY);
+				for(int i = 0; i < 5; i++) {
+					EffD.CreateDeform(Vector(XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)), YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)), 255), DEFORM_ALL,PASSING_WAVE_PROCESS);
+				}
+
+				Enable = 0;	
+				UsedCheckNum++;
+				NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
+				if (UsedCheckNum >= GloryPlaceNum) {
+					NetStatisticUpdate(NET_STATISTICS_END_RACE);
+				}
+				else {
+					isNewCheck = true;
+				}
+
+				send_player_body(my_player_body);
+				SOUND_SUCCESS();
+			}
+			
+			prevMechosCoords = Vector(ActD.Active->R_curr.x, ActD.Active->R_curr.y, 255);
+		}
+	}
+}
 
 extern aciPromptData aiMessageBuffer;
 extern uvsTabuTaskType **TabuTable;
