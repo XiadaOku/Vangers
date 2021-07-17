@@ -1652,7 +1652,9 @@ void iGetMultiGameParameters(void)
 			if(strcmp(game_name,"test")==0) value = 999999;
 			if(strcmp(game_name,"wiring")==0) value = 999999;
 			if(strcmp(game_name,"mechosumo")==0) value = 999999;
-			if(strcmp(game_name,"mechokvach")==0) value = 999999;
+			if(isMod(ID_MAMMOTH)) value = 999999;
+			
+			if(strcmp(game_name,"survival")==0) value = 0;
 			my_server_data.Van_War.InitialCash = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_ARTEFACTS_USING);
@@ -1660,6 +1662,8 @@ void iGetMultiGameParameters(void)
 			if(strcmp(game_name,"wiring")==0) value = 0;
 			if(strcmp(game_name,"mechosumo")==0) value = 0;
 			if(strcmp(game_name,"mechokvach")==0) value = 0;
+			
+			if(strcmp(game_name,"survival")==0) value = 0;
 			my_server_data.Van_War.ArtefactsUsing = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_IN_ESCAVE_TIME);
@@ -1667,6 +1671,8 @@ void iGetMultiGameParameters(void)
 			if(strcmp(game_name,"wiring")==0) value = 2;
 			if(strcmp(game_name,"mechosumo")==0) value = 2;
 			if(strcmp(game_name,"mechokvach")==0) value = 2;
+			
+			if(strcmp(game_name,"survival")==0) value = 4;
 			my_server_data.Van_War.InEscaveTime = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_TEAM_MODE);
@@ -1684,6 +1690,7 @@ void iGetMultiGameParameters(void)
 			if(strcmp(game_name,"wiring")==0) value = 1;
 			if(strcmp(game_name,"mechosumo")==0) value = 1;
 			if(strcmp(game_name,"mechokvach")==0) value = 1;
+			if(strcmp(game_name,"survival")==0) value = 1;
 			my_server_data.Van_War.WorldAccess = value;
 
 			value = iGetMultiGameParameter(iMP_VAN_WAR,iMP_MAX_KILLS);
@@ -1803,16 +1810,20 @@ void iSetMultiGameParameters(void)
 	int value = 0;
 
 	iCurMultiGame = my_server_data.GameType;
+	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 
 	switch(iCurMultiGame){
 		case iMP_VAN_WAR:
 			value = my_server_data.Van_War.InitialCash;
+			if(strcmp(game_name,"survival")==0) value = 0;
 			iSetMultiGameParameter(iMP_VAN_WAR,iMP_INITIAL_CASH,value);
 
 			value = my_server_data.Van_War.ArtefactsUsing;
+			if(strcmp(game_name,"survival")==0) value = 0;
 			iSetMultiGameParameter(iMP_VAN_WAR,iMP_ARTEFACTS_USING,value);
 
 			value = my_server_data.Van_War.InEscaveTime;
+			if(strcmp(game_name,"survival")==0) value = 4;
 			iSetMultiGameParameter(iMP_VAN_WAR,iMP_IN_ESCAVE_TIME,value);
 
 			value = my_server_data.Van_War.TeamMode;
@@ -1823,6 +1834,7 @@ void iSetMultiGameParameters(void)
 			iSetMultiGameParameter(iMP_VAN_WAR,iMP_NASCENCY,value);
 
 			value = my_server_data.Van_War.WorldAccess;
+			if(strcmp(game_name,"survival")==0) value = 1;
 			iSetMultiGameParameter(iMP_VAN_WAR,iMP_ACCESS,value);
 
 			value = my_server_data.Van_War.MaxKills;

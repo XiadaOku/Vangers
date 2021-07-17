@@ -5,6 +5,7 @@
 */
 
 #include "../global.h"
+#include <vector>
 
 //XStream VOVA("VOVA.LST", XS_OUT);
 
@@ -32,14 +33,11 @@
 #ifdef _ROAD_
 #include "../units/uvsapi.h"
 #include "../units/compas.h"
-#include "../units/mechos.h"
-#include "../units/hobj.h"
 #include "../runtime.h"
 #endif
 
 #include "../3d/3d_math.h"
 #include "../3d/parser.h"
-#include "../3d/3dobject.h"
 #include "../terra/vmap.h"
 #include "../sound/hsound.h"
 #include "diagen.h"
@@ -68,9 +66,6 @@
 const int TABUTASK_BAD = ACI_TABUTASK_FAILED;
 const int TABUTASK_GOOD = ACI_TABUTASK_SUCCESSFUL;
 
-int countFromCommand = 0;
-int countFromDancin = 0;
-
 int RACE_WAIT =  300;
 int uvsKronActive = 0;
 int uvsVersion = 14;
@@ -85,22 +80,28 @@ int uvsTabuTaskY = 0;
 int uvsTabuTaskFlag = 0;
 //int uvsGamerActive = 1;
 
-/* ----------------------------- EXTERN SECTION ---------------------------- */
+/* ----------------------------- MODS SECTION ---------------------------- */
+int countFromCommand = 0;
+int rollcallTime = 0;
+
+int countFromDancin = 0;
+int rollcallNum = 0;
+int kvachTime = -1;
+
 extern int is_start;
 extern int is_kill;
-extern int whoIsKvach;
-int kvachTime = -1;
-extern char* kvachName;
-extern char kvachId[20];
-int rollcallTime = 0;
-int rollcallNum = 0;
 
 extern int isRollcall;
-extern char* rollcallNicknames;
+extern std::vector<std::string> rollcallNicknames;
 
 extern int checkModVersion;
 extern int numCheckModVersion;
 
+extern int whoIsKvach;
+extern char* kvachName;
+extern std::string kvachId;
+
+/* ----------------------------- EXTERN SECTION ---------------------------- */
 extern int Dead,Quit;
 extern int GameQuantReturnValue;
 extern int NetworkON;
@@ -1093,13 +1094,15 @@ void uvsContimer::Quant(void){
 		}
 	}
 	
+	
+	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	if (isRollcall==-1) {
 		rollcallTime = 0;
 	}
 	if (isRollcall>-1) {
 		rollcallTime++;
-		if (rollcallTime == 1)
-			message_dispatcher.send("[bot]Перекличка", MESSAGE_FOR_PLAYER, 0);
+		if (rollcallTime == 1) {
+			message_dispatcher.send((char*)"Перекличка", MESSAGE_FOR_ALL, 0);
 			rollcallNum = 0;
 			PlayerData* pd;
 			pd = players_list.first();
@@ -1109,41 +1112,31 @@ void uvsContimer::Quant(void){
 				}
 				pd = (PlayerData*)pd -> next;
 			}
-		if (rollcallTime == 240 || isRollcall >= rollcallNum) {
-			message_dispatcher.send("[bot]-----------------", MESSAGE_FOR_PLAYER, 0);
+		}
+		if (rollcallTime == 1200 || isRollcall >= rollcallNum) {
+			message_dispatcher.send((char*)"-----------------", MESSAGE_FOR_ALL, 0);
 			char *rollsize = new char[3]();
-			int plsize = 0;
-			PlayerData* pd;
-			pd = players_list.first();
-			while (pd) {
-				if (pd->status == GAMING_STATUS) {
-					plsize++;
-				}
-				pd = (PlayerData*)pd -> next;
-			}
-			port_itoa(plsize, rollsize, 10);
+			port_itoa(rollcallNum, rollsize, 10);
 			char *arollsize = new char[3]();
 			port_itoa(isRollcall, arollsize, 10);
 		
-			char *roll_msg = new char[strlen(rollsize) + strlen(arollsize) + 6]();
-			strcpy(roll_msg, "[bot]");
-			strcat(roll_msg, arollsize);
+			char *roll_msg = new char[strlen(rollsize) + strlen(arollsize) + 1]();
+			strcpy(roll_msg, arollsize);
 			strcat(roll_msg, "/");
 			strcat(roll_msg, rollsize);
-			message_dispatcher.send(roll_msg, MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send(roll_msg, MESSAGE_FOR_ALL, 0);
 		}
 		if (isRollcall >= rollcallNum) {
 			is_start = 7;
 			isRollcall=-1;
 		}
-		else if (rollcallTime == 240) {
-			message_dispatcher.send("[bot]Перекличка отменена", MESSAGE_FOR_PLAYER, 0);
+		else if (rollcallTime == 1200) {
+			message_dispatcher.send((char*)"Перекличка отменена", MESSAGE_FOR_ALL, 0);
 			isRollcall = -1;
-			rollcallNicknames = new char[10000]();
+			rollcallNicknames.clear();
 		}
 	}
 	
-	char *game_name = iScrOpt[iSERVER_NAME]->GetValueCHR();
 	if (NetworkON && is_start != 1 && is_start != 7 && countFromCommand != 0) {
 		countFromCommand=0;
 	}
@@ -1151,215 +1144,217 @@ void uvsContimer::Quant(void){
 	if (NetworkON && is_start==1) {
 		countFromCommand++;
 		if (isMod(ID_MAMMOTH)) {
+			if (countFromCommand==1) {
+				message_dispatcher.send((char*)"Старт мамонта через 20 секунд, охотников через 40", MESSAGE_FOR_ALL, 0);
+			}
 			if (countFromCommand==300) {
-				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"5(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("[bot]4(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"4(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("[bot]3(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"3(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("[bot]2(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"2(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("[bot]1(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"1(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("[bot]20 секунд мамонта", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"20 секунд мамонта", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==700) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"5", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==720) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"4", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==740) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"3", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==760) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"2", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==780) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"1", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==800) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"СТАРТ!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 				is_start=0;
 			}
 		}
 		else if (strcmp(game_name,"mechokvach")==0) {
 			if (countFromCommand==300) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
-				message_dispatcher.send("[bot]Кто квач? (я/z)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]Кто квач? (я/z)", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 				whoIsKvach=1;
-				kvachTime=-1;
 			}
 		}
 		else {
 			if (countFromCommand==300) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"5", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==320) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"4", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==340) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"3", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==360) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"2", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==380) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"1", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"СТАРТ!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 				is_start=2;
 			}
 		}
 	}
+	
 	if (NetworkON && is_start==2 && kvachTime >= 0 && kvachTime < 200) {
 		kvachTime++;
 		if (kvachTime==100) {
-			message_dispatcher.send("[bot]5(квач)", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send((char*)"[bot]5(квач)", MESSAGE_FOR_PLAYER, 0);
 		}
 		else if (kvachTime==120) {
-			message_dispatcher.send("[bot]4(квач)", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send((char*)"[bot]4(квач)", MESSAGE_FOR_PLAYER, 0);
 		}
 		else if (kvachTime==140) {
-			message_dispatcher.send("[bot]3(квач)", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send((char*)"[bot]3(квач)", MESSAGE_FOR_PLAYER, 0);
 		}
 		else if (kvachTime==160) {
-			message_dispatcher.send("[bot]2(квач)", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send((char*)"[bot]2(квач)", MESSAGE_FOR_PLAYER, 0);
 		}
 		else if (kvachTime==180) {
-			message_dispatcher.send("[bot]1(квач)", MESSAGE_FOR_PLAYER, 0);
+			message_dispatcher.send((char*)"[bot]1(квач)", MESSAGE_FOR_PLAYER, 0);
 		}
 		else if (kvachTime==200) {
-			message_dispatcher.send("[bot]Старт квача", MESSAGE_FOR_PLAYER, 0);
-			kvachTime=-1;
+			message_dispatcher.send((char*)"[bot]Старт квача", MESSAGE_FOR_PLAYER, 0);
+			kvachTime = -1;
 		}
 	}
+	
 	if (NetworkON && is_start==7) {
 		countFromCommand++;
-		if (isMod(ID_MAMMOTH)) {
+		if (strcmp(game_name,"ohota na mamonta")==0 || strcmp(game_name,"mamont")==0 || strcmp(game_name,"mammoth hunt")==0) {
 			if (countFromCommand==1) {
-				message_dispatcher.send("Старт мамонта через 5 секунд, охотников через 25", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"Старт мамонта через 5 секунд, охотников через 25", MESSAGE_FOR_ALL, 0);
 			}
 			if (countFromCommand==1) {
-				message_dispatcher.send("[bot]5(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"5(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==20) {
-				message_dispatcher.send("[bot]4(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"4(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==40) {
-				message_dispatcher.send("[bot]3(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"3(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==60) {
-				message_dispatcher.send("[bot]2(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"2(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==80) {
-				message_dispatcher.send("[bot]1(мамонт)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"1(мамонт)", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==100) {
-				message_dispatcher.send("[bot]20 секунд мамонта", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"20 секунд мамонта", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==400) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"5", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==420) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"4", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==440) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"3", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==460) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"2", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==480) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"1", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==500) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"СТАРТ!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 				is_start=0;
 			}
 		}
 		else if (strcmp(game_name,"mechokvach")==0) {
 			if (countFromCommand==1) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]5", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==21) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]4", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==41) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]3", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==61) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]2", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==81) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]1", MESSAGE_FOR_PLAYER, 0);
 			}
 			else if (countFromCommand==101) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
-				message_dispatcher.send("[bot]Кто квач? (я/z)", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"[bot]Кто квач? (я/z)", MESSAGE_FOR_PLAYER, 0);
 				countFromCommand=0;
 				is_start=2;
 				whoIsKvach=1;
-				kvachTime=-1;
 			}
 		}
 		else {
 			if (countFromCommand==1) {
-				message_dispatcher.send("[bot]5", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"5", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==21) {
-				message_dispatcher.send("[bot]4", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"4", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==41) {
-				message_dispatcher.send("[bot]3", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"3", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==61) {
-				message_dispatcher.send("[bot]2", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"2", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==81) {
-				message_dispatcher.send("[bot]1", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"1", MESSAGE_FOR_ALL, 0);
 			}
 			else if (countFromCommand==101) {
-				message_dispatcher.send("[bot]СТАРТ!!!", MESSAGE_FOR_PLAYER, 0);
+				message_dispatcher.send((char*)"СТАРТ!!!", MESSAGE_FOR_ALL, 0);
 				countFromCommand=0;
 				is_start=2;
 			}
 		}
 	}
-
 
 	if (is_kill==-1 && ActD.Tail) {
 		VangerUnit* p;
 		p = (VangerUnit*)(ActD.Tail);
 		while (p) {
-			p->BulletCollision(9999999999999999, NULL);
+			p->BulletCollision(p->MaxArmor + p->MaxEnergy, NULL);
 			p = (VangerUnit*)(p->NextTypeList);
 		}
 		is_kill=0;
@@ -1376,7 +1371,7 @@ void uvsContimer::Quant(void){
 			VangerUnit* p;
 			p = (VangerUnit*)(ActD.Tail);
 			while (p) {
-				p->BulletCollision(9999999999999999, NULL);
+				p->BulletCollision(p->MaxArmor + p->MaxEnergy, NULL);
 				p = (VangerUnit*)(p->NextTypeList);
 			}
 			is_start=3;
@@ -1393,10 +1388,18 @@ void uvsContimer::Quant(void){
 			VangerUnit* p;
 			p = (VangerUnit*)(ActD.Tail);
 			while (p) {
-				p->BulletCollision(9999999999999999, NULL);
+				p->BulletCollision(p->MaxArmor + p->MaxEnergy, NULL);
 				p = (VangerUnit*)(p->NextTypeList);
 			}
 			is_start=3;
+		}
+	}
+	else if (NetworkON && strcmp(game_name,"survival")==0) {
+		VangerUnit* p;
+		p = (VangerUnit*)(ActD.Tail);
+		while (p) {
+			p->BulletCollision((p->MaxArmor + p->MaxEnergy)/(/*dificulty*/ 3 * 200), NULL);
+			p = (VangerUnit*)(p->NextTypeList);
 		}
 	}
 	else if (NetworkON && strcmp(game_name,"dancin")==0 && ActD.Active) {
@@ -1458,6 +1461,7 @@ void uvsContimer::Quant(void){
 		}
 		whoIsKvach=0;
 	}
+	
 	if (NetworkON && checkModVersion==1) {
 		message_dispatcher.send(modVersion, MESSAGE_FOR_ALL, 0);
 		checkModVersion = 2;
@@ -1466,30 +1470,38 @@ void uvsContimer::Quant(void){
 		checkModVersion++;
 	}
 	if (NetworkON && checkModVersion==10) {
-		message_dispatcher.send("[bot]-----------------", MESSAGE_FOR_PLAYER, 0);
+		message_dispatcher.send((char*)"-----------------", MESSAGE_FOR_PLAYER, 0);
 		
 		char *psize = new char[3]();
-		port_itoa(players_list.size(), psize, 10);
+		int plsize = 0;
+		PlayerData* pd;
+		pd = players_list.first();
+		while (pd) {
+			if (pd->status == GAMING_STATUS) {
+				plsize++;
+			}
+			pd = (PlayerData*)pd -> next;
+		}
+		port_itoa(plsize, psize, 10);
 		char *charNCheck = new char[3]();
 		port_itoa(numCheckModVersion, charNCheck, 10);
 		
-		char *check_msg = new char[strlen(charNCheck) + strlen(psize) + 6]();
-		strcpy(check_msg, "[bot]");
-		strcat(check_msg, charNCheck);
+		char *check_msg = new char[strlen(charNCheck) + strlen(psize) + 1]();
+		strcpy(check_msg, charNCheck);
 		strcat(check_msg, "/");
 		strcat(check_msg, psize);
 		message_dispatcher.send(check_msg, MESSAGE_FOR_PLAYER, 0);
 		checkModVersion = 0;
 	}
 	
-	if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0 && !strcmp(kvachId, "-------------------")==0) {
+	if (NetworkON && is_start==2 && strcmp(game_name,"mechokvach")==0 && !kvachId.empty()) {
 		if (ActD.Active) {
 			VangerUnit* p;
 			p = (VangerUnit*)(ActD.Tail);
 			while (p) {
-				char ddn[20];
-				port_itoa(p->ShellNetID, ddn, 10);
-				if (strncmp(ddn, kvachId, strlen(ddn))==0) {
+				std::string ddn = std::to_string(p->ShellNetID);
+				std::cout << "ddn: " << ddn << " kvachId: " << kvachId << " == " << (kvachId == ddn) << std::endl;
+				if (kvachId == ddn) {
 					if (p->uvsPoint->Pmechos->actualColor == 4) {
 						p->uvsPoint->Pmechos->color = 1;
 						p->set_body_color(COLORS_IDS::BODY_RED);
@@ -1538,7 +1550,7 @@ void uvsContimer::Quant(void){
 				}
 				p = (VangerUnit*)(p->NextTypeList);
 			}
-			strcpy(kvachId, "-------------------");
+			kvachId.clear();
 		}
 	}
 	else if (NetworkON && is_start==0 && strcmp(game_name,"mechokvach")==0) {
@@ -5886,6 +5898,11 @@ void uvsEscave::add_goods_to_shop( void ){ //znfo - ╨┤╨╛╨▒╨░╨▓╨║╨░ ╤В╨╛╨▓╨░╤А╨╛╨
 
 	if (Pbunch -> status == UVS_BUNCH_STATUS::UNABLE) return;
 
+	if (NetworkON && uvsGoodsON) {
+		GamerResult.phlegma_buy *= (int)(GamerResult.phlegma_buy < 0);
+		GamerResult.toxick_buy *= (int)(GamerResult.toxick_buy < 0);
+	}
+	
 	while( pt ){
 		int k = 0;
 
@@ -5894,8 +5911,12 @@ void uvsEscave::add_goods_to_shop( void ){ //znfo - ╨┤╨╛╨▒╨░╨▓╨║╨░ ╤В╨╛╨▓╨░╤А╨╛╨
 				
 			if (n > 32) n = 32;
 
-			if (!uvsGoodsON)
-				n = uvsQuantity;
+			switch (pt->type) {
+				case 24: n -= GamerResult.nymbos_buy; break;
+				case 26: n -= GamerResult.heroin_buy; break;
+				case 27: n -= GamerResult.shrub_buy; break;
+				case 28: n -= GamerResult.poponka_buy; break;
+			}
 		} else {
 			n = 8 + RND(5);
 
@@ -6015,19 +6036,29 @@ void uvsSpot::add_goods_to_shop( void ){
 
 	if (Pworld -> escT[0] -> Pbunch -> status == UVS_BUNCH_STATUS::UNABLE) return;
 
+	if (NetworkON && uvsGoodsON) {
+		GamerResult.nymbos_buy *= (int)(GamerResult.nymbos_buy < 0);
+		GamerResult.heroin_buy *= (int)(GamerResult.heroin_buy < 0);
+		GamerResult.shrub_buy *= (int)(GamerResult.shrub_buy < 0);
+		GamerResult.poponka_buy *= (int)(GamerResult.poponka_buy < 0);
+	}
+	
 	while( pt ){
 		int k = 0;
 
 		if (NetworkON){
 			n = uvsQuantity;
+			
 			if (n > 32) n = 32;
-
-			if (!uvsGoodsON)
-				n = uvsQuantity;
+			
+			switch (pt->type) {
+				case 25: n -= GamerResult.phlegma_buy; break;
+				case 29: n -= GamerResult.toxick_buy; break;
+			}
 		} else {
-			n = 4 + RND(5) + 4;
+			n = 8 + RND(5);
 
-			if (pt -> type == UVS_ITEM_TYPE::POPONKA && !NetworkON)
+			if (pt -> type == UVS_ITEM_TYPE::POPONKA)
 				n = DG_POPONKA_MAX - 1;
 		}
 
@@ -8467,6 +8498,12 @@ stand < ConTimer.GetTime() < "BOORAWCHICK go home\n";
 
 		count = GamerResult.nymbos - ItemCount(Pitem,UVS_ITEM_TYPE::NYMBOS );
 		GamerResult.nymbos = ItemCount(Pitem,UVS_ITEM_TYPE::NYMBOS );
+		if (Pescave && strcmp(Pescave->name, "Podish") == 0) {
+			if (GamerResult.nymbos_buy - count > uvsQuantity) { GamerResult.nymbos_buy = uvsQuantity; }
+			else { GamerResult.nymbos_buy -= count; }
+		}
+		std::cout << "NymbosBuy: " << GamerResult.nymbos_buy << std::endl;
+		std::cout<<"countNymbos: "<<count<<std::endl;
 		if (count > 0){
 			uvsTradeItem* pl = (uvsTradeItem*)pt;
 			while(pl){
@@ -8479,13 +8516,19 @@ stand < ConTimer.GetTime() < "BOORAWCHICK go home\n";
 			}//  end while
 
 			if (NetworkON && my_server_data.GameType == MECHOSOMA){
-				my_player_body.MechosomaStat.ItemCount1 += count;
-				send_player_body(my_player_body);
+				if (Pspot && strcmp(Pspot->name, "Incubator") == 0) {
+					my_player_body.MechosomaStat.ItemCount1 += count;
+					send_player_body(my_player_body);
+				}
 			}
 		}
-
+		
 		count = GamerResult.phlegma - ItemCount(Pitem, UVS_ITEM_TYPE::PHLEGMA);
 		GamerResult.phlegma = ItemCount(Pitem, UVS_ITEM_TYPE::PHLEGMA);
+		if (Pspot && strcmp(Pspot->name, "Incubator") == 0) {
+			if (GamerResult.phlegma_buy - count > uvsQuantity) { GamerResult.phlegma_buy = uvsQuantity; }
+			else { GamerResult.phlegma_buy -= count; }
+		}
 		if (count > 0){
 			uvsTradeItem* pl = (uvsTradeItem*)pt;
 			while(pl){
@@ -8497,13 +8540,19 @@ stand < ConTimer.GetTime() < "BOORAWCHICK go home\n";
 				pl = (uvsTradeItem*)pl -> next;
 			}//  end while
 			if (NetworkON && my_server_data.GameType == MECHOSOMA){
-				my_player_body.MechosomaStat.ItemCount2 += count;
-				send_player_body(my_player_body);
+				if (Pescave && strcmp(Pescave->name, "Podish") == 0) {
+					my_player_body.MechosomaStat.ItemCount2 += count;
+					send_player_body(my_player_body);
+				}
 			}
 		}
 		//stalkerg ╨У╨┤╨╡ ╤В╨╛ ╤В╤Г╤В
 		count = GamerResult.heroin - ItemCount(Pitem,UVS_ITEM_TYPE::HEROIN );
 		GamerResult.heroin = ItemCount(Pitem,UVS_ITEM_TYPE::HEROIN );
+		if (Pescave && strcmp(Pescave->name, "VigBoo") == 0) {
+			if (GamerResult.heroin_buy - count > uvsQuantity) { GamerResult.heroin_buy = uvsQuantity; }
+			else { GamerResult.heroin_buy -= count; }
+		}
 		if (count > 0){
 			uvsTradeItem* pl = (uvsTradeItem*)pt;
 			while(pl){
@@ -8515,13 +8564,19 @@ stand < ConTimer.GetTime() < "BOORAWCHICK go home\n";
 				pl = (uvsTradeItem*)pl -> next;
 			}//  end while
 			if (NetworkON && my_server_data.GameType == MECHOSOMA){
-				my_player_body.MechosomaStat.ItemCount1 += count;
-				send_player_body(my_player_body);
+				if (Pspot && strcmp(Pspot->name, "Lampasso") == 0) {
+					my_player_body.MechosomaStat.ItemCount1 += count;
+					send_player_body(my_player_body);
+				}
 			}
 		}
 
 		count = GamerResult.shrub - ItemCount(Pitem,UVS_ITEM_TYPE::SHRUB );
 		GamerResult.shrub = ItemCount(Pitem,UVS_ITEM_TYPE::SHRUB );
+		if (Pescave && strcmp(Pescave->name, "VigBoo") == 0) {
+			if (GamerResult.shrub_buy - count > uvsQuantity) { GamerResult.shrub_buy = uvsQuantity; }
+			else { GamerResult.shrub_buy -= count; }
+		}
 		if (count > 0){
 			uvsTradeItem* pl = (uvsTradeItem*)pt;
 			while(pl){
@@ -8533,13 +8588,19 @@ stand < ConTimer.GetTime() < "BOORAWCHICK go home\n";
 				pl = (uvsTradeItem*)pl -> next;
 			}//  end while
 			if (NetworkON && my_server_data.GameType == MECHOSOMA){
-				my_player_body.MechosomaStat.ItemCount2 += count;
-				send_player_body(my_player_body);
+				if (Pspot && strcmp(Pspot->name, "Ogorod") == 0) {
+					my_player_body.MechosomaStat.ItemCount2 += count;
+					send_player_body(my_player_body);
+				}
 			}
 		}
 
 		count = GamerResult.poponka - ItemCount(Pitem,UVS_ITEM_TYPE::POPONKA );
 		GamerResult.poponka = ItemCount(Pitem,UVS_ITEM_TYPE::POPONKA );
+		if (Pspot && strcmp(Pspot->name, "ZeePa") == 0) {
+			if (GamerResult.poponka_buy - count > uvsQuantity) { GamerResult.poponka_buy = uvsQuantity; }
+			else { GamerResult.poponka_buy -= count; }
+		}
 		if (count > 0){
 			uvsTradeItem* pl = (uvsTradeItem*)pt;
 			while(pl){
@@ -8551,13 +8612,19 @@ stand < ConTimer.GetTime() < "BOORAWCHICK go home\n";
 				pl = (uvsTradeItem*)pl -> next;
 			}//  end while
 			if (NetworkON && my_server_data.GameType == MECHOSOMA){
-				my_player_body.MechosomaStat.ItemCount1 += count;
-				send_player_body(my_player_body);
+				if (Pescave && strcmp(Pescave->name, "B-Zone") == 0) {
+					my_player_body.MechosomaStat.ItemCount1 += count;
+					send_player_body(my_player_body);
+				}
 			}
 		}
 
 		count = GamerResult.toxick - ItemCount(Pitem,UVS_ITEM_TYPE::TOXICK );
 		GamerResult.toxick = ItemCount(Pitem,UVS_ITEM_TYPE::TOXICK );
+		if (Pescave && strcmp(Pescave->name, "B-Zone") == 0) {
+			if (GamerResult.toxick_buy - count > uvsQuantity) { GamerResult.toxick_buy = uvsQuantity; }
+			else { GamerResult.toxick_buy -= count; }
+		}
 		if (count > 0){
 			uvsTradeItem* pl = (uvsTradeItem*)pt;
 			while(pl){
@@ -8569,8 +8636,10 @@ stand < ConTimer.GetTime() < "BOORAWCHICK go home\n";
 				pl = (uvsTradeItem*)pl -> next;
 			}//  end while
 			if (NetworkON && my_server_data.GameType == MECHOSOMA){
-				my_player_body.MechosomaStat.ItemCount2 += count;
-				send_player_body(my_player_body);
+				if (Pspot && strcmp(Pspot->name, "ZeePa") == 0) {
+					my_player_body.MechosomaStat.ItemCount2 += count;
+					send_player_body(my_player_body);
+				}
 			}
 		}
 
@@ -9151,7 +9220,6 @@ void uniVangLoad(XStream &pfile){
 		(v = new uvsVanger(pfile));
 		if( v -> shape == UVS_VANGER_SHAPE::GAMER  ){
 			Gamer = v;
-			v -> shape = UVS_VANGER_SHAPE::GAMER;
 		}
 		v -> elink(ETail);
 	}
@@ -10086,6 +10154,13 @@ void uvsGamerResult::Init(void){
 	toxick_bonus = 1;
 	BoorawchickGoHimself = 0;
 	unik_poponka = 0;
+	
+	nymbos_buy = 0;
+	phlegma_buy = 0;
+	heroin_buy = 0;
+	shrub_buy = 0;
+	poponka_buy = 0;
+	toxick_buy = 0;
 }
 
 void uvsGamerResult::LocalInit(void){

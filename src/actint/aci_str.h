@@ -112,3 +112,19 @@
 #define aciSTR_PutThis1 		"Put this"
 #define aciSTR_PutThis2 		"Положить"
 
+
+//CX Van-War game restrictions
+#define aciSTR_RESTRICTIONS1	"Game restrictions:"
+#define aciSTR_RESTRICTIONS2	"Ограничения игры:"
+
+//CX Van-War statistics
+#define aciSTR_STATISTICS1		"Statistics:"
+#define aciSTR_STATISTICS2		"Статистика:"
+	
+//CX Van-War kills for statistics 
+#define aciSTR_KILLS_NEED1		"kills"
+#define aciSTR_KILLS_NEED2		"убийств"
+
+//CX Van-War time for statistics 
+#define aciSTR_MINUTES1		"minutes"
+#define aciSTR_MINUTES2		"минут"

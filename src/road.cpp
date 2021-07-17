@@ -66,6 +66,7 @@
 #include "iscreen/hfont.h"
 #include "iscreen/iscreen.h"
 #include "iscreen/controls.h"
+#include "iscreen/i_chat.h"
 #include "actint/actint.h"
 #endif
 
@@ -997,11 +998,11 @@ _MEM_STATISTIC_("AFTER curGMap  -> ");
 #ifdef ISCREEN
 	palTr -> set(NULL,palbufOrg,0,255);
 #else
-	XGR_SetPal(palbufOrg,0,255);
+	XGR_SetPal(palbufOrg,0,256);
 #endif
 
 #ifdef _ACI_SKIP_SHOP_
-	XGR_SetPal(palbuf,0,255);
+	XGR_SetPal(palbuf,0,256);
 #endif
 
 	if(idOS == 1) vMap -> lockMem();
@@ -1369,9 +1370,9 @@ void PalettePrepare(void) {
 		for(j = 0;j < TERRAIN_MAX;j++){
 			if(j == 3 || j == 5 || j == 6 || j == 4) break;
 			for(i = BEGCOLOR[j];i <= ENDCOLOR[j];i++){
-				palbufSrc[i*3] = palbufOrg[i*3] = 63 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
-				palbufSrc[i*3 + 1] = palbufOrg[i*3 + 1] = 63 *(i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
-				palbufSrc[i*3 + 2] = palbufOrg[i*3 + 2] = 63 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
+				palbufSrc[i*3] = palbufOrg[i*3] = 255 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
+				palbufSrc[i*3 + 1] = palbufOrg[i*3 + 1] = 255 *(i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
+				palbufSrc[i*3 + 2] = palbufOrg[i*3 + 2] = 255 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
 			};
 		};
 	};
@@ -1980,13 +1981,15 @@ void iGameMap::draw(int self)
 
 				zChat.init();
 				zChat < msg->message;
-				zchatfont.draw(
-					xc-xside+80,
-					yc-yside+20+(zCHAT_ROWLIMIT*zCHAT_ROWHEIGHT)-(zCount*zCHAT_ROWHEIGHT),
-					(unsigned char*)(zChat.GetBuf()),
-					zColor, 
-					zCOLOR_TRANSPARENT
-				);
+				if (!iChatMUTE) {
+					zchatfont.draw(
+						xc-xside+80,
+						yc-yside+20+(zCHAT_ROWLIMIT*zCHAT_ROWHEIGHT)-(zCount*zCHAT_ROWHEIGHT),
+						(unsigned char*)(zChat.GetBuf()),
+						zColor, 
+						zCOLOR_TRANSPARENT
+					);
+				}
 
 				if(msg == message_dispatcher.first()) break;
 				msg = (MessageElement*)msg->prev;
@@ -2171,7 +2174,7 @@ void ShowImageRTO::Init(int id)
 	ff.read(pal,768);
 	ff.close();
 
-	XGR_SetPal(tpal,0,255);
+	XGR_SetPal(tpal,0,256);
 
 	if(!(Flags[curFile] & IMG_RTO_NO_IMAGE)){
 		ff.open(XBuf -> address(),XS_IN);

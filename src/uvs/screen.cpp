@@ -264,10 +264,10 @@ void WorldScreen::DollyQuant(uvsDolly* pd)
 {
 	int xx = x + GetX(pd -> pos_y);
 	int yy = y + GetY(pd -> pos_x);
-	XGR_LineTo(xx - 3,yy,7,2,63);
-	XGR_LineTo(xx,yy - 3,7,3,63);
-	XGR_SetPixel(xx - 1,yy - 1,63); XGR_SetPixel(xx - 1,yy + 1,63);
-	XGR_SetPixel(xx + 1,yy - 1,63); XGR_SetPixel(xx + 1,yy + 1,63);
+	XGR_LineTo(xx - 3,yy,7,2,255);
+	XGR_LineTo(xx,yy - 3,7,3,255);
+	XGR_SetPixel(xx - 1,yy - 1,255); XGR_SetPixel(xx - 1,yy + 1,255);
+	XGR_SetPixel(xx + 1,yy - 1,255); XGR_SetPixel(xx + 1,yy + 1,255);
 
 	int i,j = pd -> tail_cInd,c;
 	j = (j - 1 < 0) ? DOLLY_TAIL_LEN - 1 : j - 1;
@@ -275,7 +275,7 @@ void WorldScreen::DollyQuant(uvsDolly* pd)
 		if(pd -> tail_x[j] != -1){
 			xx = x + GetX(pd -> tail_y[j]);
 			yy = y + GetY(pd -> tail_x[j]);
-			c = 63 - (i + 1)*60/DOLLY_TAIL_LEN;
+			c = 255 - (i + 1)*60/DOLLY_TAIL_LEN;
 			XGR_LineTo(xx - 2,yy,5,2,c);
 			XGR_LineTo(xx,yy - 2,5,3,c);
 			j = (j - 1 < 0) ? DOLLY_TAIL_LEN - 1 : j - 1;

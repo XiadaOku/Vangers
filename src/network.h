@@ -1,29 +1,36 @@
 #ifndef __NETWORK_H__
 #define __NETWORK_H__
 #include "zmod_client.h"
+#include <vector>
 
 #include "xsocket.h"
 #include "multiplayer.h"
 
 #define DEFAULT_SERVER_PORT	2197
 
+extern double zMod_cycle;
+extern double zMod_flood_level_delta;
+
+
+/*****************************************************************
+			Mods section
+*****************************************************************/
+extern int countFromCommand;
 extern int is_start;
 extern int is_kill;
-extern int kvachTime;
-extern int whoIsKvach;
-extern char* kvachName;
-extern char kvachId[20];
+
+extern int rollcallTime;
+extern int isRollcall;
+extern std::vector<std::string> rollcallNicknames;
 
 extern int checkModVersion;
 extern int numCheckModVersion;
 extern char* modVersion;
 
-extern int isRollcall;
-extern char* rollcallNicknames;
-
-extern double zMod_cycle;
-extern double zMod_flood_level_delta;
-
+extern int kvachTime;
+extern int whoIsKvach;
+extern char* kvachName;
+extern std::string kvachId;
 
 extern char modsArray[][4][40];
 
@@ -280,7 +287,8 @@ int send_server_data(char* name, ServerData* data, zServerData* zdata); // retur
 int is_current_server_configured(char* name, ServerData* data, zServerData* zdata);  // changes name and data if server is configured
 void void_network_quant(); // receives messages only
 
-int isMod(int id); //returns 1 if game_name is mod game name; else false
+int isMod(int id); //returns true if server_name is mod else false
+int getCurrentMod(); //returns mod id or -1
 
 int NetInit(ServerFindChain* p);
 

@@ -1999,29 +1999,39 @@ void dgRoom::acceptTEXT(void)
 	delete dgf;
 }
 
-void dgRoom::acceptDIL(void)
-{
-	//std::cout<<"dgRoom::acceptDIL "<<getDGname(roomName,".dil")<<std::endl;
+void dgRoom::acceptDIL(void) {
+	std::cout<<"dgRoom::acceptDIL "<<getDGname(roomName,".dil")<<std::endl;
 	dgFile* dgf = new dgFile(getDGname(roomName,".dil"));
 
 	gridSX = atoi(dgf -> getElement(DGF_NONE));
 	gridSY = atoi(dgf -> getElement(DGF_NONE));
-	memset(grid = new dgCell*[gridSX*gridSY],0,sizeof(dgCell*)*gridSX*gridSY);
-	memset(status = new uchar[2*gridSX*gridSY],DG_CELLSTATUS::EMPTY,2*gridSX*gridSY);
+	int num = atoi(dgf -> getElement(DGF_NONE));
+	dgf -> getElement(DGF_NONE);
+	
+	dgCell* pc;
+	grid = new dgCell*[gridSX*gridSY];
+	status = new uchar[2 * gridSX * gridSY];
+	
+	memset(grid, 0, sizeof(dgCell*) * gridSX * gridSY);
+	memset(status, DG_CELLSTATUS::EMPTY, 2 * gridSX * gridSY);
 	backup_status = status + gridSX*gridSY;
 
-	int num = atoi(dgf -> getElement(DGF_NONE)),i;
-	dgf -> getElement(DGF_NONE);
-	dgCell* pc;
-	for(i = 0;i < num;i++){
-		(pc = new dgCell(this)) -> read(dgf);
-		setGRID(pc -> x,pc -> y,pc);
-		setSTATUS(pc -> x,pc -> y,DG_CELLSTATUS::DORMANT);
-		}
-	if(getSTATUS(startX,startY) != DG_CELLSTATUS::EMPTY){
-		setSTATUS(startX,startY,DG_CELLSTATUS::WAITING);
+	for (int i = 0; i < num; i++) {
+		pc = new dgCell(this);
+		pc -> read(dgf);
+		setGRID(pc -> x, pc -> y, pc);
+		setSTATUS(pc -> x, pc -> y, DG_CELLSTATUS::DORMANT);
+	}
+	if (getSTATUS(startX, startY) != DG_CELLSTATUS::EMPTY) {
+		setSTATUS(startX, startY, DG_CELLSTATUS::WAITING);
 		explodeState(startX,startY);
+	}
+	std::cout << "gridSX: " << gridSX << " gridSY: " << gridSY << std::endl;
+	for (int i = 0; i < gridSX * gridSY; i++) {
+		if (grid[i]) {
+			std::cout << "grid[" << i << "]: " << grid[i] -> Name << std::endl;
 		}
+	}
 }
 
 void dgRoom::acceptQUERY(void)

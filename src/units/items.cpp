@@ -546,11 +546,11 @@ void StuffObject::Quant(void)
 		switch(ActIntBuffer.type){
 			case ACI_CONLARVER:
 				if(LightData) LightData->set_position(R_curr.x,R_curr.y,512);
-				else LightData = MapD.CreateLight(R_curr.x,R_curr.y,512,radius*2,63,LIGHT_TYPE::STATIC);
+				else LightData = MapD.CreateLight(R_curr.x,R_curr.y,512,radius*2,255,LIGHT_TYPE::STATIC);
 				break;
 			case ACI_EMPTY_CONLARVER:
 				if(LightData) LightData->set_position(R_curr.x,R_curr.y,512);
-				else LightData = MapD.CreateLight(R_curr.x,R_curr.y,512,radius,63,LIGHT_TYPE::DYNAMIC);
+				else LightData = MapD.CreateLight(R_curr.x,R_curr.y,512,radius,255,LIGHT_TYPE::DYNAMIC);
 				break;
 			case ACI_MECHANIC_MESSIAH:
 				if(CurrentWorld == WORLD_XPLO && ActD.FunctionSpobsDestroyActive){
@@ -571,7 +571,7 @@ void StuffObject::Quant(void)
 				if(CurrentWorld == WORLD_THREALL){
 					if(ActD.ThreallDestroy){
 						if(LightData) LightData->set_position(R_curr.x,R_curr.y,512);
-						else LightData = MapD.CreateLight(R_curr.x,R_curr.y,512,80,63,LIGHT_TYPE::DYNAMIC);
+						else LightData = MapD.CreateLight(R_curr.x,R_curr.y,512,80,255,LIGHT_TYPE::DYNAMIC);
 						if(R_curr.z < 255) impulse(Vector(0,0,64),RND(15),RND(8));
 					}else{
 						if((dynamic_state & GROUND_COLLISION) && GetTouchSensor("SIGN") && ActD.FunctionThreallDestroyActive){
@@ -1566,7 +1566,7 @@ void BulletObject::TimeOutQuant(void)
 			};
 		}else{
 			if(ShowID == BULLET_SHOW_TYPE_ID::CRATER && ExtShowType){
-				if(BigGetAlt(R_curr.x,R_curr.y,R_curr.z,alt,ExtShowType)) MapLevel = 1;
+				if(BigGetAlt(R_curr, alt, ExtShowType)) MapLevel = 1;
 				else{
 					MapLevel = 0;
 					alt = 0;
@@ -1575,7 +1575,7 @@ void BulletObject::TimeOutQuant(void)
 						LightData = NULL;
 					};
 				};
-			}else MapLevel = GetAlt(R_curr.x,R_curr.y,R_curr.z,alt);			
+			}else MapLevel = GetAlt(R_curr,alt);
 			R_curr.z = alt + AltOffset;
 		};
 	}else{
@@ -1648,8 +1648,8 @@ void BulletObject::DrawQuant(void)
 				EffD.CreateParticle(ExtShowType,R_prev,R_curr,ShowType);
 			break;
 		case BULLET_SHOW_TYPE_ID::FIREBALL:
-			if(AdvancedView) s = G2LF(R_curr.x,R_curr.y,R_curr.z,tx,ty);
-			else s = G2LS(R_curr.x,R_curr.y,R_curr.z,tx,ty);
+			if(AdvancedView) s = G2LF(R_curr,tx,ty);
+			else s = G2LS(R_curr,tx,ty);
 //!!!!!!!!!
 			s *= BulletScale;
 			EffD.FireBallData[ShowType].Show(tx,ty,R_curr.z,s,FrameCount);
@@ -1660,8 +1660,8 @@ void BulletObject::DrawQuant(void)
 				LightData = MapD.CreateLight(R_curr.x,R_curr.y,R_curr.z,40,32,LIGHT_TYPE::DYNAMIC);
 			break;
 		case BULLET_SHOW_TYPE_ID::DEFORM:
-			if(AdvancedView) s = G2LF(R_curr.x,R_curr.y,R_curr.z,tx,ty);
-			else s = G2LS(R_curr.x,R_curr.y,R_curr.z,tx,ty);
+			if(AdvancedView) s = G2LF(R_curr,tx,ty);
+			else s = G2LS(R_curr,tx,ty);
 			if(EffD.DeformData[ShowType].CheckOffset(FrameCount)) FrameCount = 0;
 			EffD.DeformData[ShowType].Deform(tx,ty,FrameCount,1);
 			break;
@@ -2892,7 +2892,7 @@ void HordeObject::DrawQuant(void)
 			p->QuantP(R_curr << 8, vDelta << 8,3 << 8,5);
 			vPos = p->vR;
 			vPos >>= 8;
-			G2LQ(vPos.x,vPos.y,vPos.z,tx,ty);
+			G2LQ(vPos,tx,ty);
 			if(tx > UcutLeft && tx < UcutRight && ty > VcutUp && ty < VcutDown) XGR_SetPixelFast(tx,ty,p->Color >> 8);
 		};
 	}else{
@@ -3704,49 +3704,82 @@ void GloryPlace::CloseWorld(void)
 	};
 };
 
-void GloryPlace::Quant(void)
-{
-	int i;
+int rndJump = RND(2) + 1, jumpCount = 0, jumpAnimationON = 0;
+int oldX, oldY, deltaX, deltaY;
+int prevX = -1, prevY = -1;
+int STEPS, steps = 0;
+const int change = 2048 / 2;
+const int inOneStep = 20;
+
+void GloryPlace::Quant(void) {
 	int dx,dy;
 	uchar** lt;
-	if(World == CurrentWorld && Enable){
+	
+	if (World == CurrentWorld && Enable) {
 		lt = vMap->lineT;
-		for(i = -GLORY_PLACE_RADIUS;i < GLORY_PLACE_RADIUS;i++){
-			if(!lt[YCYCL(R_curr.y + i)]){
-				if(LightData){
+		for (int i = -GLORY_PLACE_RADIUS; i < GLORY_PLACE_RADIUS; i++) {
+			if (!lt[YCYCL(R_curr.y + i)]) {
+				if (LightData) {
 					LightData->Destroy();
 					LightData = NULL;
-				};
+				}
 				return;
-			};
-		};
+			}
+		}
 		
-		if(ActD.Active){
-			if(!LightData)
-				LightData = MapD.CreateLight(R_curr.x,R_curr.y,255,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::DYNAMIC | LIGHT_TYPE::TOR);
-
-			dx = getDistX(ActD.Active->R_curr.x,R_curr.x);
-			dy = getDistY(ActD.Active->R_curr.y,R_curr.y);
-			if((dx*dx + dy*dy) < GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS && 
-				((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))){
-					if(LightData){
-						LightData->Destroy();
-						LightData = NULL;
-					};
-					MapD.CreateLight(R_curr.x,R_curr.y,R_curr.z,GLORY_PLACE_RADIUS,32,LIGHT_TYPE::STATIONARY);
-					for(i = 0;i < 5;i++)
-						EffD.CreateDeform(Vector(XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS)),255),DEFORM_ALL,PASSING_WAVE_PROCESS);
-					Enable = 0;					
-					UsedCheckNum++;
-					NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
-					if(UsedCheckNum >= GloryPlaceNum)
-						NetStatisticUpdate(NET_STATISTICS_END_RACE);
-					send_player_body(my_player_body);
-					SOUND_SUCCESS();
-			};		
-		};
-	};
-};
+		if (ActD.Active) {
+			dx = getDistX(ActD.Active->R_curr.x, R_curr.x);
+			dy = getDistY(ActD.Active->R_curr.y, R_curr.y);
+			
+			if (jumpCount < rndJump && (dx*dx + dy*dy) < (GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS*4) && prevX != -1 && prevY != -1 &&
+			((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))) {
+				oldX = R_curr.x; oldY = R_curr.y;
+				R_curr.x = XCYCL(R_curr.x + SIGN(ActD.Active->R_curr.x - prevX) * change);
+				R_curr.y = YCYCL(R_curr.y + SIGN(ActD.Active->R_curr.y - prevY) * change);
+				STEPS = sqrt((R_curr.x - oldX)*(R_curr.x - oldX) + (R_curr.y - oldY)*(R_curr.y - oldY)) / inOneStep;
+				deltaX = (R_curr.x - oldX) / STEPS; deltaY = (R_curr.y - oldY) / STEPS;
+				jumpCount++; jumpAnimationON = 1;
+			}
+			
+			if (!jumpAnimationON && !LightData) { LightData = MapD.CreateLight(R_curr.x, R_curr.y, 255, GLORY_PLACE_RADIUS, 32, LIGHT_TYPE::DYNAMIC | LIGHT_TYPE::TOR); }
+			else if (jumpAnimationON) {
+				if (LightData) { LightData->Destroy(); LightData = NULL; }
+				oldX = XCYCL(oldX + deltaX);
+				oldY = YCYCL(oldY + deltaY);
+				LightData = MapD.CreateLight(oldX, oldY, 255, GLORY_PLACE_RADIUS, 32, LIGHT_TYPE::DYNAMIC | LIGHT_TYPE::TOR);
+				steps++;
+				if (steps >= STEPS) { jumpAnimationON = 0; steps = 0; }
+			}
+			
+			if ((dx*dx + dy*dy) < GLORY_PLACE_RADIUS*GLORY_PLACE_RADIUS && 
+			((ActD.Active->dynamic_state & GROUND_COLLISION) || (ActD.Active->dynamic_state & TRACTION_WHEEL_TOUCH) || (ActD.Active->dynamic_state & STEER_WHEEL_TOUCH))) {
+				if (LightData) {
+					LightData->Destroy();
+					LightData = NULL;
+				}
+				MapD.CreateLight(R_curr.x, R_curr.y, R_curr.z, GLORY_PLACE_RADIUS, 32, LIGHT_TYPE::STATIONARY);
+				
+				for (int i = 0; i < 5; i++) {
+					int x = XCYCL(R_curr.x + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS));
+					int y = YCYCL(R_curr.y + GLORY_PLACE_RADIUS - RND(2*GLORY_PLACE_RADIUS));
+					
+					EffD.CreateDeform(Vector(x, y, 255), DEFORM_ALL, PASSING_WAVE_PROCESS);
+				}
+				
+				Enable = 0;	
+				UsedCheckNum++;
+				NetStatisticUpdate(NET_STATISTICS_CHECKPOINT);
+				if(UsedCheckNum >= GloryPlaceNum) { NetStatisticUpdate(NET_STATISTICS_END_RACE); }
+				send_player_body(my_player_body);
+				SOUND_SUCCESS();
+				
+				rndJump = RND(2) + 1;
+				jumpCount = 0;
+			}
+			prevX = ActD.Active->R_curr.x; prevY = ActD.Active->R_curr.y;
+		}
+	}
+}
 
 extern aciPromptData aiMessageBuffer;
 extern uvsTabuTaskType **TabuTable;

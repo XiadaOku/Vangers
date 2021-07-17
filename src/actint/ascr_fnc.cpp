@@ -23,6 +23,7 @@
 
 #include "item_api.h"
 #include "../units/uvsapi.h"
+#include "../units/magnum.h"
 
 #include "../uvs/univang.h"
 #include "../uvs/diagen.h"
@@ -514,6 +515,13 @@ const char* aciSTR_PutThis = aciSTR_PutThis1;
 const char* aciSTR_Ware1 = aciSTR_Ware11;
 const char* aciSTR_Ware2 = aciSTR_Ware21;
 const char* aciSTR_Checkpoints = aciSTR_Checkpoints1;
+
+
+const char* aciSTR_RESTRICTIONS = aciSTR_RESTRICTIONS1;
+const char* aciSTR_STATISTICS = aciSTR_STATISTICS1;
+
+const char* aciSTR_KILLS_NEED = aciSTR_KILLS_NEED1;
+const char* aciSTR_MINUTES = aciSTR_MINUTES1;
 
 int aciItmTextQueueSize = 0;
 int aciItmTextQueueCur = 0;
@@ -2021,6 +2029,7 @@ uvsActInt* aciGetShopItem(int id)
 
 void aciSell_Item(invItem* p)
 {
+	std::cout << "aciSell_Item itemType: " << p->ID << std::endl;
 	int cr;
 	invItem* it = aScrDisp -> get_iitem(p -> ID);
 	uvsActInt* ptr = (uvsActInt*)p -> uvsDataPtr;
@@ -2974,6 +2983,8 @@ void aciBuyItem(void)
 				p1 -> flags |= INV_ITEM_NO_PAY;
 				p1 -> flags |= INV_ITEM_NEW;
 
+				std::cout<<"aciBuyItem itemType: "<<u->type<<std::endl;
+				
 				u -> pos_x = u -> pos_y = -1;
 				p1 -> MatrixX = p1 -> MatrixY = -1;
 
@@ -4085,7 +4096,12 @@ void aciAddTeleportMenuItem(int id,int fnc_id)
 	if(!mn) return;
 
 	if(id == -1){
-		ptr = aci_curLocationName;
+		if (lang() == RUSSIAN) {
+			if (strcmp(aci_curLocationName, (char*)eCmpPodish) == 0) ptr = rCmpPodish;
+			else if (strcmp(aci_curLocationName, (char*)eCmpVigBoo) == 0) ptr = rCmpVigBoo;
+			else if (strcmp(aci_curLocationName, (char*)eCmpZeePa) == 0) ptr = rCmpZeePa;
+		}
+		else ptr = aci_curLocationName;
 	}
 	else {
 		m = aScrDisp -> get_matrix(id);
@@ -4811,6 +4827,7 @@ void aciPromptData::alloc_mem(int size)
 	PosX = new int[size];
 	PosY = new int[size];
 	ColBuf = new unsigned int[size];
+	
 	for(i = 0; i < size; i ++){
 		StrBuf[i] = NULL;
 		TimeBuf[i] = 0;
@@ -5256,11 +5273,6 @@ void acsSaveData(void)
 	XBuffer XBuf;
 	XStream fh;
 
-	XStream fh2;
-	fh2.open("tmp_f1.txt",XS_OUT);
-	fh2<14<40;
-	fh2.close();
-
 	const char* ptr = NULL;
 	aciScreenInputField* p;
 
@@ -5698,6 +5710,7 @@ void aciLoadUVSList(XStream& fh,uvsActInt** p,int list_type)
 	*p = (uvsActInt*)el;
 }
 
+#define ACI_FRAG_ADDITIONAL_LINES 4
 #define ACI_FRAG_TIMER		300
 #define ACI_FRAG_FONT		0
 
@@ -5730,6 +5743,8 @@ void aciShowFrags(void)
 	iSortPlayers(1);
 
 	num = iNumPlayers;
+	if (iCurMultiGame == 0) num += ACI_FRAG_ADDITIONAL_LINES; //Van-War
+	
 	aScrDisp -> curPrompt -> alloc_mem(num);
 	aScrDisp -> curPrompt -> CurTimer = 0;
 
@@ -5737,14 +5752,29 @@ void aciShowFrags(void)
 
 	switch(iCurMultiGame){
 		case 0: // VAN-WAR...
-			for(i = 0; i < num; i ++){
+			
+			for (i = 0; i < ACI_FRAG_ADDITIONAL_LINES; i++) {
+				XBuf.init();
+				switch (i) {
+					case 0: XBuf < aciSTR_RESTRICTIONS; break;
+					case 1: XBuf < aciSTR_KILLS_NEED < " " <= my_server_data.Van_War.MaxKills < ", " < aciSTR_MINUTES < " " <= my_server_data.Van_War.MaxTime; break;
+					case 2: XBuf < ""; break;
+					case 3: XBuf < aciSTR_STATISTICS; break;
+				}
+				
+				aScrDisp -> curPrompt -> add_str(i, (unsigned char*)XBuf.address());
+				aScrDisp -> curPrompt -> TimeBuf[i] = ACI_FRAG_TIMER;
+				aScrDisp -> curPrompt -> ColBuf[i] = fragColors[4];
+			}
+			
+			for(i = 0; i < num - ACI_FRAG_ADDITIONAL_LINES; i ++){
 				p = iPlayers[i];
 				XBuf.init();
 				world_name = aScrDisp -> wMap -> world_ptr[aScrDisp -> wMap -> world_ids[p -> body.world]] -> name;
-				XBuf < p -> name < " (" < world_name < ") : " <= p -> body.kills < " " < aciSTR_KILLS < " " <= p -> body.deaths < " " < aciSTR_DEATHS;
-				aScrDisp -> curPrompt -> add_str(i,(unsigned char*)XBuf.address());
-				aScrDisp -> curPrompt -> TimeBuf[i] = ACI_FRAG_TIMER;
-				aScrDisp -> curPrompt -> ColBuf[i] = fragColors[p -> body.color];
+				XBuf < p -> name < " (" < world_name < ") : " <= p -> body.kills < " " < aciSTR_KILLS < ", " <= p -> body.deaths < " " < aciSTR_DEATHS;
+				aScrDisp -> curPrompt -> add_str(i + ACI_FRAG_ADDITIONAL_LINES,(unsigned char*)XBuf.address());
+				aScrDisp -> curPrompt -> TimeBuf[i + ACI_FRAG_ADDITIONAL_LINES] = ACI_FRAG_TIMER;
+				aScrDisp -> curPrompt -> ColBuf[i + ACI_FRAG_ADDITIONAL_LINES] = fragColors[p -> body.color];
 			}
 			break;
 		case 1: // MECHOSOMA...
@@ -5764,7 +5794,7 @@ void aciShowFrags(void)
 				p = iPlayers[i];
 				XBuf.init();
 				world_name = aScrDisp -> wMap -> world_ptr[aScrDisp -> wMap -> world_ids[p -> body.world]] -> name;
-				XBuf < p -> name < " (" < world_name < ") : " < aciSTR_Checkpoints < " " <= p -> body.PassemblossStat.CheckpointLighting < "/" <= my_server_data.Passembloss.CheckpointsNumber;
+				XBuf < p -> name < " (" < world_name < ") : " < aciSTR_Checkpoints < " " <= p -> body.PassemblossStat.CheckpointLighting < "/" <= my_server_data.Passembloss.CheckpointsNumber < " [" <= p->body.kills < " /" <= p->body.deaths < "]";
 				aScrDisp -> curPrompt -> add_str(i,(unsigned char*)XBuf.address());
 				aScrDisp -> curPrompt -> TimeBuf[i] = ACI_FRAG_TIMER;
 				aScrDisp -> curPrompt -> ColBuf[i] = fragColors[p -> body.color];
@@ -6788,6 +6818,13 @@ void aciInitStrings(void)
 		aciSTR_Ware1 = aciSTR_Ware11;
 		aciSTR_Ware2 = aciSTR_Ware21;
 		aciSTR_Checkpoints = aciSTR_Checkpoints1;
+		
+		
+		aciSTR_RESTRICTIONS = aciSTR_RESTRICTIONS1;
+		aciSTR_STATISTICS = aciSTR_STATISTICS1;
+		
+		aciSTR_KILLS_NEED = aciSTR_KILLS_NEED1;
+		aciSTR_MINUTES = aciSTR_MINUTES1;
 	}
 	else {
 		aciSTR_ON = aciSTR_ON2;
@@ -6823,6 +6860,13 @@ void aciInitStrings(void)
 		aciSTR_Ware1 = aciSTR_Ware12;
 		aciSTR_Ware2 = aciSTR_Ware22;
 		aciSTR_Checkpoints = aciSTR_Checkpoints2;
+		
+		
+		aciSTR_RESTRICTIONS = aciSTR_RESTRICTIONS2;
+		aciSTR_STATISTICS = aciSTR_STATISTICS2;
+		
+		aciSTR_KILLS_NEED = aciSTR_KILLS_NEED2;
+		aciSTR_MINUTES = aciSTR_MINUTES2;
 	}
 }
 

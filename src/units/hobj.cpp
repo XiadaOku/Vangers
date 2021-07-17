@@ -848,7 +848,7 @@ void GeneralSystemFree(void)
 	if(NetworkON){
 		if(my_server_data.GameType == PASSEMBLOSS){
 			if(GloryPlaceData){
-				delete GloryPlaceData;
+				delete[] GloryPlaceData;
 				GloryPlaceData = NULL;
 			};
 		};
@@ -1225,7 +1225,7 @@ void GameObjectDispatcher::Quant(void)
 					break;
 				};	
 		};
-	}
+	} 
 
 #ifdef _DEBUG
 //	DBGCHECK;
@@ -1627,24 +1627,24 @@ char GetMapLevelType(Vector& v,uchar*& type)
 	return -1;
 };
 
-uchar GetAlt(int x,int y,int z,uchar& alt)
+uchar GetAlt(Vector v,uchar& alt)
 {
-	uchar* p = vMap->lineT[y];
+	uchar* p = vMap->lineT[v.y];
 	uchar* t;
 	uchar d;
 	if(p){
-		p += x;
+		p += v.x;
 		t = p + H_SIZE;
 		if((*t) & DOUBLE_LEVEL){
-			if(x & 1){
-				if((*p) < z){
+			if(v.x & 1){
+				if((*p) < v.z){
 					alt = *p;
 					return 1;
 				};
 
 				d = *(p -1);
-				if(d < z){
-					if((d + (((GET_DELTA(*(t - 1)) << 2) + GET_DELTA(*t) + 1) << DELTA_SHIFT)) > z){
+				if(d < v.z){
+					if((d + (((GET_DELTA(*(t - 1)) << 2) + GET_DELTA(*t) + 1) << DELTA_SHIFT)) > v.z){
 						alt = d;
 						return 0;
 					}else{
@@ -1656,13 +1656,13 @@ uchar GetAlt(int x,int y,int z,uchar& alt)
 					return 0;
 				};
 			}else{
-				if(*(p + 1) < z){
+				if(*(p + 1) < v.z){
 					alt = *(p + 1);
 					return 1;
 				};
 				d = *p;
-				if(d < z){
-					if((d + (((GET_DELTA(*t) << 2) + GET_DELTA(*(t + 1)) + 1) << DELTA_SHIFT)) > z){
+				if(d < v.z){
+					if((d + (((GET_DELTA(*t) << 2) + GET_DELTA(*(t + 1)) + 1) << DELTA_SHIFT)) > v.z){
 						alt = d;
 						return 0;
 					}else{
@@ -1679,20 +1679,21 @@ uchar GetAlt(int x,int y,int z,uchar& alt)
 	return 1;
 };
 
-
-int BigGetAlt(int x,int y,int z,uchar& alt,uchar terrain)
+int BigGetAlt(Vector v, uchar& alt, uchar terrain)
 {
-	uchar* p = vMap->lineT[y];
-	if(p){
-		p += x;
+	uchar* p = vMap->lineT[v.y];
+	if (p) {
+		p += v.x;
 		alt = *p;
-		if(GET_TERRAIN(*(p + H_SIZE)) == terrain)
+		if (GET_TERRAIN(*(p + H_SIZE)) == terrain)
 			return 1;
-		else 
+		else
 			return 0;
-	}else alt = 0;
+	} else {
+		alt = 0;
+	}
 	return 0;
-};
+}
 
 int TouchSphere(Vector& r0,Vector& r1,Vector& c,int rad,int& r)
 {
@@ -2378,34 +2379,34 @@ const int DecColorPlace[WORLD_MAX][NUM_COLOR_PLACE] = {
 };
 
 const int GrayColorCycle[WORLD_MAX][NUM_COLOR_PLACE] = {
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0},
 
-	{63,63,63,0,0,0,0,63,
+	{255,255,255,0,0,0,0,255,
 		0,0,0,0,0,0,0,0}
 };
 
@@ -2417,17 +2418,17 @@ void CloseBunchPal(void)
 	int MaxVector,dc;
 
 	if(uvsCurrentWorldUnable && CurrentWorld < MAIN_WORLD_MAX - 1){
-		vColor = Vector(63,63,63);
+		vColor = Vector(255,255,255);
 		MaxVector = vColor.vabs();		
 
 		for(k = 0;k < WorldPalNum;k++){
 			for(i = 0;i < NUM_COLOR_PLACE;i++){
 				for(j = FirstColorPlace[CurrentWorld][i];j <= LastColorPlace[CurrentWorld][i];j++){
 					vCheck = Vector(WorldPalData[k][j*3],WorldPalData[k][j*3 + 1],WorldPalData[k][j*3 + 2]);
-					dc = 63 * vCheck.vabs() / MaxVector;
-					WorldPalData[k][j*3] = WorldPalData[k][j*3] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3]) / 63;
-					WorldPalData[k][j*3 + 1] = WorldPalData[k][j*3 + 1] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 1]) / 63;
-					WorldPalData[k][j*3 + 2] = WorldPalData[k][j*3 + 2] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 2]) / 63;
+					dc = 255 * vCheck.vabs() / MaxVector;
+					WorldPalData[k][j*3] = WorldPalData[k][j*3] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3]) / 255;
+					WorldPalData[k][j*3 + 1] = WorldPalData[k][j*3 + 1] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 1]) / 255;
+					WorldPalData[k][j*3 + 2] = WorldPalData[k][j*3 + 2] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 2]) / 255;
 				};
 			};			
 		};
@@ -2455,17 +2456,17 @@ void GeneralTableOpen(void)
 		};
 
 		if(uvsCurrentWorldUnable && CurrentWorld < MAIN_WORLD_MAX - 1){
-			vColor = Vector(63,63,63);
+			vColor = Vector(255,255,255);
 			MaxVector = vColor.vabs();		
 
 			for(k = 0;k < WorldPalNum;k++){
 				for(i = 0;i < NUM_COLOR_PLACE;i++){
 					for(j = FirstColorPlace[CurrentWorld][i];j <= LastColorPlace[CurrentWorld][i];j++){
 						vCheck = Vector(WorldPalData[k][j*3],WorldPalData[k][j*3 + 1],WorldPalData[k][j*3 + 2]);
-						dc = 63 * vCheck.vabs() / MaxVector;
-						WorldPalData[k][j*3] = WorldPalData[k][j*3] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3]) / 63;
-						WorldPalData[k][j*3 + 1] = WorldPalData[k][j*3 + 1] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 1]) / 63;
-						WorldPalData[k][j*3 + 2] = WorldPalData[k][j*3 + 2] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 2]) / 63;
+						dc = 255 * vCheck.vabs() / MaxVector;
+						WorldPalData[k][j*3] = WorldPalData[k][j*3] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3]) / 255;
+						WorldPalData[k][j*3 + 1] = WorldPalData[k][j*3 + 1] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 1]) / 255;
+						WorldPalData[k][j*3 + 2] = WorldPalData[k][j*3 + 2] + GrayColorCycle[CurrentWorld][i]*(dc - WorldPalData[k][j*3 + 2]) / 255;
 					};
 				};			
 			};
@@ -2490,7 +2491,7 @@ void GeneralTableOpen(void)
 		ParticlePaletteTableInit(palbufOrg);
 		FirePaletteTableInit(palbufOrg);
 		
-		vColor = Vector(63,63,63);
+		vColor = Vector(255,255,255);
 		MaxVector = vColor.vabs();
 
 		for(k = 0;k < 256;k++){
@@ -2557,7 +2558,7 @@ void GeneralTableOpen(void)
 					if(cval < lmin) lmin = cval;
 				};
 
-				vColor = Vector(63,63,63);
+				vColor = Vector(255,255,255);
 				MaxVector = vColor.vabs();
 				cdelta = cmax - lmin;
 
@@ -2717,6 +2718,11 @@ void ChangeWorld(int world,int flag)
 //		}
 };*/
 
+void G2L(Vector v,int& xl,int& yl)
+{
+	G2L(v.x, v.y, xl, yl);
+};
+
 void G2L(int x,int y,int& xl,int& yl)
 {
 	x = getDistX(x,ViewX);
@@ -2726,47 +2732,65 @@ void G2L(int x,int y,int& xl,int& yl)
 	yl = round((x*sinTurnFlt + y*cosTurnFlt)) + ScreenCY;
 };
 
-int G2LS(int x,int y,int z,int& sx,int& sy)
+int G2LS(Vector v,int& sx,int& sy)
 {
-	int z1;
-	sx = round(getDistX(x,ViewX)*ScaleMapInvFlt) + ScreenCX;
-	sy = round(getDistY(y,ViewY)*ScaleMapInvFlt) + ScreenCY;
-	z1 = ViewZ - (z >> 1);
-	if(z1 <= 0) z1 = 1;
-//	return((focus << 8)/(-((int)z >> 1) + ViewZ));
-	return(focus << 8)/z1;
+	return G2LS(v.x, v.y, v.z, sx, sy);
 };
 
-void G2LP(int x,int y,int z,int& sx,int& sy)
+int G2LS(int x,int y,int z,int& sx,int& sy)
+{
+	sx = round(getDistX(x,ViewX)*ScaleMapInvFlt) + ScreenCX;
+	sy = round(getDistY(y,ViewY)*ScaleMapInvFlt) + ScreenCY;
+	int _z = ViewZ - (z >> 1);
+	if(_z <= 0) _z = 1;
+	return (focus << 8) / _z;
+};
+
+void G2LP(Vector v, int& sx, int& sy)
+{
+	G2LP(v.x, v.y, sx, sy);
+};
+
+void G2LP(int x,int y,int& sx,int& sy)
 {
 	sx = getDistX(x,ViewX) + ScreenCX;
 	sy = getDistY(y,ViewY) + ScreenCY;
 };
 
-void G2LQ(int x,int y,int z,int& sx,int& sy)
+void G2LQ(Vector v, int& sx, int &sy)
 {
-	z = 0;
+	G2LQ(v.x, v.y, sx, sy);
+};
+
+void G2LQ(int x, int y, int& sx, int &sy)
+{
+	int z = 0;
 	int xx = getDistX(x,ViewX);
 	int yy = getDistY(y,ViewY);
 	double x1 = A_g2s.a[0]*xx + A_g2s.a[1]*yy - A_g2s.a[2]*z;
 	double y1 = A_g2s.a[3]*xx + A_g2s.a[4]*yy - A_g2s.a[5]*z;
 	double z1 = ViewZ + (A_g2s.a[6]*xx + A_g2s.a[7]*yy -A_g2s.a[7]*z)*0.5;
-	if(z1 <= 0) 
+	if (z1 <= 0)
 		z1 = 1;
 	z1 = focus_flt/z1;
 	sx = round(x1*z1) + ScreenCX;
 	sy = round(y1*z1) + ScreenCY;
 };
 
-int G2LF(int x,int y,int z,int& sx,int& sy)
+int G2LF(Vector v,int& sx,int& sy)
 {
-	z = 0;
+	return G2LF(v.x, v.y, sx, sy);
+};
+
+int G2LF(int x,int y,int& sx,int& sy)
+{
+	int z = 0;
 	int xx = getDistX(x,ViewX);
 	int yy = getDistY(y,ViewY);
 	double x1 = round(A_g2s.a[0]*xx + A_g2s.a[1]*yy - A_g2s.a[2]*z);
 	double y1 = round(A_g2s.a[3]*xx + A_g2s.a[4]*yy - A_g2s.a[5]*z);
 	double z1 = ViewZ + round((A_g2s.a[6]*xx + A_g2s.a[7]*yy -A_g2s.a[7]*z)*.5);
-	if(z1 <= 0) 
+	if (z1 <= 0)
 		z1 = 1;
 	z1 = focus_flt/z1;
 	sx = round(x1*z1) + ScreenCX;
@@ -3015,11 +3039,11 @@ void ScreenLineTrace(Vector& v0,Vector& v1,uchar* ColorTable,uchar flag)
 	v1.x = XCYCL(v1.x);
 
 	if(AdvancedView){
-		G2LQ(v0.x,v0.y,v0.z,x0,y0);
-		G2LQ(v1.x,v1.y,v1.z,x1,y1);
+		G2LQ(v0,x0,y0);
+		G2LQ(v1,x1,y1);
 	}else{
-		G2LP(v0.x,v0.y,v0.z,x0,y0);
-		G2LP(v1.x,v1.y,v1.z,x1,y1);
+		G2LP(v0,x0,y0);
+		G2LP(v1,x1,y1);
 	};
 
 	dx = x1 - x0;
@@ -3056,8 +3080,11 @@ void ScreenLineTrace(Vector& v0,Vector& v1,uchar* ColorTable,uchar flag)
 
 				ty = cy >> FIXED_SHIFT;
 				if(cx > UcutLeft && cx < UcutRight && ty > VcutUp && ty < VcutDown){
-					if(GetAltLevel(vC.x >> FIXED_SHIFT,vC.y >> FIXED_SHIFT,vC.z >> FIXED_SHIFT))
-						XGR_SetPixel(cx,ty,ColorTable[XGR_GetPixel(cx,ty) + l]);
+					if(GetAltLevel(Vector(
+						vC.x >> FIXED_SHIFT,
+						vC.y >> FIXED_SHIFT,
+						vC.z >> FIXED_SHIFT))
+					){ XGR_SetPixel(cx,ty,ColorTable[XGR_GetPixel(cx,ty) + l]); };
 				};
 				cx++;
 				cy += k;
@@ -3092,8 +3119,11 @@ void ScreenLineTrace(Vector& v0,Vector& v1,uchar* ColorTable,uchar flag)
 
 				tx = cx >> FIXED_SHIFT;
 				if(tx > UcutLeft && tx < UcutRight && cy > VcutUp && cy < VcutDown){
-					if(GetAltLevel(vC.x >> FIXED_SHIFT,vC.y >> FIXED_SHIFT,vC.z >> FIXED_SHIFT))
-						XGR_SetPixel(tx,cy,ColorTable[XGR_GetPixel(tx,cy) + l]);
+					if(GetAltLevel(Vector(
+						vC.x >> FIXED_SHIFT,
+						vC.y >> FIXED_SHIFT,
+						vC.z >> FIXED_SHIFT))
+					){ XGR_SetPixel(tx,cy,ColorTable[XGR_GetPixel(tx,cy) + l]); };
 				};
 				cy++;
 				cx += k;
@@ -3134,8 +3164,11 @@ void ScreenLineTrace(Vector& v0,Vector& v1,uchar* ColorTable,uchar flag)
 
 				ty = cy >> FIXED_SHIFT;
 				if(cx > UcutLeft && cx < UcutRight && ty > VcutUp && ty < VcutDown){
-					if(GetAltLevel(vC.x >> FIXED_SHIFT,vC.y >> FIXED_SHIFT,vC.z >> FIXED_SHIFT))
-						XGR_SetPixel(cx,ty,ColorTable[XGR_GetPixel(cx,ty) + (l & 0xffffff00)]);
+					if(GetAltLevel(Vector(
+						vC.x >> FIXED_SHIFT,
+						vC.y >> FIXED_SHIFT,
+						vC.z >> FIXED_SHIFT))
+					){ XGR_SetPixel(cx,ty,ColorTable[XGR_GetPixel(cx,ty) + (l & 0xffffff00)]); };
 				};
 
 				cx++;
@@ -3178,8 +3211,11 @@ void ScreenLineTrace(Vector& v0,Vector& v1,uchar* ColorTable,uchar flag)
 
 				tx = cx >> FIXED_SHIFT;
 				if(tx > UcutLeft && tx < UcutRight && cy > VcutUp && cy < VcutDown){
-					if(GetAltLevel(vC.x >> FIXED_SHIFT,vC.y >> FIXED_SHIFT,vC.z >> FIXED_SHIFT))
-						XGR_SetPixel(tx,cy,ColorTable[XGR_GetPixel(tx,cy) + (l & 0xffffff00)]);
+					if(GetAltLevel(Vector(
+						vC.x >> FIXED_SHIFT,
+						vC.y >> FIXED_SHIFT,
+						vC.z >> FIXED_SHIFT))
+					){ XGR_SetPixel(tx,cy,ColorTable[XGR_GetPixel(tx,cy) + (l & 0xffffff00)]); };
 				};
 				cy++;
 				cx += k;
@@ -4144,7 +4180,7 @@ void PalPoint::Quant(void)
 			palbufOrg[i] = palbuf[i] = (uchar)(FirstColor[i] >> 16);
 		};
 	};
-	XGR_SetPal(palbuf,0,255);
+	XGR_SetPal(palbuf,0,256);
 	Time--;
 };
 
@@ -4194,7 +4230,7 @@ void PalPoint::Set(int mode,int time,uchar* p1,uchar* p2)
 			PalCD.PalEnable = 0;
 			for(i =0;i < 768;i++){
 				FirstColor[i] = ((int)(palbuf/*Org*/[i])) << 16;
-				DeltaColor[i] = ((63 << 16) - FirstColor[i]) / Time;					
+				DeltaColor[i] = ((255 << 16) - FirstColor[i]) / Time;					
 			};
 			break;
 		case CPAL_PASSAGE_FROM:
@@ -4218,9 +4254,9 @@ void PalPoint::Set(int mode,int time,uchar* p1,uchar* p2)
 			for(j = 0;j < TERRAIN_MAX;j++){
 				for(i = BEGCOLOR[j];i <= ENDCOLOR[j];i++){
 					if(j == 3 || j == 5 || j == 6 || j == 4) break;
-					palbufSrc[i*3] = palbufOrg[i*3] = 63 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
-					palbufSrc[i*3 + 1] = palbufOrg[i*3 + 1] = 63 *(i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
-					palbufSrc[i*3 + 2] = palbufOrg[i*3 + 2] = 63 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
+					palbufSrc[i*3] = palbufOrg[i*3] = 255 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
+					palbufSrc[i*3 + 1] = palbufOrg[i*3 + 1] = 255 *(i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
+					palbufSrc[i*3 + 2] = palbufOrg[i*3 + 2] = 255 * (i - BEGCOLOR[j]) / (ENDCOLOR[j] - BEGCOLOR[j]);
 				};
 			};
 			for(i = 0;i < 768;i++){
@@ -4569,7 +4605,7 @@ void PassageImageType::Show(void)
 			start[i] += delta[i];
 			palbuf[i] = (uchar)(start[i] >> 16);
 		};
-		XGR_SetPal(palbuf,0,255);
+		XGR_SetPal(palbuf,0,256);
 	};
 
 //	PassageImageType::Hide();
@@ -4597,7 +4633,7 @@ void PassageImageType::Show(void)
 			start[i] += delta[i];
 			palbuf[i] = (uchar)(start[i] >> 16);
 		};
-		XGR_SetPal(palbuf,0,255);
+		XGR_SetPal(palbuf,0,256);
 	};
 	delete[] Data;
 };
@@ -4619,7 +4655,7 @@ void PassageImageType::Hide(void)
 			start[i] += delta[i];
 			palbuf[i] = (uchar)(start[i] >> 16);
 		};
-		XGR_SetPal(palbuf,0,255);
+		XGR_SetPal(palbuf,0,256);
 	};
 	aciSetRedraw();
 };

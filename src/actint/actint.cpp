@@ -112,6 +112,13 @@ extern char* aciSTR_PICKUP_ITEMS_OFF;
 extern char* aciSTR_PICKUP_WEAPONS_OFF;
 extern char* aciSTR_PutThis;
 
+
+extern char* aciSTR_RESTRICTIONS;
+extern char* aciSTR_STATISTICS;
+
+extern char* aciSTR_KILLS_NEED;
+extern char* aciSTR_MINUTES;
+
 extern int aciItmTextQueueSize;
 
 /* --------------------------- PROTOTYPE SECTION ---------------------------- */
@@ -3175,7 +3182,7 @@ void actIntDispatcher::redraw(void)
 		return;
 
 	aci_tmp ++;
-	if(aci_tmp > 64) aci_tmp = 0;
+	if(aci_tmp > aci_tmp_max) aci_tmp = 0;
 
 	iPl = (InfoPanel*)infoPanels -> last;
 	while(iPl){
@@ -5101,8 +5108,8 @@ void actIntDispatcher::EventQuant(void)
 		aciTextColBright = 0;
 		aciTextColBrightDelta = 1;
 	}
-	if(aciTextColBright > 64){
-		aciTextColBright = 64;
+	if(aciTextColBright > 255){
+		aciTextColBright = 255;
 		aciTextColBrightDelta = -1;
 	}
 

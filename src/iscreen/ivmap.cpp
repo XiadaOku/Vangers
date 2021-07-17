@@ -782,140 +782,116 @@ void iregRender(int LowX,int LowY,int HiX,int HiY)
 
 /* ------------------ PALETTE.CPP ----------------------*/
 
-void ipal_iter0(void)
-{
-	if(iPAL_WAVE_TERRAIN == -1 || iPAL_WAVE_TERRAIN >= TERRAIN_MAX) return;
-	const int DSIZE = 8;
-	const int PRD = 64;
-	const int DATA[DSIZE] = { 1,3,5,6,5,3,2,1 };
-	const int BEG = iBEGCOLOR[iPAL_WAVE_TERRAIN];
-	const int SZ = iENDCOLOR[iPAL_WAVE_TERRAIN] - BEG;
+void ipal_iter_num(bool ipal_num) {
+	if(iPAL_WAVE_TERRAIN == -1 || iPAL_WAVE_TERRAIN >= TERRAIN_MAX) { return; } //если wave_terrain за границами значений - ретёрнить
+	
+	int DSIZE, PRD;
+	if (!ipal_num) {
+		DSIZE = 8; //кол-во элементов в градиенте видимо
+		PRD = 64; //всего элементов состоящих в градиентах длины dsize (видимо)
+	}
+	else { DSIZE = 10; PRD = 150; }
+	
+	int *DATA;
+	if (!ipal_num) { DATA = new int[DSIZE] {1, 3, 5, 6, 5, 3, 2, 1}; } //**************************************************************** что это ********
+	else { DATA = new int[DSIZE] {1, 3, 5, 7, 10, 8, 6, 4, 2, 1}; } 
+	//возможно "влияние" каждого элемента градиента, а их по 8 и 10 для разных блоков градиентов длиной 8 и 10 соответственно
+	
+	const int BEG = iBEGCOLOR[iPAL_WAVE_TERRAIN]; //начинать с n или 0, в зависимости от того, есть ли Wave Terrain
+	const int SZ = iENDCOLOR[iPAL_WAVE_TERRAIN] - BEG; //разница начала цвета и конца
 
-	static int off = 0;
-	static int cnt = PRD;
-	static int add = 1;
+	static int off = 0; //видимо отключение чего-то
+	static int cnt = PRD; //см. PRD (возможно count) [видимо какой-то счетчик]
+	static int add = 1; //добавка чего-то
 
-	int i;
-	uchar* p = ipalbuf + 3*(BEG + 1);
-	uchar* po = ipalbufOrg + 3*(BEG + 1);
-	memcpy(p,po,3*SZ);
-	if(off > 0) p += 3*off, po += 3*off;
+	
+	uchar* p = ipalbuf + 3*(BEG + 1); //(unsigned char) p (iscrPal) + rgb(цвета материала+1)
+	uchar* po = ipalbufOrg + 3*(BEG + 1); //p (iscrPal) + rgb(цвета материала+1)
+	memcpy(p, po, 3*SZ); //в p копируется дата из po размером в rgb(разница endcolor и begcolor, оно же SZ)
+	
+	if (off > 0) { p += 3*off, po += 3*off; } //если есть off то прибавляется rgb(off)
 
-	for(i = 0;i < DSIZE;i++)
-		if(off + i >= 0 && off + i < SZ){
-			*p += DATA[i];
-			if(*p > 63) *p = 63;
-			p++;
-			*p += DATA[i];
-			if(*p > 63) *p = 63;
-			p++;
-			*p += DATA[i];
-			if(*p > 63) *p = 63;
-			p++;
+
+	for (int i = 0; i < DSIZE; i++) { //пробегаемся по каждому биту
+		if (0 <= off + i && off + i < SZ) { //если off+i между нулем и разницей(см. SZ)
+			for (int j = 0; j < 3; j++) { //плюсуем rgb(data)
+				*p += DATA[i];
+				if (*p > 255) { *p = 255; } //если значение одного из цветов больше 255 -- ставим 255 
+				p++; //смещаем указатель на другой канал или следующую секцию из трех каналов rgb
 			}
-	if(--cnt) off = off + add;
-	else {
-		cnt = PRD;
-		add = realRND(2) ? 1 : -1;
-		if(add > 0) off = -DSIZE;
-		else off = SZ - 1;
 		}
-}
-
-void ipal_iter1(void)
-{
-	if(iPAL_WAVE_TERRAIN == -1 || iPAL_WAVE_TERRAIN >= TERRAIN_MAX) return;
-	const int DSIZE = 10;
-	const int PRD = 150;
-	const int DATA[DSIZE] = { 1,3,5,7,10,8,6,4,2,1 };
-	const int BEG = iBEGCOLOR[iPAL_WAVE_TERRAIN];
-	const int SZ = iENDCOLOR[iPAL_WAVE_TERRAIN] - BEG;
-
-	static int off = 0;
-	static int cnt = PRD;
-	static int add = 1;
-
-	int i;
-	uchar* p = ipalbuf + 3*(iBEGCOLOR[iPAL_WAVE_TERRAIN] + 1);
-	uchar* po = ipalbufOrg + 3*(iBEGCOLOR[iPAL_WAVE_TERRAIN] + 1);
-	memcpy(p,po,3*SZ);
-	if(off > 0) p += 3*off, po += 3*off;
-
-	for(i = 0;i < DSIZE;i++)
-		if(off + i >= 0 && off + i < SZ){
-			*p += DATA[i];
-			if(*p > 63) *p = 63;
-			p++;
-			*p += DATA[i];
-			if(*p > 63) *p = 63;
-			p++;
-			*p += DATA[i];
-			if(*p > 63) *p = 63;
-			p++;
-			}
-	if(--cnt) off = off + add;
-	else {
-		cnt = PRD;
-		add = realRND(2) ? 1 : -1;
-		if(add > 0) off = -DSIZE;
-		else off = SZ - 1;
-		}
-//	XGR_SetPal(ipalbuf,BEG,SZ);
+	}
+	
+	if (cnt - 1) { off += add; } //если cnt - 1 положительное -- прибавляем к off add (off + add)
+	else { //если 0 и меньше
+		add = realRND(2) ? 1 : -1; //если 0, то -1
+		if (add > 0) { off = -DSIZE; } //если 1, то off равент отрицательному кол-ву бит
+		else { off = SZ - 1; } //иначе равно разница - 1
+	}
 }
 
 static int ioffset[TERRAIN_MAX];
 
-void ipal_iter2(void)
-{
-	int add,i,j;
-	uchar *p,*po;
-	for(int ind = 0;ind < iPAL_MAX;ind++){
-		ioffset[ind] = rPI(ioffset[ind] + iPAL_SPEED[ind]);
-		add = iPAL_AMPL[ind]*SI[ioffset[ind]]/UNIT;
-		p = ipalbuf + 3*iBEGCOLOR[iPAL_TERRAIN[ind]];
-		po = ipalbufOrg + 3*iBEGCOLOR[iPAL_TERRAIN[ind]];
-		for(i = iBEGCOLOR[iPAL_TERRAIN[ind]];i <= iENDCOLOR[iPAL_TERRAIN[ind]];i++){
-			if(iPAL_RED[ind]){
-				j = *po + add; if(j > 63) j = 63; else if(j < 0) j = 0;
-				*p++ = j; po++;
-				}
-			else *p++ = *po++;
-			if(iPAL_GREEN[ind]){
-				j = *po + add; if(j > 63) j = 63; else if(j < 0) j = 0;
-				*p++ = j; po++;
-				}
-			else *p++ = *po++;
-			if(iPAL_BLUE[ind]){
-				j = *po + add; if(j > 63) j = 63; else if(j < 0) j = 0;
-				*p++ = j; po++;
-				}
-			else *p++ = *po++;
+void ipal_iter2(void) {
+	int add, j;
+	uchar *p, *po;
+	
+	for (int ind = 0; ind < iPAL_MAX; ind++) { //iPAL_MAX = Terrain Number
+		ioffset[ind] = rPI(ioffset[ind] + iPAL_SPEED[ind]); //длина окружности от скорости палитры и оффсета, но он вроде 0
+		add = iPAL_AMPL[ind] * SI[ioffset[ind]] / UNIT; //амплитуда умноженная на синус оффсета(скорости палитры) и поделенная на 32768 (2^15)
+		p = ipalbuf + 3*iBEGCOLOR[iPAL_TERRAIN[ind]]; //p (iscrPal) + rgb(цвета материала)
+		po = ipalbufOrg + 3*iBEGCOLOR[iPAL_TERRAIN[ind]]; //p (iscrPal) + rgb(цвета материала)
+		
+		for (int i = iBEGCOLOR[iPAL_TERRAIN[ind]]; i <= iENDCOLOR[iPAL_TERRAIN[ind]]; i++) { //от начального цвета до конечного цвета градиента
+			if (iPAL_RED[ind]) { //если есть красный канал
+				j = *po + add; 
+				if (j > 255) { j = 255; }
+				else if (j < 0) { j = 0; }
+				
+				*p++ = j; po++; //p = j + 1; указатель на po += 1;
 			}
-//		XGR_SetPal(ipalbuf,iBEGCOLOR[iPAL_TERRAIN[ind]],iENDCOLOR[iPAL_TERRAIN[ind]] - iBEGCOLOR[iPAL_TERRAIN[ind]] + 1);
+			else { *p++ = *po++; } //иначе p = po + 1; po += 1;
+			
+			if (iPAL_GREEN[ind]) {
+				j = *po + add; 
+				if (j > 255) { j = 255; }
+				else if (j < 0) { j = 0; }
+				
+				*p++ = j; po++;
+			}
+			else { *p++ = *po++; }
+			
+			if (iPAL_BLUE[ind]) {
+				j = *po + add; 
+				if (j > 255) { j = 255; }
+				else if (j < 0) { j = 0; }
+				
+				*p++ = j; po++;
+			}
+			else { *p++ = *po++; }
 		}
+	}
 }
 
-void ipal_init(uchar* p)
-{
-	if(!ipalbuf){
+void ipal_init(uchar* p) {
+	if (!ipalbuf) { 
 		ipalbuf = new uchar[768];
 		ipalbufOrg = new uchar[768];
-		}
-	memcpy(ipalbuf,p,768);
-	memcpy(ipalbufOrg,p,768);
+	}
+	memcpy(ipalbuf, p, 768);
+	memcpy(ipalbufOrg, p, 768);
+	//заполняем 768 байт ipalbuf и ipalbufOrg p
 }
 
-void ipal_iter_init(void)
-{
+void ipal_iter_init(void) {
 	iPAL_MAX = 0;
 	iPAL_WAVE_TERRAIN = -1;
-	for(int i = 0;i < TERRAIN_MAX;i++) ioffset[i] = 0;
+	for (int i = 0; i < TERRAIN_MAX; i++) { ioffset[i] = 0; } //заполняем ioffset нулями
 }
 
-void ipal_iter(int reduced)
-{
-	ipal_iter0();
-	ipal_iter1();
+void ipal_iter(int reduced) {
+	ipal_iter_num(0);
+	ipal_iter_num(1);
 	ipal_iter2();
-	XGR_SetPal(ipalbuf,0,reduced ? 128 : 256);
+	XGR_SetPal(ipalbuf, 0, 256);
 }

@@ -417,8 +417,8 @@ void Normal::calc_intensity() // Metal
 		Intens = Ln;
 		}
 
-	if(Intens > (63 << 8))
-		I = (63 << 8);
+	if(Intens > (255 << 8))
+		I = (255 << 8);
 	else
 		I = Intens;
 	I_8 = I >> 7;

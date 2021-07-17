@@ -771,17 +771,115 @@ void XGR_Screen::close(void)
 
 int UI_OR_GAME=1;
 
-void XGR_Screen::blitScreen(uint32_t *dst, uint8_t *src) { 
-	int x, y; 
-	SDL_Color color;
+//размер пикселя
+const int pixel_size = 1;
 
-	for (y = XGR_ScreenSurface->h; y > 0; y--) {
-		for (x = XGR_ScreenSurface->w; x > 0; x--) {
-			color = XGR_Palette->colors[*src];
-			*(dst++) = SDL_MapRGBA(XGR32_ScreenSurface->format, color.r, color.g, color.b, color.a);
-			src++;
+//шейдер...
+const bool SHADER = false;
+
+//кол-во цветов на палитру (динамику съело использование в функции)
+//палитра цветов. Есть цикл на нахождение ближайшего цвета из палитры
+const int colors_num = 6;
+const uint8_t pal_colors[colors_num*3] = {0, 0, 0, 8, 24, 32, 23, 42, 12, 52, 104, 86, 136, 192, 112, 255, 255, 255};
+
+int frames = 0;
+const int frames_update = 20 * 5;
+
+//быстрый корень
+unsigned int root(unsigned int a) {
+   unsigned int x;
+   x = (a/0x3f + 0x3f)>>1;
+   x = (a/x + x)>>1;
+   x = (a/x + x)>>1;
+   return x; 
+}
+
+//скорость перемещения курсора и радиус Фонаря
+int speedX, speedY, light_r = 0;
+
+void XGR_Screen::blitScreen(uint32_t *dst, uint8_t *src) { 
+	SDL_Color color;
+	uint8_t red, green, blue, alpha_color = 0;
+	float colors_distance, min_colors_distance;		//различие цветов. Текущее и минимальное
+	int min_colors_index;	//индексня наиболее похожего цвета из палитры
+	int red1, green1, blue1;	//новые промежуточные цвета для палитры. Нужны для условий и дальнейших действий с ними
+	int store, width_pixel = XGR_ScreenSurface->w / pixel_size;	//индексня для буффера цветов для пикселизации и кол-во пикселей в строке
+	uint8_t* save = new uint8_t[XGR_ScreenSurface->h / pixel_size * width_pixel * 3](); //одномерное представление двумерного массива для сейва цветов 
+	int light_i = 50, delta_x, delta_y;		//интенсивность света, расстояние до пикселя от центра Фонаря (для определения степени освещенности)
+	float light;	//Освещенность
+	int light_x, light_y;
+	
+	if (SHADER) {
+		light_x = XGR_MouseObj.PosX + XGR_MouseObj.SizeX/2;		//x координата Фонаря
+		light_y = XGR_MouseObj.PosY + XGR_MouseObj.SizeY/2;		//y координата Фонаря
+		
+		if (frames >= frames_update) { frames = 0; }
+		
+		if (speedX == XGR_MouseObj.PosX - XGR_MouseObj.LastPosX && speedY == XGR_MouseObj.PosY - XGR_MouseObj.LastPosY && light_r > 0) { 
+			light_r = std::max(light_r - 5, 0);
+		}
+		else if (speedX != XGR_MouseObj.PosX - XGR_MouseObj.LastPosX || speedY != XGR_MouseObj.PosY - XGR_MouseObj.LastPosY) {
+			speedX = XGR_MouseObj.PosX - XGR_MouseObj.LastPosX;
+			speedY = XGR_MouseObj.PosY - XGR_MouseObj.LastPosY;
+			light_r = std::min(int(root(speedX*speedX + speedY*speedY))*2, 50);
 		}
 	}
+	
+	for (int y = 0; y < XGR_ScreenSurface->h; y++) {
+		for (int x = 0; x < XGR_ScreenSurface->w; x++) {
+			store = int(y / pixel_size) * width_pixel + int(x / pixel_size);
+			
+			if (x % pixel_size != 0 || y % pixel_size != 0) {
+				red = save[store*3];
+				green = save[store*3 + 1];
+				blue = save[store*3 + 2];
+			}
+			else {
+				color = XGR_Palette->colors[*src];
+				red = color.r;
+				green = color.g;
+				blue = color.b;
+
+				if (SHADER) {
+					//поиск ближайшего цвета из палитры
+					for (int i = 0; i < colors_num; i++) {
+						red1 = red - pal_colors[i*3];
+						green1 = green - pal_colors[i*3 + 1];
+						blue1 = blue - pal_colors[i*3 + 2];
+						
+						colors_distance = red1*red1*30 + green1*green1*59 + blue1*blue1*11;
+						if (colors_distance <= min_colors_distance || i == 0) { 
+							min_colors_distance = colors_distance;
+							min_colors_index = i;
+						}
+					}
+					red = pal_colors[min_colors_index*3];
+					green = pal_colors[min_colors_index*3 + 1];
+					blue = pal_colors[min_colors_index*3 + 2];
+				
+					//Фонарь
+					delta_x = (light_x - x);
+					delta_y = (light_y - y);
+					light = root(delta_x*delta_x + delta_y*delta_y);
+					if (light < light_r) {
+						light_i = light_r+5;
+						light = light_i - int(light_i/light_r*light);
+						red += light;
+						green += light;
+						blue += light;
+					}
+					
+					save[store*3] = red;
+					save[store*3 + 1] = green;
+					save[store*3 + 2] = blue;
+				}
+			}
+			
+			src++;
+			*(dst++) = SDL_MapRGBA(XGR32_ScreenSurface->format, red, green, blue, alpha_color);
+		}
+	}
+	frames += 1;
 } 
 
 void XGR_Screen::set_render_buffer(SDL_Surface *buf) {

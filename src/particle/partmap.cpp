@@ -395,24 +395,24 @@ void FirePaletteInit(unsigned char* pal)
 	int i;
 	const int NULL_INTENS = 20;
 	for(i = 0;i < RED_POINT;i++){
-		pal[3*(i + first_col)] = NULL_INTENS + (64 - NULL_INTENS)*i/RED_POINT;
+		pal[3*(i + first_col)] = NULL_INTENS + (256 - NULL_INTENS)*i/RED_POINT;
 		pal[3*(i + first_col) + 1] = 0;
 		pal[3*(i + first_col) + 2] = 0;
 		}
 	for(;i < YELLOW_POINT;i++){
-		pal[3*(i + first_col)] = 63;
-		pal[3*(i + first_col) + 1] = (64*(i - YELLOW_POINT)/(YELLOW_POINT - RED_POINT)) & 63;
+		pal[3*(i + first_col)] = 255;
+		pal[3*(i + first_col) + 1] = (256*(i - YELLOW_POINT)/(YELLOW_POINT - RED_POINT)) & 255;
 //		pal[3*(i + first_col) + 1] = (64*(i - YELLOW_POINT)/(YELLOW_POINT - RED_POINT));
 		pal[3*(i + first_col) + 2] = 0;
 		}
 	for(;i < WHITE_POINT;i++){
-		pal[3*(i + first_col)] = 63;
-		pal[3*(i + first_col) + 1] = 63;
-		pal[3*(i + first_col) + 2] = (64*(i - WHITE_POINT)/(WHITE_POINT - YELLOW_POINT)) & 63;
+		pal[3*(i + first_col)] = 255;
+		pal[3*(i + first_col) + 1] = 255;
+		pal[3*(i + first_col) + 2] = (256*(i - WHITE_POINT)/(WHITE_POINT - YELLOW_POINT)) & 255;
 //		pal[3*(i + first_col) + 2] = (64*(i - WHITE_POINT)/(WHITE_POINT - YELLOW_POINT));
 		}
 	i = WHITE_POINT - 1;
-	pal[3*(i + first_col)] = pal[3*(i + first_col) + 1] = pal[3*(i + first_col) + 2] = 63;
+	pal[3*(i + first_col)] = pal[3*(i + first_col) + 1] = pal[3*(i + first_col) + 2] = 255;
 /*
 	int middle = first_col + WHITE_POINT/2;
 	const BLACK_RAD = 2;

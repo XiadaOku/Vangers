@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "../global.h"
 #include "../lang.h"
 
@@ -52,6 +50,9 @@
 #include "magnum.h"
 
 #include "../actint/credits.h"
+
+#include "../actint/actint.h"
+extern actIntDispatcher* aScrDisp;
 
 #define INSECTOIDS
 
@@ -2236,7 +2237,7 @@ void ActionDispatcher::Init(Parser& in)
 
 	LightData.Init(NULL);
 	LightData.MemInit();
-	LightData.CreateLight(63,12,LIGHT_TYPE::TOR | LIGHT_TYPE::DYNAMIC);
+	LightData.CreateLight(255,12,LIGHT_TYPE::TOR | LIGHT_TYPE::DYNAMIC);
 
 	SpobsDestroy = 0;
 	ThreallDestroy = 0;
@@ -4424,17 +4425,20 @@ void VangerUnit::InitEnvironment(void)
 			ChangeVangerProcess();
 	}else{
 		if(VangerChanger && VangerChangerCount > 0){
-			VangerChangerCount--;
+			//std::cout<<"VangerChangerCount: "<<VangerChangerCount<<std::endl;
+			VangerChangerCount -= 1;
 			switch(VangerChangerCount){
 				case 1:
 					OutCarNator();
 					break;
 				case 0:
+					std::cout<<"Vanger: "<< uvsPoint->gIndex <<std::endl;
 					ChangeVangerProcess();
 					VangerChanger = NULL;
 					break;
 			};		
 		};
+		//std::cout<<"MaxPassageCount: "<<MaxPassageCount<<std::endl;
 	};
 
 	if(!NetworkON || (Status & SOBJ_ACTIVE)){
@@ -8702,8 +8706,8 @@ void CompasObject::Quant(void)
 	v = Vector(ActD.Active->Speed,0,0)*ActD.Active->RotMat;
 	x = XCYCL(x + vMove.x + v.x);
 	y = YCYCL(y + vMove.y + v.y);
-	if(AdvancedView) G2LQ(x,y,0,tx,ty);
-	else G2LS(x,y,0,tx,ty);
+	if(AdvancedView) G2LQ(Vector(x,y,0),tx,ty);
+	else G2LS(Vector(x,y,0),tx,ty);
 
 	if(tx < UcutLeft + COMPAS_LEFT){
 		tx = UcutLeft + COMPAS_LEFT;
@@ -9437,7 +9441,7 @@ void ActionDispatcher::FunctionQuant(void)
 
 	if(FunctionThreallDestroyActive > 0){
 		if(ActD.Active){
-			if(!ProtractorLight) ProtractorLight = MapD.CreateLight(ActD.Active->R_curr.x,ActD.Active->R_curr.y,512,ActD.Active->radius*2,63,LIGHT_TYPE::DYNAMIC);
+			if(!ProtractorLight) ProtractorLight = MapD.CreateLight(ActD.Active->R_curr.x,ActD.Active->R_curr.y,512,ActD.Active->radius*2,255,LIGHT_TYPE::DYNAMIC);
 			else ProtractorLight->set_position(ActD.Active->R_curr.x,ActD.Active->R_curr.y,512);
 		};
 	}else{
@@ -10651,14 +10655,14 @@ void VangerUnit::ResolveGenerator(void)
 		q = SeedNum;
 		s = DeviceData;
 		SeedNum = 0;
-		if(uvsCurrentCycle == 1) { // Election of Castaways
+		if(uvsCurrentCycle == 1){
 			while(s){
 				if(s->ActIntBuffer.type == ACI_PIPETKA)
 					SeedNum += s->ActIntBuffer.data1;
 				s = s->NextDeviceList;
 			};
 		}else{
-			if(uvsCurrentCycle == 2){ // Heroism
+			if(uvsCurrentCycle == 2){
 				while(s){
 					if(s->ActIntBuffer.type == ACI_KERNOBOO)
 						SeedNum += s->ActIntBuffer.data1;
@@ -10670,11 +10674,11 @@ void VangerUnit::ResolveGenerator(void)
 		if(FarmerD.Num == 0 && ActD.WorldSeedNum <= MaxSeed)
 			SeedNum = MaxSeed;
 
-		if(SeedNum >= MaxSeed && q < MaxSeed && uvsCurrentCycle != 0){ // 0 - Progress
+		if(SeedNum >= MaxSeed && q < MaxSeed){
 			aiResolveFind.ClearResolve();
 			uvsPoint->break_harvest();
 			MainOrderInit();
-		};
+		};			
 	};
 
 	if(Visibility == VISIBLE && CoptePoint && !aiAlarmTime) aiStatus |= AI_STATUS_FLY;
@@ -13818,6 +13822,13 @@ void NetworkGetStart(char* name,int& x,int& y)
 		y = 366;
 		return;
 	}
+	
+	if (NetworkON && strcmp(game_name, "survival")==0 && my_server_data.GameType == 0) {
+		aScrDisp->send_event(EV_TELEPORT, 12);
+		x = 980;
+		y = 366;
+		return;
+	}
 
 	for(i = 0;i < NETWORK_NUM_ESCAVE;i++){
 		if(!strcmp(name,NetworkEscaveName[i])){
@@ -13975,6 +13986,7 @@ void VangerUnit::ChangeVangerProcess(void)
 	};
 
 	sc = uvsMechosTable[uvsPoint->Pmechos->type];
+	std::cout<<"MaxSpeed: "<< sc->MaxSpeed << std::endl;
 	uvsMaxSpeed = sc->MaxSpeed;
 	MaxArmor = sc->MaxArmor << 16;
 	MaxEnergy = sc->MaxEnergy << 16;
@@ -13985,6 +13997,7 @@ void VangerUnit::ChangeVangerProcess(void)
 	OxigenResource = MaxOxigenResource = sc->MaxOxigen;
 	PowerFlag = sc->MaxFire;
 	aiPowerFlag = VANGER_POWER_NONE;
+	std::cout<<"MaxTeleport: "<< sc->MaxTeleport << std::endl;
 	MaxPassageCount = sc->MaxTeleport;
 	DestroyClass = sc->MaxDamage;
 
