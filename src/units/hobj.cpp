@@ -42,6 +42,26 @@
 #include "../palette.h"
 #include "magnum.h"
 
+#include "../../lang/src/passlang.h"
+
+const auto getChecks = initPasslang([](int world, int x, int y) -> passlang::C_Check {
+	while (world == passlang::randomPlaceholder || world == WORLD_HMOK) {
+		world = GloryRnd.aiRnd(WORLD_MAX);
+	}
+	if (x == passlang::randomPlaceholder) {
+		x = GloryRnd.aiRnd(2048);
+	}
+	if (y == passlang::randomPlaceholder) {
+		if(world < MAIN_WORLD_MAX - 1) {
+			y = 300 + GloryRnd.aiRnd(WorldTable[world]->y_size - 600);
+		}
+		else {
+			y = GloryRnd.aiRnd(WorldTable[world]->y_size);
+		}
+	}
+	return {world, x, y};
+});
+
 const int TOUCH_SHIFT = 11;
 
 int TurnSideX;
@@ -3840,8 +3860,12 @@ void NetworkWorldOpen(void)
 				UsedCheckNum = 0;
 				GloryPlaceNum = my_server_data.Passembloss.CheckpointsNumber;
 				GloryPlaceData = new GloryPlace[GloryPlaceNum];
+
+				auto checks = getChecks(GloryPlaceNum, "[[];n;0 0-2] (n - 1)(-)");
+				GloryPlaceNum = checks.size();
+
 				for(i=0;i<GloryPlaceNum; i++)
-					GloryPlaceData[i].Init(i);
+					GloryPlaceData[i].Init(i, checks[i]);
 			};
 			aciOpenWorldLink(WORLD_FOSTRAL,WORLD_GLORX);
 			aciOpenWorldLink(WORLD_FOSTRAL,WORLD_WEEXOW);

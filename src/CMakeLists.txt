@@ -103,5 +103,6 @@ else()
 		xtool
 		xgraph
 		xsound
+		lang
 	)
 endif(ANDROID)

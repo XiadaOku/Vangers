@@ -3623,7 +3623,7 @@ int UsedCheckNum;
 
 aiRndType GloryRnd;
 
-void GloryPlace::Init(int ind)
+void GloryPlace::Init(int ind, passlang::C_Check check)
 {
 	ID = ID_GLORY_PLACE;
 	Enable = 1;
@@ -3632,70 +3632,74 @@ void GloryPlace::Init(int ind)
 	LightData = NULL;
 	Index = ind;
 
+	World = check.world;
+	R_curr.x = check.x;
+	R_curr.y = check.y;
+
 	//zMod fixed
 
 	//zNfo - GloryPlace
 	
 	//Formula-V
-	if (z_my_server_data.mod_id == Z_MODS_FORMULAV_ID) {
-		World = WORLD_GLORX;
-		switch (ind % 4) {
-		case 0:	R_curr.x = 1341;	R_curr.y = 5971;	break;
-		case 1:	R_curr.x =  486;	R_curr.y = 5648;	break;
-		case 2:	R_curr.x = 1607;	R_curr.y = 6315;	break;
-		case 3:	R_curr.x =   80;	R_curr.y = 7281;	break;
-		}
-		return;
-	} 
-	
-	//Trak-Trial
-	if (z_my_server_data.mod_id == Z_MODS_TRAKTRIAL_ID) {
-		World = WORLD_NECROSS;
-		switch (ind % 2) {
-		case 0:	R_curr.x =  620;	R_curr.y = 14771;	break;
-		case 1:	R_curr.x = 1756;	R_curr.y = 2447;	break;
-		}
-		return;
-	}
-	
-	//khoxrun
-	if (z_my_server_data.mod_id == Z_MODS_KHOXRUN_ID) {
-		World = WORLD_KHOX;
-		switch (ind) {
-		case  0:	R_curr.x = 1358;	R_curr.y = 7036;	World = WORLD_GLORX;	break; // НЕ МЕНЯТЬ !!! Связано с багом вылета клиента при смерти в пассе. если чек не на трех мирах.
-		case  1:	R_curr.x =  390;	R_curr.y = 1266;	break;
-		case  2:	R_curr.x = 1858;	R_curr.y = 1849;	break;
-		case  3:	R_curr.x = 1869;	R_curr.y =  232;	break;
-		case  4:	R_curr.x =  696;	R_curr.y =   86;	break;
-		case  5:	R_curr.x = 1145;	R_curr.y = 1210;	break;
-		case  6:	R_curr.x = 1987;	R_curr.y = 1043;	break;
-		case  7:	R_curr.x = 2021;	R_curr.y =    8;	break;
-		case  8:	R_curr.x =  150;	R_curr.y =  378;	break;
-		case  9:	R_curr.x =  910;	R_curr.y = 2014;	break;
-		case 10:	R_curr.x = 1232;	R_curr.y =  717;	break;
-		case 11:	R_curr.x =  307;	R_curr.y =  385;	break;
-		}
-		return;
-	}
-
-	//classic
-	if(ind == 0) {
-		World = GloryRnd.aiRnd(3); // НЕ МЕНЯТЬ !!! Связано с багом вылета клиента при смерти в пассе. если чек не на трех мирах.
-	} else {
-		World = GloryRnd.aiRnd(WORLD_MAX);
-
-		while (World == WORLD_HMOK)
-			World = GloryRnd.aiRnd(WORLD_MAX);
-
-		if(z_my_server_data.mod_id == Z_MODS_RAFARUN_ID ) //tarakan'i bega/ excludes hmok && threall
-			while (World==WORLD_HMOK || World==WORLD_THREALL)
-		World = GloryRnd.aiRnd(WORLD_MAX);
-	};
-	R_curr.x = GloryRnd.aiRnd(WorldTable[World]->x_size);
-	if(World < MAIN_WORLD_MAX - 1)
-		R_curr.y = 300 + GloryRnd.aiRnd(WorldTable[World]->y_size - 600);
-	else	
-		R_curr.y = GloryRnd.aiRnd(WorldTable[World]->y_size);
+// 	if (z_my_server_data.mod_id == Z_MODS_FORMULAV_ID) {
+// 		World = WORLD_GLORX;
+// 		switch (ind % 4) {
+// 		case 0:	R_curr.x = 1341;	R_curr.y = 5971;	break;
+// 		case 1:	R_curr.x =  486;	R_curr.y = 5648;	break;
+// 		case 2:	R_curr.x = 1607;	R_curr.y = 6315;	break;
+// 		case 3:	R_curr.x =   80;	R_curr.y = 7281;	break;
+// 		}
+// 		return;
+// 	}
+//
+// 	//Trak-Trial
+// 	if (z_my_server_data.mod_id == Z_MODS_TRAKTRIAL_ID) {
+// 		World = WORLD_NECROSS;
+// 		switch (ind % 2) {
+// 		case 0:	R_curr.x =  620;	R_curr.y = 14771;	break;
+// 		case 1:	R_curr.x = 1756;	R_curr.y = 2447;	break;
+// 		}
+// 		return;
+// 	}
+//
+// 	//khoxrun
+// 	if (z_my_server_data.mod_id == Z_MODS_KHOXRUN_ID) {
+// 		World = WORLD_KHOX;
+// 		switch (ind) {
+// 		case  0:	R_curr.x = 1358;	R_curr.y = 7036;	World = WORLD_GLORX;	break; // НЕ МЕНЯТЬ !!! Связано с багом вылета клиента при смерти в пассе. если чек не на трех мирах.
+// 		case  1:	R_curr.x =  390;	R_curr.y = 1266;	break;
+// 		case  2:	R_curr.x = 1858;	R_curr.y = 1849;	break;
+// 		case  3:	R_curr.x = 1869;	R_curr.y =  232;	break;
+// 		case  4:	R_curr.x =  696;	R_curr.y =   86;	break;
+// 		case  5:	R_curr.x = 1145;	R_curr.y = 1210;	break;
+// 		case  6:	R_curr.x = 1987;	R_curr.y = 1043;	break;
+// 		case  7:	R_curr.x = 2021;	R_curr.y =    8;	break;
+// 		case  8:	R_curr.x =  150;	R_curr.y =  378;	break;
+// 		case  9:	R_curr.x =  910;	R_curr.y = 2014;	break;
+// 		case 10:	R_curr.x = 1232;	R_curr.y =  717;	break;
+// 		case 11:	R_curr.x =  307;	R_curr.y =  385;	break;
+// 		}
+// 		return;
+// 	}
+//
+// 	//classic
+// 	if(ind == 0) {
+// 		World = GloryRnd.aiRnd(3); // НЕ МЕНЯТЬ !!! Связано с багом вылета клиента при смерти в пассе. если чек не на трех мирах.
+// 	} else {
+// 		World = GloryRnd.aiRnd(WORLD_MAX);
+//
+// 		while (World == WORLD_HMOK)
+// 			World = GloryRnd.aiRnd(WORLD_MAX);
+//
+// 		if(z_my_server_data.mod_id == Z_MODS_RAFARUN_ID ) //tarakan'i bega/ excludes hmok && threall
+// 			while (World==WORLD_HMOK || World==WORLD_THREALL)
+// 		World = GloryRnd.aiRnd(WORLD_MAX);
+// 	};
+// 	R_curr.x = GloryRnd.aiRnd(WorldTable[World]->x_size);
+// 	if(World < MAIN_WORLD_MAX - 1)
+// 		R_curr.y = 300 + GloryRnd.aiRnd(WorldTable[World]->y_size - 600);
+// 	else
+// 		R_curr.y = GloryRnd.aiRnd(WorldTable[World]->y_size);
 };
 
 void GloryPlace::CloseWorld(void)

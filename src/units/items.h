@@ -3,6 +3,8 @@
 
 #include "../3d/3dgraph.h"
 
+#include "../../lang/src/passlang.h"
+
 const int ITEM_GUN_DEVICE = 0;
 const int ITEM_CHANGER = 1;
 const int ITEM_OTHER = 2;
@@ -372,7 +374,7 @@ struct GloryPlace final : GeneralObject
 	int Index;
 	LightPoint* LightData;
 
-	void Init(int ind);
+	void Init(int ind, passlang::C_Check check);
 	void Quant(void);	
 	void CloseWorld(void);
 };

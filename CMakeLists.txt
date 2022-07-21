@@ -123,3 +123,5 @@ if(NOT ANDROID)
 	ADD_SUBDIRECTORY("server")
 	ADD_SUBDIRECTORY("surmap")
 endif()
+
+ADD_SUBDIRECTORY("lang")
