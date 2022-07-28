@@ -124,4 +124,4 @@ if(NOT ANDROID)
 	ADD_SUBDIRECTORY("surmap")
 endif()
 
-ADD_SUBDIRECTORY("lang")
+ADD_SUBDIRECTORY("passlang")

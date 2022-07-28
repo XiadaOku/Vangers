@@ -3,7 +3,7 @@
 
 #include "../3d/3dgraph.h"
 
-#include "../../lang/src/passlang.h"
+#include "../../passlang/src/passlang.h"
 
 const int ITEM_GUN_DEVICE = 0;
 const int ITEM_CHANGER = 1;

@@ -42,7 +42,7 @@
 #include "../palette.h"
 #include "magnum.h"
 
-#include "../../lang/src/passlang.h"
+#include "../../passlang/src/passlang.h"
 
 const auto getChecks = initPasslang([](int world, int x, int y) -> passlang::C_Check {
 	while (world == passlang::randomPlaceholder || world == WORLD_HMOK) {
@@ -60,6 +60,8 @@ const auto getChecks = initPasslang([](int world, int x, int y) -> passlang::C_C
 		}
 	}
 	return {world, x, y};
+}, [](int start, int finish) -> int {
+	return start + GloryRnd.aiRnd(finish - start + 1);
 });
 
 const int TOUCH_SHIFT = 11;
@@ -3864,8 +3866,10 @@ void NetworkWorldOpen(void)
 				auto checks = getChecks(GloryPlaceNum, "[[];n;0 0-2] (n - 1)(-)");
 				GloryPlaceNum = checks.size();
 
-				for(i=0;i<GloryPlaceNum; i++)
+				for(i=0;i<GloryPlaceNum; i++) {
+					std::cout << checks[i] << "\n";
 					GloryPlaceData[i].Init(i, checks[i]);
+				}
 			};
 			aciOpenWorldLink(WORLD_FOSTRAL,WORLD_GLORX);
 			aciOpenWorldLink(WORLD_FOSTRAL,WORLD_WEEXOW);
