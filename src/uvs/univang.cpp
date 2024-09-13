@@ -1037,6 +1037,8 @@ void uvsContimer::Quant(void){
 			}
 		}
 	}
+
+	//XnB TODO MAIN LOOP QUANT!!!
 }
 
 char* uvsContimer::GetTime(void){

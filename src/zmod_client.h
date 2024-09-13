@@ -2,7 +2,7 @@
 #define _ZMOD_CLIENT_
 
 #include "zmod_common.h"
-#define zSTR_LOADING_800_RU	"(C)1997-2014. Все права защищены. Бета версия. Идет загрузка..."
+#define zSTR_LOADING_800_RU	"(C)1997-2014. пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ..."
 
 #define zCHAT_TIMELIMIT	30000
 #define zCHAT_ROWLIMIT	5
@@ -22,6 +22,8 @@
 #define zCOLOR_TRANSPARENT -1
 #define zCOLOR_CAMOUFLAGE		254
 #define zCOLOR_PATROL		159
+
+const int zColors[10] = {zCOLOR_GREEN, zCOLOR_ORANGE, zCOLOR_BLUE, zCOLOR_YELLOW, zCOLOR_RED, zCOLOR_WHITE, zCOLOR_GRAY, zCOLOR_BLACK, zCOLOR_CAMOUFLAGE, zCOLOR_PATROL};
 
 extern int z_time;
 extern int z_time_tic;

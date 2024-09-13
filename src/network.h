@@ -10,6 +10,82 @@
 extern double zMod_cycle;
 extern double zMod_flood_level_delta;
 
+
+/*****************************************************************
+			Mods section
+*****************************************************************/
+#include <vector>
+
+namespace XnB {
+	namespace START_STATUS {
+		enum {
+			NONE,
+			TIMER,
+			INGAME,
+			DROPPED_OUT
+		};
+	}
+
+	namespace KVACH_STATUS {
+		enum {
+			NONE,
+			GET,
+			SET
+		};
+	}
+
+	//XnB TODO_R transfer to some other more global header file
+	namespace ACI_COLORS {
+		enum {
+			GREEN,
+			ORANGE,
+			BLUE,
+			YELLOW,
+			RED,
+			WHITE,
+			GRAY,
+			BLACK,
+			CAMOUFLAGE,
+			PATROL
+		};
+	}
+
+	int start_status = START_STATUS::NONE;
+	
+	bool is_rollcall = false; //XnB TODO[?] is/status namespace
+	int rollcall_quantity;
+	std::vector<std::string> rollcall_nicknames;
+
+	int kvach_id;
+	int kvach_status;
+	char* kvach_name;
+
+	bool is_kill = false; //XnB TODO server events for... erm... events i suppose
+
+	bool is_check = false;
+	int check_quantity;
+	const char* xnb_version = (char*)"XnB 0.01";
+
+	//XnB TODO outer file with mods
+	std::vector<std::vector<std::string>> mods_names = {
+		{"mammoth hunt", "mamont", "охота на мамонта", "мамонт"},
+		{"mechokvach", "мехоквач"}
+	};
+
+	enum {
+		ID_KHOX_RUN,
+		ID_TRUCK_TRIAL,
+		ID_ARENA,
+		ID_RAFFA_RUN,
+		ID_NEPTUNE,
+		ID_MAMMOTH
+	};
+
+	int isMod(int id); 
+	int getMod(int notFound = -1); 
+}
+
+
 /*****************************************************************
 			Механизм поиска сереров
 *****************************************************************/

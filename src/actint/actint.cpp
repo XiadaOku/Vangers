@@ -6633,6 +6633,7 @@ void aIndData::init(void)
 			colors[0] = ACI_IND_DVC_COL | (ACI_IND_DVC_SIZE << 16);
 			break;
 	}
+	std::cout << "[XnBlog]" << "colors: " << colors[0] << " " << colors[1] << "\n";
 }
 
 void aIndData::finit(void)

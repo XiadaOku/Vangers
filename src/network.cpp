@@ -1,3 +1,9 @@
+//XnB
+#include <vector>
+#include <string>
+#include <algorithm>
+//#include "xnb_client.h"
+
 //zmod
 #include "zmod_client.h"
 
@@ -14,6 +20,29 @@
 #include <arpa/inet.h> // ntohl() FIXME: remove
 #endif
 #include "network.h"
+
+//XnB
+#include "iscreen/iscreen_options.h"
+#include "iscreen/iscreen.h"
+
+extern iScreenOption** iScrOpt;
+
+using namespace XnB;
+
+extern int XnB::start_status;
+extern bool XnB::is_kill; 
+
+extern bool XnB::is_rollcall; 
+extern int XnB::rollcall_quantity;
+extern std::vector<std::string> XnB::rollcall_nicknames;
+
+extern int XnB::kvach_id;
+extern int XnB::kvach_status;
+extern char* XnB::kvach_name;
+
+extern bool XnB::is_check;
+extern int XnB::check_quantity;
+
 
 extern int MP_GAME;
 extern XStream fout;
@@ -180,23 +209,36 @@ ServerFindChain::ServerFindChain(int IP,int port,char* domain_name,int game_ID,c
 	configured = 0;
 	prev = next = 0;
 	list = 0;
+	char* new_game_name;
 	XBuffer str_buf;
+
 	if(!game_ID) {
-	    if (lang() == RUSSIAN) {
-			//CP866 –ù–æ–≤–∞—è –∏–≥—Ä–∞ –Ω–∞
-			const unsigned char new_game_on[] = {0x8D, 0xAE, 0xA2, 0xA0, 0xEF, 0x20, 0xA8, 0xA3, 0xE0, 0xA0, 0x20, 0xAD, 0xA0, 0x20, 0x00};
-			str_buf < (const char *)new_game_on;
-        } else {
-            str_buf < "New Game on ";
-        }
+		switch(RND(40)) {
+			case 0: new_game_name = (char*)"Ä®§, ™Æ£§† CX ≠† "; break;
+			case 1: new_game_name = (char*)"èÆ·‚†¢®‚Ï ´®≠„™· ≠† "; break;
+			case 2: new_game_name = (char*)"ì°®‚Ï Ñ®¨Æ≠† ≠† "; break;
+			case 3: new_game_name = (char*)"à·ØÆ´ÏßÆ¢†‚Ï ®≠™†‡≠†‚Æ‡ ≠† "; break;
+			case 4: new_game_name = (char*)"èÆ´Æ¶®‚Ï ·•‡¢•‡ "; break;
+			case 5: new_game_name = (char*)"ì§†´®‚Ï ·•‡¢•‡ "; break;
+			case 6: new_game_name = (char*)"Ç®§•≠ ™Æ‡®§Æ‡ ≠† "; break;
+			case 7: new_game_name = (char*)"ä·®†§• ≠•Á•£Æ §•´†‚Ï ≠† "; break;
+			default: new_game_name = (char*)"çÆ¢†Ô ®£‡† ≠† "; break;		
+		}
+		str_buf < new_game_name;
 	}
-	if(!game_name)
-		if(domain_name)
+	
+	if (!game_name) {
+		if (domain_name) {
 			str_buf < domain_name;
-		else
+		}
+		else {
 			str_buf <= (IP & 0xff) < "." <= ((IP >> 8) & 0xff) < "." <= ((IP >> 16) & 0xff) < "." <= ((IP >> 24) & 0xff);
-	else
+		}
+	}
+	else {
 		str_buf < game_name;
+	}
+	
 	strncpy(name, str_buf.GetBuf(), 50);
 	name[50] = 0;
 }
@@ -622,7 +664,7 @@ int InputEventBuffer::receive_waiting_for_event(int event, XSocket& sock,int ski
 	if(!skip_if_aint)
         {
 	    if (lang() == RUSSIAN) {
-            ErrH.Abort("–°–µ—Ä–≤–µ—Ä –Ω–µ –æ—Ç–≤–µ—á–∞–µ—Ç", XERR_USER, event);
+            ErrH.Abort("ë•‡¢•‡ ≠• Æ‚¢•Á†•‚", XERR_USER, event);
         } else {
             ErrH.Abort("Time out of Server's response receiving", XERR_USER, event);
         }
@@ -667,7 +709,7 @@ int InputEventBuffer::next_event() {
 	zCreateObjectQueue* temp;
 	if (event_ID == zCREATE_OBJECT_BY_SERVER) {
 		std::cout<<"zCREATE_OBJECT_BY_SERVER"<<std::endl;
-		//zmod - –ø–∞–∫–µ—Ç "—Å–æ–∑–¥–∞–π –ø—Ä–µ–¥–º–µ–¥"
+		//zmod - Ø†™•‚ "·Æß§†© Ø‡•§¨•‚"
 		*this > factory_number > ammo_count;
 		body_size = 0;
 		if(my_player_body.BirthTime) {
@@ -839,7 +881,7 @@ int restore_connection()
 		if(number_of_reconnection_attempt-- <= 0)
             {
 		    if (lang() == RUSSIAN) {
-                ErrH.Abort("–ù–µ –º–æ–≥—É –≤–æ—Å—Å—Ç–∞–Ω–æ–≤–∏—Ç—å —Å–æ–µ–¥–∏–Ω–µ–Ω–∏–µ —Å –°–µ—Ä–≤–µ—Ä–æ–º");
+                ErrH.Abort("ç• ¨Æ£„ ¢Æ··‚†≠Æ¢®‚Ï ·Æ•§®≠•≠®• · ë•‡¢•‡Æ¨");
             } else {
                 ErrH.Abort("Unable to restore connection to Server");
             }
@@ -1189,6 +1231,35 @@ void void_network_quant()
 		events_in.next_event();
 	}
 }
+
+//XnB TODO xnb_client.h
+int XnB::isMod(int id) {
+	if (!NetworkON) { 
+		return false;
+	}
+
+	std::string game_name = std::string(iScrOpt[iSERVER_NAME]->GetValueCHR());
+	for (int i = 0; i < game_name.length(); i++) {
+		game_name[i] = tolower(game_name[i]);
+	}
+
+	for (int name = 0; name < mods_names[id].size(); name++) {
+		if (game_name == mods_names[id][name]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int XnB::getMod(int notFound = -1) {
+	for (int id = 0; id < mods_names.size(); id++) {
+		if (isMod(id)) {
+			return id;
+		}
+	}
+	return notFound;
+}
+
 /*******************************************************************************
 				Player's List
 *******************************************************************************/
@@ -1312,13 +1383,185 @@ void PlayersList::parsing_total_body_query()
 /*******************************************************************************
 			Chat Tool
 *******************************************************************************/
-MessageElement::MessageElement(const char* player_name, char* msg,int col)
-{
-	message = new char[strlen(player_name) + strlen(msg) + 3];
-	strcpy(message,player_name);
+MessageElement::MessageElement(const char* player_name, char* msg,int col) {
+//XnB TODO shellnetid in messages
+	//XnB TODO command "[]" for differen colors and bot messages
+	const char *bot_tag = "[bot]";
+	const char *bot_name = "$";
+	//XnB TODO own bot's messages color; rainbow, huh
+	const int bot_color = ACI_COLORS::YELLOW;
+
+    char *name, *actual_msg;
+    int actual_col;
+
+	std::cout << "[XnBlog]" << "[msglog]" << player_name << ": " << msg << "\n";
+
+    if (strncmp(msg, bot_tag, strlen(bot_tag)) == 0) {
+        *name = *bot_name;
+        actual_msg = msg + strlen(bot_tag);
+        actual_col = bot_color;
+    } 
+	
+	//XnB TODO outer file with commands and is/get functions for ids
+	//XnB TODO translate to other languages-layouts lel
+	else if (!is_kill && (strcmp(msg, "/kill") == 0 || strcmp(msg, ".´Ë§§") == 0)) {
+		*name = *player_name;
+        actual_msg = msg;
+        actual_col = col;
+		//XnB TODO admins config file & *for* for check rights heh
+		if (strncmp(player_name, "xiada", 5) == 0) {
+			is_kill = true;
+		}
+	}
+	else if (start_status == START_STATUS::NONE && (strcmp(msg, "/start") == 0 || strcmp(msg, ".Î•‰™•") == 0)) {
+		*name = *bot_name;
+		
+		if  (isMod(MOD_ID::MAMMOTH)) {
+			//XnB TODO config file for mods or just timer but anyway 
+			actual_msg = "ë‚†‡‚ ¨†¨Æ≠‚† Á•‡•ß 20 ·•™„≠§, ÆÂÆ‚≠®™Æ¢ Á•‡•ß 40";
+		} 
+		else {
+			actual_msg = "ë‚†‡‚ Á•‡•ß 20 ·•™„≠§";
+		}
+
+		if (isMod(MOD_ID::MECHOKVACH)) {
+			kvach_id = 0;
+			kvach_status = KVACH_STATUS::GET;
+		}
+		actual_col = bot_color;
+		start_status = START_STATUS::TIMER;
+	} 
+	else if ((start_status == START_STATUS::INGAME || start_status == START_STATUS::DROPPED_OUT) && (strcmp(msg, "/finish") == 0 || strcmp(msg, ".†Ë‚ËÎ‡") == 0)) {
+		*name = *bot_name;
+		actual_msg = "î®≠®Ë";
+		actual_col = bot_color;
+		start_status = START_STATUS::NONE;
+	} 
+	//XnB TODO own rollcall messages
+	else if (start_status == START_STATUS::INGAME && kvach_status == KVACH_STATUS::GET && (strcmp(msg, "Ô") == 0 || strcmp(msg, "z") == 0 || strcmp(msg, "ü") == 0|| strcmp(msg, "Z") == 0)) {
+		kvach_status = KVACH_STATUS::SET;
+		*kvach_name = *player_name;
+
+		*name = *player_name;
+        actual_msg = msg;
+        actual_col = col;
+	}
+	else if (strncmp(msg, "/kvach", 6) == 0) {
+		*name = *bot_name;
+		*actual_msg = *player_name;
+		//XnB test /kvach*1234567890*
+		strcat(actual_msg, " £Æ‚Æ¢");
+		actual_col = bot_color;
+		
+		kvach_id = atoi(msg + strlen("/kvach"));
+	}
+	else if (start_status == START_STATUS::INGAME && isMod(MOD_ID::MECHOKVACH) && (strcmp(msg, "/rekvach") == 0 || strcmp(msg, ".™„´¨‰·‡") == 0)) {
+		*name = *bot_name;
+		actual_msg = "è•‡•™¢†Á™†";
+		actual_col = bot_color;
+		
+		kvach_status = KVACH_STATUS::GET;
+	}
+	else if ((strncmp(msg, "/mess ", 6) == 0 || strncmp(msg, ".Ï„ÎÎ ", 6) == 0) && strncmp(player_name, "xiada", 5) == 0) {
+		name = "";
+		actual_msg = "";
+		actual_col = bot_color;
+		
+		bool flag = false;
+		int message_quantity;
+		std::string message_str;
+		char *message_send;
+		
+		for	(int i = 6; i < strlen(msg); i++) {
+			if (!flag && !atoi((char*)msg[i])) {
+				flag = true;
+				continue;
+			}
+			if (flag) {
+				message_str += msg[i];
+			}
+			else {
+				message_quantity *= 10;
+				message_quantity += atoi((char*)msg[i]);
+			}
+		}
+		
+		if (message_str != "--old" || message_str != "--È§¢") {
+			*message_send = *message_str.c_str();
+		}
+		for (int i = 0; i < message_quantity; i++) {
+			message_dispatcher.send(message_send, MESSAGE_FOR_ALL, 0);
+		}
+	}
+	else if (!is_check && strcmp(msg, "/check") == 0 || strcmp(msg, ".·‡„·´") == 0) {
+		*name = *player_name;
+        actual_msg = msg;
+        actual_col = col;
+
+		is_check = true;
+		check_quantity = 0;
+	}
+	else if (is_check && strcmp(msg, xnb_version) == 0) {
+		*name = *player_name;
+        actual_msg = msg;
+        actual_col = col;
+		
+		check_quantity += 1;
+	}
+	else if (!is_rollcall && (strcmp(msg, "/rollcall") == 0 || strcmp(msg, ".™È§§·‰§§") == 0)) {
+		*name = *bot_name;
+		actual_msg = "è•‡•™´®Á™†";
+		actual_col = bot_color;
+
+		is_rollcall = true;
+		rollcall_quantity = 0;
+		rollcall_nicknames.clear();
+	} 
+	else if (is_rollcall && (strcmp(msg, "/rcancel") == 0 || strcmp(msg, ".™·‰‚·„§") == 0)) {
+		*name = *bot_name;
+		actual_msg = "è•‡•™´®Á™† Æ‚¨•≠•≠†";
+		actual_col = bot_color;
+
+		is_rollcall = false;
+		rollcall_nicknames.clear();
+	} 
+	else if (start_status == START_STATUS::TIMER && (strcmp(msg, "/scancel") == 0 || strcmp(msg, ".Î·‰‚·„§") == 0)) {
+		*name = *bot_name;
+		actual_msg = "ë‚†‡‚ Æ‚¨•≠•≠";
+		actual_col = bot_color;
+
+		start_status = START_STATUS::NONE;
+	} 
+	else if (is_rollcall && (strcmp(msg, "Ô") == 0 || strcmp(msg, "z") == 0 || strcmp(msg, "ü") == 0 || strcmp(msg, "Z") == 0)) {
+		*name = *player_name;
+        actual_msg = msg;
+        actual_col = col;
+		
+		bool is_double = false;
+		
+		for (int i = 0; i < rollcall_nicknames.size(); i++) {
+			if (rollcall_nicknames[i] == player_name) { 
+				is_double = true; break; 
+			}
+		}
+		if (!is_double) {
+			actual_msg = "ÉÆ‚Æ¢";
+			actual_col = bot_color;
+
+			rollcall_nicknames.push_back(player_name);
+			rollcall_quantity += 1;
+		}
+	}
+	else {
+        *name = *player_name;
+        actual_msg = msg;
+        actual_col = col;
+    }
+	message = new char[strlen(name) + strlen(": ") + strlen(actual_msg)];
+	strcpy(message,name);
 	strcat(message,": ");
-	strcat(message,msg);
-	color = col;
+	strcat(message,actual_msg);
+	color = actual_col;
 	//zmod
     time = SDL_GetTicks();
 }
@@ -1326,7 +1569,12 @@ MessageElement::MessageElement(const char* player_name, char* msg,int col)
 void MessageDispatcher::send(char* message,int mode,int parameter)
 {
 	unsigned int cors;
-	switch(mode){
+	
+	if ((strncmp(message, "/mess ", 5) == 0 || strncmp(message, ".Ï„ÎÎ ", 6) == 0) && strncmp(CurPlayerName, "xiada", 5) == 0) {
+		mode = MESSAGE_FOR_PLAYER;
+		parameter = 0;
+	} 
+	switch(mode) {
 		case MESSAGE_FOR_ALL:
 			cors = 0xffffffff & ~(1 << (GlobalStationID - 1));
 			break;
@@ -1336,7 +1584,8 @@ void MessageDispatcher::send(char* message,int mode,int parameter)
 		case MESSAGE_FOR_PLAYER:
 			cors = 1 << (parameter - 1);
 			break;
-		}
+	}
+
 	events_out.begin_direct_send(cors);
 	events_out < message < char(0);
 	events_out.end_body();

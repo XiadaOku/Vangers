@@ -1963,19 +1963,8 @@ void iGameMap::draw(int self)
 			MessageElement* msg = message_dispatcher.last();
    			while (msg && zCount<zCHAT_ROWLIMIT && msg->time+zCHAT_TIMELIMIT>SDL_GetTicks()) {
 				zCount++;
-				switch(msg->color) {
-					case 0:	zColor = zCOLOR_GREEN;	break;
-					case 1:	zColor = zCOLOR_ORANGE;	break;
-					case 2:	zColor = zCOLOR_BLUE;	break;
-					case 3:	zColor = zCOLOR_YELLOW;	break;
-					case 4:	zColor = zCOLOR_RED;	break;
-					case 5:	zColor = zCOLOR_WHITE;	break;
-					case 6:	zColor = zCOLOR_GRAY;	break;
-					case 7:	zColor = zCOLOR_BLACK;	break;
-					case 8:	zColor = zCOLOR_CAMOUFLAGE;	break;
-					case 9:	zColor = zCOLOR_PATROL;	break;
-					default:zColor = zCOLOR_WHITE;
-				}
+				
+				zColor = zColors[min(msg->color, sizeof(zColors) / sizeof(zColors[0]) - 1)];
 				if (msg->message[0]=='$' && msg->message[1]==':')
 					zColor = zCOLOR_RED;
 
